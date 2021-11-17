@@ -16,7 +16,12 @@ int main(int argc, char const *argv[]) {
     ft::Vector<std::string> p(7, "ben");
 
     p.push_back("Tonere");
+    p.push_back("Tonere");
+    p.push_back("Tonere");
+    p.push_back("Tonere");
+    p.push_back("Tonere");
+    p.push_back("Tonere");
     print_vector(p);
-    int n = 9;
+    system("leaks main");
     return 0;
 }

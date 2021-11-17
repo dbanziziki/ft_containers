@@ -31,18 +31,19 @@ class Vector {
                     const allocator_type &alloc = allocator_type())
         : _size(n), _capacity(n), _alloc(alloc) {
         this->_ptr = this->_alloc.allocate(n);
-        this->_end = this->_ptr;
+        this->_end = this->_ptr + n;
         while (n--) _ptr[n] = val;
     }
-    ~Vector() { /*_alloc.deallocate(_ptr, this->_size);*/
+    ~Vector() {
+        this->destroy();
+        _alloc.deallocate(_ptr, this->_capacity);
     }
 
     size_t size() const { return _size; }
     size_type capacity() const { return this->_capacity; }
     void destroy() {
-        while (_ptr != _end) {
-            _alloc.destroy(--this->_end);
-        }
+        size_t temp = _size;
+        while (temp--) this->_alloc.destroy(_ptr + temp);
     }
 
     void push_back(const value_type &val) {
@@ -51,6 +52,7 @@ class Vector {
         }
         _ptr[_size] = val;
         _size++;
+        _end++;
     }
 
     T &operator[](int index) {
