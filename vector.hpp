@@ -4,6 +4,8 @@
 #include <cstddef>
 #include <memory>
 
+#include "iterator.hpp"
+
 namespace ft {
 template <class T, class Alloc = std::allocator<T> >
 class Vector {
