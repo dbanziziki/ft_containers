@@ -19,6 +19,10 @@ class Vector {
     typedef typename allocator_type::const_pointer const_pointer;
     typedef size_t size_type;
 
+    typedef typename ft::random_accses_iterator<value_type> iterator;
+    typedef typename ft::random_accses_iterator<const_value_type>
+        const_iterator;
+
     pointer _ptr;
     pointer _end;
     pointer _end_capacty;
@@ -320,6 +324,9 @@ class Vector {
 
     /* Allocator */
     allocator_type get_allocator() const { return _alloc; }
+
+   public:
+    iterator begin() { return iterator(_ptr); }
 
    private:
 };

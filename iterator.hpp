@@ -14,7 +14,7 @@ struct random_access_iterator_tag : public bidirectional_iterator_tag {};
 
 template <class Category, class T, class Distance = std::ptrdiff_t,
           class Pointer = T*, class Reference = T&>
-struct iterator {
+struct Iterator {
     typedef Category iterator_category;
     typedef T value_type;
     typedef Distance diffrence_type;
@@ -33,10 +33,21 @@ struct iterator_traits {
 
 template <class T>
 struct iterator_traits<T*> {
-}
+    typedef std::ptrdiff_t difference_type;
+    typedef T value_type;
+    typedef T* pointer;
+    typedef T& reference;
+    typedef ft::random_access_iterator_tag iterator_category;
+};
 
 template <class T>
-struct iterator_traits<const T*>;
+struct iterator_traits<const T*> {
+    typedef std::ptrdiff_t difference_type;
+    typedef T value_type;
+    typedef T* pointer;
+    typedef T& reference;
+    typedef ft::random_access_iterator_tag iterator_category;
+};
 
 }  // namespace ft
 
