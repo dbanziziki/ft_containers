@@ -8,6 +8,7 @@ namespace ft {
 template <class T>
 class random_accses_iterator
     : public ft::Iterator<random_access_iterator_tag, T> {
+   private:
     typedef ft::Iterator<ft::random_access_iterator_tag, T> iterator_type;
     typedef typename ft::iterator_traits<
         ft::Iterator<ft::random_access_iterator_tag, T> >::iterator_category
@@ -16,8 +17,8 @@ class random_accses_iterator
         ft::Iterator<ft::random_access_iterator_tag, T> >::value_type
         value_type;
     typedef typename ft::iterator_traits<
-        ft::Iterator<ft::random_access_iterator_tag, T> >::diffrence_type
-        diffrence_type;
+        ft::Iterator<ft::random_access_iterator_tag, T> >::difference_type
+        difference_type;
     typedef typename ft::iterator_traits<
         ft::Iterator<ft::random_access_iterator_tag, T> >::pointer pointer;
     typedef typename ft::iterator_traits<
@@ -26,10 +27,16 @@ class random_accses_iterator
    private:
     pointer _ptr;
 
+   public:
     random_accses_iterator() : _ptr(nullptr) {}
-    random_accses_iterator(iterator_type it) {}
+    random_accses_iterator(pointer p) : _ptr(p) {}
+    // random_accses_iterator(iterator_type it) {}
     random_accses_iterator(const random_accses_iterator<T>& ra_it)
         : _ptr(ra_it._ptr) {}
+
+    ~random_accses_iterator() {}
+
+    iterator_type base() const {}
 
     random_accses_iterator& operator++() {
         _ptr++;
@@ -52,9 +59,12 @@ class random_accses_iterator
         return it;
     }
 
-    reference operator[](int index) { return _ptr[index]; }
-    pointer operator->() { return _ptr; }
-    pointer operator*() { return *_ptr; }
+    reference operator[](int index) { return *(_ptr + index); }
+
+    pointer operator->() { return &(operator*()); }
+
+    reference operator*() const { return *_ptr; }
+
     bool operator==(const random_accses_iterator& other) {
         return _ptr == other._ptr;
     }
@@ -62,6 +72,36 @@ class random_accses_iterator
     bool operator!=(const random_accses_iterator& other) {
         return !(*this == other);
     }
+
+    random_accses_iterator operator+(difference_type n) const {
+        return random_accses_iterator(_ptr + n);
+    }
+
+    random_accses_iterator operator-(difference_type n) const {
+        return random_accses_iterator(_ptr - n);
+    }
+
+    random_accses_iterator& operator+=(difference_type n) {
+        _ptr += n;
+        return *this;
+    }
+
+    random_accses_iterator& operator-=(difference_type n) {
+        _ptr -= n;
+        return *this;
+    }
+
+    /*bool operator>(const random_accses_iterator& rhs) {
+        return _ptr > rhs._ptr;
+    }
+
+    bool operator<(const random_accses_iterator& rhs) {
+        return _ptr < rhs._ptr;
+    }
+
+    bool operator<=(const random_accses_iterator& rhs) {
+        return
+    }*/
 };
 }  // namespace ft
 

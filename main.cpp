@@ -11,40 +11,59 @@ void print_vector(ft::Vector<T> &v) {
     }
 }
 
-int main(int argc, char const *argv[]) {
-    ft::Vector<std::string> p;
-    ft::Vector<std::string> v;
+int main() {
+    // ft::Vector<std::string> p;
+    // ft::Vector<std::string> v;
 
-    v.push_back("One");
-    p.push_back("Nate");
-    p.push_back("Patie");
-    p.push_back("Jean");
-    p.push_back("Jeanine");
-    p.resize(2);
-    p.push_back("Donie");
-    p.push_back("Donie");
-    p.push_back("Donie");
-    p.resize(6, "end val");
-    p.push_back("another one");
-    p.assign(3, "Banana");
-    p.push_back("Tonie");
-    p.push_back("Tonie");
-    p.push_back("Tonie");
-    p.push_back("Tonie");
-    p.push_back("Tonie");
-    p.push_back("Tonie");
-    p.push_back("Tonie");
+    std::vector<int> v1;
 
-    std::cout << "[ ft::vector<std::string> p ]" << std::endl;
-    print_vector(p);
-    std::cout << "[ ft::vector<std::string> v ]" << std::endl;
-    print_vector(v);
+    v1.push_back(1);
+    v1.push_back(5);
+    v1.push_back(2);
+    ft::Vector<int> ftv(v1.begin(), v1.end());
 
-    p.swap(v);
-    std::cout << "[ after swap ]" << std::endl;
-    std::cout << "[ ft::vector<std::string> p ]" << std::endl;
-    print_vector(p);
-    std::cout << "[ ft::vector<std::string> v ]" << std::endl;
-    print_vector(v);
+    ftv.push_back(9);
+    ft::random_accses_iterator<int> it = ftv.begin();
+    ft::random_accses_iterator<int> end = ftv.end();
+    ft::random_accses_iterator<int> p_it = it + 2;
+    ft::random_accses_iterator<int> m_it = p_it - 1;
+
+    std::cout << *p_it << std::endl;
+    std::cout << *m_it << std::endl;
+    for (; it != end; ++it) {
+        std::cout << "The values is " << *it << std::endl;
+    }
+    // print_vector(ftv);
+    // v.push_back("One");
+    // p.push_back("Nate");
+    // p.push_back("Patie");
+    // p.push_back("Jean");
+    // p.push_back("Jeanine");
+    // p.resize(2);
+    // p.push_back("Donie");
+    // p.push_back("Donie");
+    // p.push_back("Donie");
+    // p.resize(6, "end val");
+    // p.push_back("another one");
+    // p.assign(3, "Banana");
+    // p.push_back("Tonie");
+    // p.push_back("Tonie");
+    // p.push_back("Tonie");
+    // p.push_back("Tonie");
+    // p.push_back("Tonie");
+    // p.push_back("Tonie");
+    // p.push_back("Tonie");
+
+    // std::cout << "[ ft::vector<std::string> p ]" << std::endl;
+    // print_vector(p);
+    // std::cout << "[ ft::vector<std::string> v ]" << std::endl;
+    // print_vector(v);
+
+    // p.swap(v);
+    // std::cout << "[ after swap ]" << std::endl;
+    // std::cout << "[ ft::vector<std::string> p ]" << std::endl;
+    // print_vector(p);
+    // std::cout << "[ ft::vector<std::string> v ]" << std::endl;
+    // print_vector(v);
     return 0;
 }

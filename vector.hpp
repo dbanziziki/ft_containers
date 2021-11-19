@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "iterator.hpp"
+#include "utils.hpp"
 
 namespace ft {
 template <class T, class Alloc = std::allocator<T> >
@@ -31,6 +32,12 @@ class Vector {
     allocator_type _alloc;
 
    public:
+    /**
+     * @brief default contructor Constructs an empty container, with no
+     * elements.
+     *
+     * @param alloc Allocator object.
+     */
     explicit Vector(const allocator_type &alloc = allocator_type())
         : _ptr(nullptr),
           _end_capacty(nullptr),
@@ -38,6 +45,16 @@ class Vector {
           _size(0),
           _capacity(0),
           _alloc(alloc) {}
+    /**
+     * @brief fill constructor Constructs a container with n elements. Each
+     * element is a copy of val.
+     *
+     * @param n Initial container size (i.e., the number of elements in the
+     * container at construction).
+     * @param val Value to fill the container with. Each of the n elements in
+     * the container will be initialized to a copy of this value.
+     * @param alloc Allocator object.
+     */
     explicit Vector(size_type n, const value_type &val = value_type(),
                     const allocator_type &alloc = allocator_type())
         : _size(n), _capacity(n), _alloc(alloc) {
@@ -49,6 +66,39 @@ class Vector {
         }
     }
 
+    /**
+     * @brief Constructs a container with as many elements as the range
+     * [first,last), with each element constructed from its corresponding
+     * element in that range, in the same order.
+     *
+     * @tparam InputIterator
+     * @param [first, last] Input iterators to the initial and final positions
+     * in a range. The range used is [first,last), which includes all the
+     * elements between first and last, including the element pointed by first
+     * but not the element pointed by last.
+     * @param alloc Allocator object.
+     */
+    template <class InputIterator>
+    Vector(InputIterator first, InputIterator last,
+           const allocator_type &alloc = allocator_type())
+        : _alloc(alloc) {
+        size_type n = ft::difference(first, last);
+        this->_ptr = this->_alloc.allocate(n);
+        this->_end = this->_ptr;
+        this->_capacity = n;
+        this->_size = n;
+        this->_end_capacty = this->_ptr + n;
+        while (n--) this->_alloc.construct(this->_end++, *first++);
+    }
+
+    /**
+     * @brief Constructs a container with a copy of each of the elements in x,
+     * in the same order.
+     *
+     * @param x Another vector object of the same type (with the same class
+     * template arguments T and Alloc), whose contents are either copied or
+     * acquired.
+     */
     Vector(const Vector &x) : _alloc(x._alloc) {
         /*size_type n = x.size();
         this->_ptr = this->_alloc.allocate(x.capacity());
@@ -120,6 +170,7 @@ class Vector {
         if (n >= _size) {
             throw std::out_of_range("ft::vector");
         }
+        return _ptr[n];
     }
 
     /**
@@ -308,6 +359,43 @@ class Vector {
     }
 
     /**
+     * @brief The vector is extended by inserting new elements before the
+     * element at the specified position, effectively increasing the container
+     * size by the number of elements inserted.
+     * @param position Position in the vector where the new elements are
+     * inserted.
+     * @param val Value to be copied (or moved) to the inserted elements.
+     * @return An iterator that points to the first of the newly inserted
+     * elements.
+     */
+    // iterator insert(iterator position, const value_type &val) {}
+
+    /**
+     * @brief The vector is extended by inserting new elements before the
+     * element at the specified position, effectively increasing the container
+     * size by the number of elements inserted.
+     * @param position Position in the vector where the new elements are
+     * @param n Number of elements to insert. Each element is initialized to a
+     * copy of val.
+     * @param val Value to be copied (or moved) to the inserted elements.
+     */
+    // void insert(iterator position, size_type n, const value_type &val) {}
+
+    /**
+     * @brief The vector is extended by inserting new elements before the
+     * element at the specified position, effectively increasing the container
+     * size by the number of elements inserted.
+     * @tparam InputIterator
+     * @param positon Position in the vector where the new elements are
+     * inserted.
+     * @param [first, last] Iterators specifying a range of elements. Copies of
+     * the elements in the range [first,last) are inserted at position (in the
+     * same order).
+     */
+    // template <class InputIterator>
+    // void insert(iterator positon, InputIterator first, InputIterator last) {}
+
+    /**
      * @brief Removes all elements from the vector (which are destroyed),
      * leaving the container with a size of 0.
      *
@@ -326,7 +414,12 @@ class Vector {
     allocator_type get_allocator() const { return _alloc; }
 
    public:
-    iterator begin() { return iterator(_ptr); }
+    iterator begin() { return _ptr; }
+
+    iterator end() { return _end; }
+
+    const_iterator cbegin() const { return _ptr; }
+    const_iterator cend() const { return _end; }
 
    private:
 };
