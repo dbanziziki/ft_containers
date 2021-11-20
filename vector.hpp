@@ -6,11 +6,12 @@
 
 #include "iterator.hpp"
 #include "utils.hpp"
+#include "reverse_iterator.hpp"
 
 namespace ft {
 template <class T, class Alloc = std::allocator<T> >
 class Vector {
-   private:
+   public:
     typedef T value_type;
     typedef T const const_value_type;
     typedef Alloc allocator_type;
@@ -21,8 +22,9 @@ class Vector {
     typedef size_t size_type;
 
     typedef typename ft::random_accses_iterator<value_type> iterator;
-    typedef typename ft::random_accses_iterator<const_value_type>
-        const_iterator;
+    typedef typename ft::random_accses_iterator<const_value_type> const_iterator;
+    typedef typename ft::reverse_iterator<iterator> reverse_iterator;
+    typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
     pointer _ptr;
     pointer _end;
@@ -39,9 +41,9 @@ class Vector {
      * @param alloc Allocator object.
      */
     explicit Vector(const allocator_type &alloc = allocator_type())
-        : _ptr(nullptr),
-          _end_capacty(nullptr),
-          _end(nullptr),
+        : _ptr(NULL),
+          _end_capacty(NULL),
+          _end(NULL),
           _size(0),
           _capacity(0),
           _alloc(alloc) {}
@@ -127,7 +129,6 @@ class Vector {
     reference operator[](size_type index) {
         if (index >= _size) {
             // TODO
-            exit(0);
         }
         return _ptr[index];
     }
@@ -142,7 +143,6 @@ class Vector {
     reference operator[](size_type index) const {
         if (index >= _size) {
             // TODO
-            exit(0);
         }
         return _ptr[index];
     }
@@ -420,6 +420,10 @@ class Vector {
 
     const_iterator cbegin() const { return _ptr; }
     const_iterator cend() const { return _end; }
+
+    reverse_iterator rbegin() { return reverse_iterator(_end); }
+
+    reverse_iterator rend() { return reverse_iterator(_ptr); }
 
    private:
 };

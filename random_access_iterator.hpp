@@ -8,27 +8,20 @@ namespace ft {
 template <class T>
 class random_accses_iterator
     : public ft::Iterator<random_access_iterator_tag, T> {
-   private:
+   public:
     typedef ft::Iterator<ft::random_access_iterator_tag, T> iterator_type;
-    typedef typename ft::iterator_traits<
-        ft::Iterator<ft::random_access_iterator_tag, T> >::iterator_category
-        iterator_category;
-    typedef typename ft::iterator_traits<
-        ft::Iterator<ft::random_access_iterator_tag, T> >::value_type
+    typedef typename ft::Iterator<ft::random_access_iterator_tag, T>::iterator_category iterator_category;
+    typedef typename ft::Iterator<ft::random_access_iterator_tag, T>::value_type
         value_type;
-    typedef typename ft::iterator_traits<
-        ft::Iterator<ft::random_access_iterator_tag, T> >::difference_type
-        difference_type;
-    typedef typename ft::iterator_traits<
-        ft::Iterator<ft::random_access_iterator_tag, T> >::pointer pointer;
-    typedef typename ft::iterator_traits<
-        ft::Iterator<ft::random_access_iterator_tag, T> >::reference reference;
+    typedef typename ft::Iterator<ft::random_access_iterator_tag, T>::difference_type difference_type;
+    typedef typename ft::Iterator<ft::random_access_iterator_tag, T>::pointer pointer;
+    typedef typename ft::Iterator<ft::random_access_iterator_tag, T>::reference reference;
 
    private:
     pointer _ptr;
 
    public:
-    random_accses_iterator() : _ptr(nullptr) {}
+    random_accses_iterator() : _ptr(NULL) {}
     random_accses_iterator(pointer p) : _ptr(p) {}
     // random_accses_iterator(iterator_type it) {}
     random_accses_iterator(const random_accses_iterator<T>& ra_it)
@@ -38,22 +31,28 @@ class random_accses_iterator
 
     iterator_type base() const {}
 
+    random_access_iterator& operator=(const random_access_iterator &it) {
+        _ptr = it._ptr;
+        return *this;
+    }
+
     random_accses_iterator& operator++() {
         _ptr++;
         return *this;
     }
 
-    random_accses_iterator& operator++(int) {
+    random_accses_iterator operator++(int) {
         random_accses_iterator it = *this;
         ++(*this);
         return it;
     }
+
     random_accses_iterator& operator--() {
         _ptr--;
         return *this;
     }
 
-    random_accses_iterator& operator--(int) {
+    random_accses_iterator operator--(int) {
         random_accses_iterator it = *this;
         --(*this);
         return it;

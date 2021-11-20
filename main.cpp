@@ -12,12 +12,18 @@ void print_vector(ft::Vector<T> &v) {
 }
 
 int main() {
-    // ft::Vector<std::string> p;
+    ft::Vector<std::string> p;
     // ft::Vector<std::string> v;
 
-    std::vector<int> v1;
+    p.push_back("Jhon");
+    p.push_back("Kori");
+    ft::Vector<std::string>::reverse_iterator r_it = p.rbegin();
+    ft::Vector<std::string>::reverse_iterator r_end = p.rend();
+    for (r_it = p.rbegin() ; r_it != p.rend(); ++r_it) {
+        std::cout << *r_it << std::endl;
+    }
 
-    v1.push_back(1);
+    /*v1.push_back(1);
     v1.push_back(5);
     v1.push_back(2);
     ft::Vector<int> ftv(v1.begin(), v1.end());
@@ -32,7 +38,7 @@ int main() {
     std::cout << *m_it << std::endl;
     for (; it != end; ++it) {
         std::cout << "The values is " << *it << std::endl;
-    }
+    } */
     // print_vector(ftv);
     // v.push_back("One");
     // p.push_back("Nate");
