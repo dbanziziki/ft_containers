@@ -5,12 +5,12 @@
 #include <memory>
 
 #include "iterator.hpp"
-#include "utils.hpp"
 #include "reverse_iterator.hpp"
+#include "utils.hpp"
 
 namespace ft {
 template <class T, class Alloc = std::allocator<T> >
-class Vector {
+class vector {
    public:
     typedef T value_type;
     typedef T const const_value_type;
@@ -21,10 +21,12 @@ class Vector {
     typedef typename allocator_type::const_pointer const_pointer;
     typedef size_t size_type;
 
-    typedef typename ft::random_accses_iterator<value_type> iterator;
-    typedef typename ft::random_accses_iterator<const_value_type> const_iterator;
+    typedef typename ft::random_access_iterator<value_type> iterator;
+    typedef typename ft::random_access_iterator<const_value_type>
+        const_iterator;
     typedef typename ft::reverse_iterator<iterator> reverse_iterator;
-    typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
+    typedef typename ft::reverse_iterator<const_iterator>
+        const_reverse_iterator;
 
     pointer _ptr;
     pointer _end;
@@ -40,7 +42,7 @@ class Vector {
      *
      * @param alloc Allocator object.
      */
-    explicit Vector(const allocator_type &alloc = allocator_type())
+    explicit vector(const allocator_type &alloc = allocator_type())
         : _ptr(NULL),
           _end_capacty(NULL),
           _end(NULL),
@@ -57,7 +59,7 @@ class Vector {
      * the container will be initialized to a copy of this value.
      * @param alloc Allocator object.
      */
-    explicit Vector(size_type n, const value_type &val = value_type(),
+    explicit vector(size_type n, const value_type &val = value_type(),
                     const allocator_type &alloc = allocator_type())
         : _size(n), _capacity(n), _alloc(alloc) {
         this->_ptr = this->_alloc.allocate(n);
@@ -81,7 +83,7 @@ class Vector {
      * @param alloc Allocator object.
      */
     template <class InputIterator>
-    Vector(InputIterator first, InputIterator last,
+    vector(InputIterator first, InputIterator last,
            const allocator_type &alloc = allocator_type())
         : _alloc(alloc) {
         size_type n = ft::difference(first, last);
@@ -101,7 +103,7 @@ class Vector {
      * template arguments T and Alloc), whose contents are either copied or
      * acquired.
      */
-    Vector(const Vector &x) : _alloc(x._alloc) {
+    vector(const vector &x) : _alloc(x._alloc) {
         /*size_type n = x.size();
         this->_ptr = this->_alloc.allocate(x.capacity());
         this->_end = this->_ptr;
@@ -112,7 +114,7 @@ class Vector {
         while (n--) this->_alloc.construct(_end++, *src++);*/
     }
 
-    ~Vector() {
+    ~vector() {
         clear();
         _alloc.deallocate(_ptr, capacity());
     }
@@ -292,13 +294,36 @@ class Vector {
      * the container will be initialized to a copy of this value.
      */
     void assign(size_type n, const value_type &val) {
-        this->~Vector();
+        this->~vector();
         _ptr = _alloc.allocate(n);
         _end = _ptr;
         _end_capacty = _ptr + n;
         _size = n;
         _capacity = n;
         while (n--) _alloc.construct(_end++, val);
+    }
+
+    /**
+     * @brief Assigns new contents to the vector, replacing its current
+     contents, and modifying its size accordingly.
+     * @tparam InputIterator
+     * @param [first, last] Input iterators to the initial and final positions
+     * in a sequence. The range used is [first,last), which includes all the
+     * elements between first and last, including the element pointed by first
+     * but not the element pointed by last.
+     */
+    template <class InputIterator>
+    void assign(InputIterator first, InputIterator last) {
+        this->~vector();
+        typedef typename iterator_traits<InputIterator>::difference_type
+            difference_type;
+        difference_type n = ft::difference(first, last);
+        _ptr = _alloc.allocate(n);
+        _end = _ptr;
+        _end_capacty = _ptr + n;
+        _size = n;
+        _capacity = n;
+        while (n--) _alloc.construct(_end++, *first++);
     }
 
     /**
@@ -309,7 +334,7 @@ class Vector {
      * with the same template parameters, T and Alloc) whose content is swapped
      * with that of this container.
      */
-    void swap(Vector &x) {
+    void swap(vector &x) {
         if (this == &x) return;
 
         pointer x_ptr = x._ptr;
@@ -394,6 +419,22 @@ class Vector {
      */
     // template <class InputIterator>
     // void insert(iterator positon, InputIterator first, InputIterator last) {}
+
+    iterator erase(iterator position) {
+        if (_size < 1) return _ptr;
+        size_type n = &(*position) - _ptr;
+        iterator first = begin();
+        typename iterator::difference_type diff =
+            ft::difference(++(begin()), end());
+        for (size_type i = 0; i < diff; i++) {
+            _alloc.construct(&(*(first)), *(first + 1));
+            first++;
+        }
+        --_size;
+        return _ptr + n;
+    }
+
+    iterator erase(iterator first, iterator last) {}
 
     /**
      * @brief Removes all elements from the vector (which are destroyed),
