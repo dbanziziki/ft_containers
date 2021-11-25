@@ -493,12 +493,15 @@ class vector {
      */
     iterator begin() { return _ptr; }
 
+    const_iterator begin() const { return _ptr; }
+
     /**
      * @brief Returns an iterator referring to the past-the-end element in the
      * vector container.
      * @return An iterator to the element past the end of the sequence.
      */
     iterator end() { return _end; }
+    const_iterator end() const { return _end; }
 
     /**
      * @brief Returns a reverse iterator pointing to the last element in the
@@ -520,7 +523,48 @@ class vector {
 };
 
 template <class T, class Alloc>
-bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {}
+bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
+    if (lhs.size() != rhs.size()) return false;
+    return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+
+template <class T, class Alloc>
+bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
+    return !(lhs == rhs);
+}
+
+template <class T, class Alloc>
+bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
+    return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(),
+                                       rhs.end());
+}
+
+template <class T, class Alloc>
+bool operator<=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
+    return !(rhs < lhs);
+}
+
+template <class T, class Alloc>
+bool operator>(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
+    return rhs < lhs;
+}
+
+template <class T, class Alloc>
+bool operator>=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
+    return !(lhs < rhs);
+}
+
+/**
+ * @brief The contents of container x are exchanged with those of y. Both
+ * container objects must be of the same type (same template parameters),
+ * although sizes may differ.
+ * @param [x, y) vector containers of the same type (i.e., having both the same
+ * template parameters, T and Alloc).
+ */
+template <class T, class Alloc>
+void swap(vector<T, Alloc> &x, vector<T, Alloc> &y) {
+    x.swap(y);
+}
 }  // namespace ft
 
 #endif  // __VECTOR_H__
