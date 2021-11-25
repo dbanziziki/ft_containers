@@ -28,6 +28,7 @@ class vector {
     typedef typename ft::reverse_iterator<const_iterator>
         const_reverse_iterator;
 
+   private:
     pointer _ptr;
     pointer _end;
     pointer _end_capacty;
@@ -423,7 +424,8 @@ class vector {
     iterator erase(iterator position) {
         if (_size < 1) return _ptr;
         size_type n = &(*position) - _ptr;
-        iterator first = begin();
+        _alloc.destroy(&(*position));
+        iterator first = position;
         typename iterator::difference_type diff =
             ft::difference(++(begin()), end());
         for (size_type i = 0; i < diff; i++) {
@@ -434,7 +436,30 @@ class vector {
         return _ptr + n;
     }
 
-    iterator erase(iterator first, iterator last) {}
+    /**
+     * @brief Removes from the vector a range of elements ([first,last)).
+     * @param [first, last] Iterators specifying a range within the vector] to
+     * be removed: [first,last). i.e., the range includes all the elements
+     * between first and last, including the element pointed by first but not
+     * the one pointed by last. Member types iterator and const_iterator are
+     * random access iterator types that point to elements.
+     * @return An iterator pointing to the new location of the element that
+     * followed the last element erased by the function call. This is the
+     * container end if the operation erased the last element in the sequence.
+     */
+    iterator erase(iterator first, iterator last) {
+        iterator start = first;
+        typename iterator::difference_type diff = ft::difference(first, last);
+        for (; first != last; first++) {
+            _alloc.destroy(&(*first));
+        }
+        for (size_type i = 0; i < diff; i++) {
+            _alloc.construct(&(*start), *(start + (diff + i)));
+            start++;
+        }
+        _size -= diff;
+        return _ptr + diff;
+    }
 
     /**
      * @brief Removes all elements from the vector (which are destroyed),
@@ -452,22 +477,50 @@ class vector {
     }
 
     /* Allocator */
+
+    /**
+     * @brief Get the allocator object
+     *
+     * @return the allocator
+     */
     allocator_type get_allocator() const { return _alloc; }
 
    public:
+    /**
+     * @brief Returns an iterator pointing to the first element in the vector.
+     *
+     * @return An iterator to the beginning of the sequence container.
+     */
     iterator begin() { return _ptr; }
 
+    /**
+     * @brief Returns an iterator referring to the past-the-end element in the
+     * vector container.
+     * @return An iterator to the element past the end of the sequence.
+     */
     iterator end() { return _end; }
 
-    const_iterator cbegin() const { return _ptr; }
-    const_iterator cend() const { return _end; }
-
+    /**
+     * @brief Returns a reverse iterator pointing to the last element in the
+     * vector
+     * @return A reverse iterator to the reverse beginning of the sequence
+     * container.
+     */
     reverse_iterator rbegin() { return reverse_iterator(_end); }
 
+    /**
+     * @brief Returns a reverse iterator pointing to the theoretical element
+     * preceding the first element in the vector (which is considered its
+     * reverse end).
+     * @return A reverse iterator to the reverse end of the sequence container.
+     */
     reverse_iterator rend() { return reverse_iterator(_ptr); }
 
    private:
 };
+
+template <class T, class Alloc>
+bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {}
 }  // namespace ft
 
 #endif  // __VECTOR_H__
