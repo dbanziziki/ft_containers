@@ -54,5 +54,13 @@ int main() {
     std::cout << "first element after erasing: " << *val << std::endl;
     assert(ft_vec.size() == std_vec.size());
     std::cout << "[OK]" << std::endl;
+    ft::vector<int> temp;
+    ft::vector<int> temp1;
+    for (int i = 0; i < 5; i++) {
+        int val = std::rand() % 100;
+        temp.push_back(val);
+        temp1.push_back(val);
+    }
+    assert(temp == temp1);
     return 0;
 }
