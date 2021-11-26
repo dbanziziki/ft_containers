@@ -25,7 +25,7 @@ int main() {
     typedef ft::vector<int>::iterator iterator;
     typedef std::vector<int>::iterator std_it;
 
-    std::cout << "Testing std::Vector void assign(InputIterator first, "
+    std::cout << "Testing ft::vector void assign(InputIterator first, "
                  "InputIterator last)"
               << std::endl;
     assert(ft_vec.size() == std_vec.size());
@@ -40,14 +40,14 @@ int main() {
         assert(ft_vec[i] == std_vec[i]);
     }
     std::cout << "[OK]" << std::endl;
-    std::cout << "Testing std::Vector iterator erase(iterator position)"
+    std::cout << "Testing ft::vector iterator erase(iterator position)"
               << std::endl;
     ft::vector<int>::iterator it = ft_vec.erase(ft_vec.begin());
     std_vec.erase(std_vec.begin());
     assert(ft_vec.size() == std_vec.size());
     std::cout << "[OK]" << std::endl;
     std::cout
-        << "Testing std::Vector iterator erase(iterator first, iterator last)"
+        << "Testing ft::vector iterator erase(iterator first, iterator last)"
         << std::endl;
     iterator val = ft_vec.erase(ft_vec.begin(), ft_vec.begin() + 2);
     std_it std_val = std_vec.erase(std_vec.begin(), std_vec.begin() + 2);
@@ -62,5 +62,27 @@ int main() {
         temp1.push_back(val);
     }
     assert(temp == temp1);
+    std::cout << "Testing ft::vector iterator insert(iterator position, const "
+                 "value_type& val)"
+              << std::endl;
+    for (size_t i = 0; i < 5; i++) {
+        ft_vec.push_back(std::rand() % 100);
+    }
+    std::cout << "size: " << ft_vec.size() << " Capacity :" << ft_vec.capacity()
+              << std::endl;
+    print_vector(ft_vec);
+    iterator it_val = ft_vec.insert(ft_vec.begin() + 6, 420);
+    ft_vec.push_back(120);
+    ft_vec.insert(ft_vec.end(), 19);
+    std::cout << "Last element is: " << *(--ft_vec.end()) << std::endl;
+    std::cout << "size: " << ft_vec.size() << " Capacity :" << ft_vec.capacity()
+              << std::endl;
+    std::cout << "-------" << std::endl;
+    ft::vector<int> nums;
+    for (int i = 0; i < 5; i++) {
+        nums.push_back(i);
+    }
+    nums.insert(nums.begin() + 2, 5, 149);
+    print_vector(nums);
     return 0;
 }

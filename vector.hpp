@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <memory>
 
+#include "algorithm.hpp"
 #include "iterator.hpp"
 #include "reverse_iterator.hpp"
 #include "utils.hpp"
@@ -282,6 +283,7 @@ class vector {
         _alloc.deallocate(_ptr, capacity());
         _ptr = new_ptr;
         _capacity = new_cap;
+        _end_capacty = _ptr + new_cap;
     }
 
     /* Modifiers */
@@ -394,7 +396,23 @@ class vector {
      * @return An iterator that points to the first of the newly inserted
      * elements.
      */
-    // iterator insert(iterator position, const value_type &val) {}
+    iterator insert(iterator position, const value_type &val) {
+        size_type n = &(*position) - _ptr;
+        if (_size <= _capacity) {
+            this->reserve(_capacity + _capacity / 2);
+        }
+        iterator last = this->end();
+        for (size_type i = 0; i < size() - n; i++) {
+            _alloc.construct(&(*last), *(last - 1));
+            _alloc.destroy(&(*(last - 1)));
+            --last;
+        }
+        iterator first = this->begin();
+        _alloc.construct(&(*(first + n)), val);
+        _size++;
+        _end++;
+        return begin() + n;
+    }
 
     /**
      * @brief The vector is extended by inserting new elements before the
@@ -405,7 +423,22 @@ class vector {
      * copy of val.
      * @param val Value to be copied (or moved) to the inserted elements.
      */
-    // void insert(iterator position, size_type n, const value_type &val) {}
+    void insert(iterator position, size_type n, const value_type &val) {
+        size_type new_cap = size() + n;
+        size_type pos_diff = &(*position) - _ptr;
+        if (_capacity < size() + n) this->reserve(new_cap);
+        pointer end_cap = _end_capacty;
+        iterator last = this->end();
+        for (size_type i = 0; i < size() - pos_diff; i++) {
+            --last;
+            _alloc.construct(--end_cap, *last);
+            _alloc.destroy(&(*last));
+        }
+        for (size_type i = 0; i < n; i++)
+            _alloc.construct(_ptr + pos_diff + i, val);
+        _size += n;
+        _end += n;
+    }
 
     /**
      * @brief The vector is extended by inserting new elements before the
@@ -419,7 +452,12 @@ class vector {
      * same order).
      */
     // template <class InputIterator>
-    // void insert(iterator positon, InputIterator first, InputIterator last) {}
+    // void insert(iterator positon, InputIterator first, InputIterator last) {
+    //     typedef typename ft::iterator_traits<InputIterator>::difference_type
+    //         difference_type;
+    //     difference_type diff = ft::difference(first, last);
+    //     size_type new_cap = size() + diff;
+    // }
 
     iterator erase(iterator position) {
         if (_size < 1) return _ptr;
@@ -429,7 +467,8 @@ class vector {
         typename iterator::difference_type diff =
             ft::difference(++(begin()), end());
         for (size_type i = 0; i < diff; i++) {
-            _alloc.construct(&(*(first)), *(first + 1));
+            _alloc.construct(&(*(first)), *(first + 1));  // TODO: notation
+            _alloc.destroy(&(*(first + diff + i)));
             first++;
         }
         --_size;
@@ -455,6 +494,7 @@ class vector {
         }
         for (size_type i = 0; i < diff; i++) {
             _alloc.construct(&(*start), *(start + (diff + i)));
+            _alloc.destroy(&(*(start + diff + i)));
             start++;
         }
         _size -= diff;
