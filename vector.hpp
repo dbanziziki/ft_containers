@@ -6,6 +6,7 @@
 
 #include "algorithm.hpp"
 #include "iterator.hpp"
+#include "random_access_iterator.hpp"
 #include "reverse_iterator.hpp"
 #include "utils.hpp"
 
@@ -46,8 +47,8 @@ class vector {
      */
     explicit vector(const allocator_type &alloc = allocator_type())
         : _ptr(NULL),
-          _end_capacty(NULL),
           _end(NULL),
+          _end_capacty(NULL),
           _size(0),
           _capacity(0),
           _alloc(alloc) {}
@@ -86,7 +87,9 @@ class vector {
      */
     template <class InputIterator>
     vector(InputIterator first, InputIterator last,
-           const allocator_type &alloc = allocator_type())
+           const allocator_type &alloc = allocator_type(),
+           typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type
+               * = nullptr)
         : _alloc(alloc) {
         size_type n = ft::difference(first, last);
         this->_ptr = this->_alloc.allocate(n);
@@ -106,14 +109,14 @@ class vector {
      * acquired.
      */
     vector(const vector &x) : _alloc(x._alloc) {
-        /*size_type n = x.size();
+        size_type n = x.size();
         this->_ptr = this->_alloc.allocate(x.capacity());
         this->_end = this->_ptr;
         this->_size = n;
         this->_capacity = x.capacity();
-        this->_end_capacty = x._ptr + n;
+        this->_end_capacty = this->_ptr + n;
         pointer src = x._ptr;
-        while (n--) this->_alloc.construct(_end++, *src++);*/
+        while (n--) this->_alloc.construct(_end++, *src++);
     }
 
     ~vector() {
@@ -132,7 +135,7 @@ class vector {
      */
     reference operator[](size_type index) {
         if (index >= _size) {
-            // TODO
+            throw std::out_of_range("ft::vector");
         }
         return _ptr[index];
     }
@@ -146,10 +149,27 @@ class vector {
      */
     reference operator[](size_type index) const {
         if (index >= _size) {
-            // TODO
+            throw std::out_of_range("ft::vector");
         }
         return _ptr[index];
     }
+
+    // TODO: operator=
+    /**
+     * @brief
+     *
+     * @param x A vector object of the same type (i.e., with the same template
+     * parameters, T and Alloc).
+     * @return vector&
+     */
+    // vector &operator=(const vector &x) {
+    //     ~vector();
+    //     _ptr = x._ptr;
+    //     _capacity = x.capacity();
+    //     _size = x.size();
+
+    //     return *this;
+    // }
 
     /**
      * @brief Returns a reference to the element at position n in the vector.
@@ -240,7 +260,6 @@ class vector {
 
     /**
      * @brief Resizes the container so that it contains n elements.
-     *
      * @param n New container size, expressed in number of elements.
      * @param val Object whose content is copied to the added elements in case
      * that n is greater than the current container size. If not specified, the
@@ -275,12 +294,14 @@ class vector {
         pointer prev_ptr = _ptr;
         _end = new_ptr;
         size_type i = size();
+        size_type prev_size = size();
         while (i--) {
             this->_alloc.construct(_end++, *prev_ptr);
             prev_ptr++;
         }
         clear();
         _alloc.deallocate(_ptr, capacity());
+        _size = prev_size;
         _ptr = new_ptr;
         _capacity = new_cap;
         _end_capacty = _ptr + new_cap;
@@ -316,7 +337,10 @@ class vector {
      * but not the element pointed by last.
      */
     template <class InputIterator>
-    void assign(InputIterator first, InputIterator last) {
+    void assign(
+        InputIterator first, InputIterator last,
+        typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * =
+            nullptr) {
         this->~vector();
         typedef typename iterator_traits<InputIterator>::difference_type
             difference_type;
@@ -507,13 +531,14 @@ class vector {
      *
      */
     void clear() {
-        pointer temp = this->_ptr;
+        pointer temp = _ptr;
         size_type i = 0;
         while (i < _size) {
             _alloc.destroy(temp);
             temp++;
             i++;
         }
+        _size = 0;
     }
 
     /* Allocator */
