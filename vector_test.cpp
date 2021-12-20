@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <vector>
 
+typedef ft::vector<int>::iterator iterator;
+typedef std::vector<int>::iterator std_iterator;
 
 template<typename T>
 void print_vec_std(std::vector<T> vec) {
@@ -219,27 +221,66 @@ void test_insert() {
         << std::endl;
     ft::vector<int> ft_vec(3, 42);
     std::vector<int> std_vec(3, 21);
-    // ft_vec.reserve(6);
+    ft_vec.reserve(6);
     // std_vec.reserve(40);
     typedef ft::vector<int>::iterator iterator;
     iterator it = ft_vec.begin();
     // std_iterator begin = std_vec.begin();
     ft_vec.insert(it + 1, 4, 19);
     it = ft_vec.begin();
-    std::cout << "vec size: " << ft_vec.size() << std::endl;
-    std::cout << "front: " << ft_vec.front() << std::endl;
-    print_vec(ft_vec);
     ft_vec.insert(it + 2, std_vec.begin(), std_vec.end());
-    std::cout << "-----------------" << std::endl;
-    print_vec(ft_vec);
+	std::cout << "[OK]" << std::endl;
 }
 
 void test_erase() {
     std::cout << "Testing iterator erase(iterator position)" << std::endl;
     ft::vector<int> ft_vec(4, 42);
-    ft_vec.erase(ft_vec.begin());
-	assert(ft_vec.size() == 3);
-    print_vec(ft_vec);
+    std::vector<int> std_vec(4, 42);
+	ft_vec.push_back(12);
+	std_vec.push_back(12);
+	iterator res = ft_vec.erase(ft_vec.begin() + 4);
+	std_iterator std_res = std_vec.erase(std_vec.begin() + 4);
+	iterator last = ft_vec.end();
+	std_iterator std_last = std_vec.end();
+	--last;
+	--std_last;
+	std::cout << "ft res: " << *res << std::endl;
+	std::cout << "std res: " << *std_res << std::endl;
+	std::cout << "ft last element: " << *last << std::endl;
+	std::cout << "std last element: " << *std_last << std::endl;
+	assert(ft_vec.size() == 4);
+	print_vec(ft_vec);
+	/*std::cout << "Testing iterator erase(iterator first, iterator last)" << std::endl;
+	for (int i = 0; i < 5; i++) {
+		ft_vec.push_back(rand() % 100);
+	}
+	ft_vec.push_back(21);
+	print_vec(ft_vec);
+	res = ft_vec.erase(ft_vec.begin(), ft_vec.begin() + 4);
+	std::cout << "res: " << *res << std::endl;
+	iterator end = ft_vec.end();
+	--end;
+	std::cout << "last element: " << *end << std::endl;
+	std::cout << "----------------------" << std::endl;
+	print_vec(ft_vec);*/
+}
+
+void test_assign_operator() {
+	std::cout << "Testing vector &operator=(const vector &x)" << std::endl;
+	ft::vector<int> ft_vec(3, 21);
+	std::vector<int> std_vec(3, 21);
+	std::vector<int> std_copy;
+	ft::vector<int> copy;
+	copy = ft_vec;
+	std_copy = std_vec;
+	std_copy.push_back(5);
+	assert(ft_vec.size() == copy.size());
+	copy.push_back(5);
+	print_vec(copy);
+	print_vec(ft_vec);
+	std::cout << "-----------------" << std::endl;
+	print_vec_std(std_copy);
+	print_vec_std(std_vec);
 }
 
 int main() {
@@ -269,5 +310,7 @@ int main() {
     test_insert();
 
     test_erase();
+
+	test_assign_operator();
     return 0;
 }

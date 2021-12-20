@@ -156,7 +156,6 @@ class vector {
         return _ptr[index];
     }
 
-    // TODO: operator=
     /**
      * @brief
      *
@@ -164,14 +163,17 @@ class vector {
      * parameters, T and Alloc).
      * @return vector&
      */
-    // vector &operator=(const vector &x) {
-    //     ~vector();
-    //     _ptr = x._ptr;
-    //     _capacity = x.capacity();
-    //     _size = x.size();
-
-    //     return *this;
-    // }
+     vector &operator=(const vector &x) {
+         this->~vector();
+		 size_type n = x.size();
+         _ptr = _alloc.allocate(n);
+		 _end = _ptr;
+         _capacity = x.capacity();
+		 _end_capacty = _ptr + n;
+         _size = x.size();
+		 while (n--) _alloc.construct(_end++, x._ptr[n]);
+         return *this;
+     }
 
     /**
      * @brief Returns a reference to the element at position n in the vector.
@@ -492,7 +494,6 @@ class vector {
                 typename ft::enable_if<!ft::is_integral<InputIterator>::value >::type* = NULL) {
         size_type n = ft::difference(first, last);
         size_type pos = &(*position) - _ptr;
-        std::cout << "pos: " << pos << std::endl;
         if (_capacity >= _size + n) {
             _end--;
             for (size_t i = 0; i < _size - pos; i++) {
@@ -534,17 +535,18 @@ class vector {
 
     iterator erase(iterator position) {
         if (_size < 1) return _ptr;
-        size_type n = &(*position) - _ptr;
+        size_type pos = &(*position) - _ptr;
         _alloc.destroy(&(*position));
-        iterator first = position;
+        iterator first = begin() + pos;
         size_type diff = ft::difference(++(begin()), end());
-        for (size_type i = 0; i < diff; i++) {
+        for (size_type i = pos; i < diff; i++) {
             _alloc.construct(&(*(first)), *(first + 1));
             _alloc.destroy(&(*(first + diff + i)));
             first++;
         }
         --_size;
-        return _ptr + n;
+		--_end;
+        return _ptr + pos;
     }
 
     /**
@@ -559,20 +561,21 @@ class vector {
      * container end if the operation erased the last element in the sequence.
      */
     iterator erase(iterator first, iterator last) {
-        iterator start = first;
-        typename iterator::difference_type diff = ft::difference(first, last);
+        size_type n = &(*first) - _ptr;
+		size_type rem = ft::difference(last, end());
+        iterator start = begin() + n;
+		size_type diff = ft::difference(first, last);
+		if (_size < diff) return _ptr;
         for (; first != last; first++) {
             _alloc.destroy(&(*first));
         }
-        for (size_type i = 0; i < diff; i++) {
-            _alloc.construct(&(*start), *(start + (diff + i)));
+        for (size_type i = 0; i < rem; i++) {
+            _alloc.construct(&(*(start + i)), *(start + (diff + i)));
             _alloc.destroy(&(*(start + diff + i)));
-            start++;
         }
         _size -= diff;
         return _ptr + diff;
     }
-
     /**
      * @brief Removes all elements from the vector (which are destroyed),
      * leaving the container with a size of 0.
