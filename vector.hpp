@@ -3,6 +3,8 @@
 
 #include <cstddef>
 #include <memory>
+#include <cstddef>
+#include <iostream>
 
 #include "algorithm.hpp"
 #include "iterator.hpp"
@@ -89,7 +91,7 @@ class vector {
     vector(InputIterator first, InputIterator last,
            const allocator_type &alloc = allocator_type(),
            typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type
-               * = nullptr)
+               * = NULL)
         : _alloc(alloc) {
         size_type n = ft::difference(first, last);
         this->_ptr = this->_alloc.allocate(n);
@@ -340,7 +342,7 @@ class vector {
     void assign(
         InputIterator first, InputIterator last,
         typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * =
-            nullptr) {
+            NULL) {
         this->~vector();
         typedef typename iterator_traits<InputIterator>::difference_type
             difference_type;
@@ -422,19 +424,7 @@ class vector {
      */
     iterator insert(iterator position, const value_type &val) {
         size_type n = &(*position) - _ptr;
-        if (_size <= _capacity) {
-            this->reserve(_capacity + _capacity / 2);
-        }
-        iterator last = this->end();
-        for (size_type i = 0; i < size() - n; i++) {
-            _alloc.construct(&(*last), *(last - 1));
-            _alloc.destroy(&(*(last - 1)));
-            --last;
-        }
-        iterator first = this->begin();
-        _alloc.construct(&(*(first + n)), val);
-        _size++;
-        _end++;
+        insert(position, 1, val);
         return begin() + n;
     }
 
@@ -448,20 +438,42 @@ class vector {
      * @param val Value to be copied (or moved) to the inserted elements.
      */
     void insert(iterator position, size_type n, const value_type &val) {
-        size_type new_cap = size() + n;
-        size_type pos_diff = &(*position) - _ptr;
-        if (_capacity < size() + n) this->reserve(new_cap);
-        pointer end_cap = _end_capacty;
-        iterator last = this->end();
-        for (size_type i = 0; i < size() - pos_diff; i++) {
-            --last;
-            _alloc.construct(--end_cap, *last);
-            _alloc.destroy(&(*last));
+        size_type pos = &(*position) - _ptr;
+        if (_capacity >= _size + n) {
+            _end--;
+            for (size_t i = 0; i < _size - pos; i++) {
+                _alloc.construct(_end + n - i, *(_end - i));
+                _alloc.destroy(_end - i);
+            }
+            _size += n;
+            _end = _ptr + _size;
+            for (size_type i = 0; i < n; i++) {
+                _alloc.construct(_ptr + pos + i, val);
+            }
+            return;
         }
-        for (size_type i = 0; i < n; i++)
-            _alloc.construct(_ptr + pos_diff + i, val);
-        _size += n;
-        _end += n;
+        size_type new_cap = _size + n;
+        size_type prev_size = _size;
+        size_type prev_capacity = _capacity;
+        pointer prev_ptr = _ptr;
+        pointer prev_end = _end;
+        _ptr = _alloc.allocate(new_cap);
+        _end_capacty = _ptr + new_cap;
+        _end = _ptr + prev_size + n;
+        _size = prev_size + n;
+        _capacity = new_cap;
+        for (size_type i = 0; i < prev_size - pos; i++) {
+            _alloc.construct(_end - i - 1, *(prev_end - i - 1));
+            _alloc.destroy(prev_end - i - 1);
+        }
+        for (size_type i = 0; i < pos; i++) {
+            _alloc.construct(_ptr + i, *(prev_ptr + i));
+            _alloc.destroy(prev_ptr + i);
+        }
+        for (size_type i = 0; i < n; i++) {
+            _alloc.construct(_ptr + pos + i, val);
+        }
+        _alloc.deallocate(prev_ptr, prev_capacity);
     }
 
     /**
@@ -475,23 +487,59 @@ class vector {
      * the elements in the range [first,last) are inserted at position (in the
      * same order).
      */
-    // template <class InputIterator>
-    // void insert(iterator positon, InputIterator first, InputIterator last) {
-    //     typedef typename ft::iterator_traits<InputIterator>::difference_type
-    //         difference_type;
-    //     difference_type diff = ft::difference(first, last);
-    //     size_type new_cap = size() + diff;
-    // }
+    template <class InputIterator>
+    void insert(iterator position, InputIterator first, InputIterator last,
+                typename ft::enable_if<!ft::is_integral<InputIterator>::value >::type* = NULL) {
+        size_type n = ft::difference(first, last);
+        size_type pos = &(*position) - _ptr;
+        std::cout << "pos: " << pos << std::endl;
+        if (_capacity >= _size + n) {
+            _end--;
+            for (size_t i = 0; i < _size - pos; i++) {
+                _alloc.construct(_end + n - i, *(_end - i));
+                _alloc.destroy(_end - i);
+            }
+            _size += n;
+            _end = _ptr + _size;
+            for (size_type i = 0; i < n; i++) {
+                _alloc.construct(_ptr + pos + i, *first);
+                ++first;
+            }
+            return;
+        }
+        size_type new_cap = _size + n;
+        size_type prev_size = _size;
+        size_type prev_capacity = _capacity;
+        pointer prev_ptr = _ptr;
+        pointer prev_end = _end;
+        _ptr = _alloc.allocate(new_cap);
+        _end_capacty = _ptr + new_cap;
+        _end = _ptr + prev_size + n;
+        _size = prev_size + n;
+        _capacity = new_cap;
+        for (size_type i = 0; i < prev_size - pos; i++) {
+            _alloc.construct(_end - i - 1, *(prev_end - i - 1));
+            _alloc.destroy(prev_end - i - 1);
+        }
+        for (size_type i = 0; i < pos; i++) {
+            _alloc.construct(_ptr + i, *(prev_ptr + i));
+            _alloc.destroy(prev_ptr + i);
+        }
+        for (size_type i = 0; i < n; i++) {
+            _alloc.construct(_ptr + pos + i, *first);
+            ++first;
+        }
+        _alloc.deallocate(prev_ptr, prev_capacity);
+    }
 
     iterator erase(iterator position) {
         if (_size < 1) return _ptr;
         size_type n = &(*position) - _ptr;
         _alloc.destroy(&(*position));
         iterator first = position;
-        typename iterator::difference_type diff =
-            ft::difference(++(begin()), end());
+        size_type diff = ft::difference(++(begin()), end());
         for (size_type i = 0; i < diff; i++) {
-            _alloc.construct(&(*(first)), *(first + 1));  // TODO: notation
+            _alloc.construct(&(*(first)), *(first + 1));
             _alloc.destroy(&(*(first + diff + i)));
             first++;
         }

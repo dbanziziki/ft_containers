@@ -1,13 +1,29 @@
 #include "vector.hpp"
-
+#include <assert.h>
+#include <stdlib.h>
 #include <vector>
+
+
+template<typename T>
+void print_vec_std(std::vector<T> vec) {
+    for (size_t i = 0; i < vec.size(); i++) {
+        std::cout << vec[i] << std::endl;
+    }
+}
+
+template<typename T>
+void print_vec(ft::vector<T> vec) {
+    for (size_t i = 0; i < vec.size(); i++) {
+        std::cout << vec[i] << std::endl;
+    }
+}
 
 void test_copy_constructor() {
     std::cout << "Testing vector(const vector &x)" << std::endl;
     ft::vector<int> ft_vec;
 
     for (int i = 0; i < 5; i++) {
-        int value = std::rand() % 100;
+        int value = rand() % 100;
         ft_vec.push_back(value);
     }
     ft::vector<int> ft_copy(ft_vec);
@@ -40,7 +56,7 @@ void test_range_constructor() {
               << std::endl;
     std::vector<int> std_vec;
     for (int i = 0; i < 5; i++) {
-        std_vec.push_back(std::rand() % 100);
+        std_vec.push_back(rand() % 100);
     }
     iterator begin = std_vec.begin();
     iterator end = std_vec.end();
@@ -59,7 +75,7 @@ void test_resize() {
     std::vector<int> std_vec;
     ft::vector<int> ft_vec;
     for (int i = 0; i < 5; i++) {
-        int value = std::rand() % 100;
+        int value = rand() % 100;
         ft_vec.push_back(value);
         std_vec.push_back(value);
     }
@@ -88,7 +104,7 @@ void test_reserve() {
     std_vec.reserve(5);
     assert(ft_vec.capacity() == std_vec.capacity());
     for (size_t i = 0; i < 5; i++) {
-        int value = std::rand() % 100;
+        int value = rand() % 100;
         ft_vec.push_back(value);
         std_vec.push_back(value);
     }
@@ -117,7 +133,7 @@ void test_front() {
     ft::vector<int> ft_vec;
     std::vector<int> std_vec;
     for (int i = 0; i < 5; i++) {
-        int value = std::rand() % 100;
+        int value = rand() % 100;
         ft_vec.push_back(value);
         std_vec.push_back(value);
     }
@@ -130,7 +146,7 @@ void test_back() {
     ft::vector<int> ft_vec;
     std::vector<int> std_vec;
     for (int i = 0; i < 5; i++) {
-        int value = std::rand() % 100;
+        int value = rand() % 100;
         ft_vec.push_back(value);
         std_vec.push_back(value);
     }
@@ -174,7 +190,7 @@ void test_push_back() {
     assert(ft_vec[0] == 4);
     assert(ft_vec.size() == 1);
     for (int i = 1; i <= 5; i++) {
-        int value = std::rand() % 100;
+        int value = rand() % 100;
         ft_vec.push_back(value);
         assert(ft_vec[i] == value);
     }
@@ -201,17 +217,33 @@ void test_insert() {
     std::cout
         << "Testing iterator insert(iterator position, const value_type &val)"
         << std::endl;
-    ft::vector<int> ft_vec(10, 42);
+    ft::vector<int> ft_vec(3, 42);
+    std::vector<int> std_vec(3, 21);
+    // ft_vec.reserve(6);
+    // std_vec.reserve(40);
     typedef ft::vector<int>::iterator iterator;
-    iterator begin = ft_vec.begin();
-    ft_vec.insert(begin, 19);
-    std::cout << *begin << std::endl;
-    assert(*begin == 19);  // TODO: broken
-    std::cout << "[OK]" << std::endl;
+    iterator it = ft_vec.begin();
+    // std_iterator begin = std_vec.begin();
+    ft_vec.insert(it + 1, 4, 19);
+    it = ft_vec.begin();
+    std::cout << "vec size: " << ft_vec.size() << std::endl;
+    std::cout << "front: " << ft_vec.front() << std::endl;
+    print_vec(ft_vec);
+    ft_vec.insert(it + 2, std_vec.begin(), std_vec.end());
+    std::cout << "-----------------" << std::endl;
+    print_vec(ft_vec);
+}
+
+void test_erase() {
+    std::cout << "Testing iterator erase(iterator position)" << std::endl;
+    ft::vector<int> ft_vec(4, 42);
+    ft_vec.erase(ft_vec.begin());
+	assert(ft_vec.size() == 3);
+    print_vec(ft_vec);
 }
 
 int main() {
-    std::srand(std::time(NULL));
+    srand(time(NULL));
     test_copy_constructor();
 
     test_fill_constructor();
@@ -236,6 +268,6 @@ int main() {
 
     test_insert();
 
-    system("leaks test");
+    test_erase();
     return 0;
 }

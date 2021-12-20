@@ -2,6 +2,7 @@
 #define __UTILS_H__
 
 #include "iterator.hpp"
+#include <uchar.h>
 
 namespace ft {
 
@@ -66,8 +67,8 @@ struct is_integral<long long int> : public true_type {};
 template <>
 struct is_integral<unsigned char> : public true_type {};
 
-template <>
-struct is_integral<unsigned short int> : public true_type {};
+//template <>
+//struct is_integral<unsigned short int> : public true_type {};
 
 template <>
 struct is_integral<unsigned long int> : public true_type {};
