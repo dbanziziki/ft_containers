@@ -9,7 +9,8 @@ namespace ft {
 
 template <class T>
 struct node {
-    T item;
+    typedef T value_type;
+    value_type item;
     struct node<T>* right;
     struct node<T>* left;
 

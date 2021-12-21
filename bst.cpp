@@ -12,13 +12,18 @@ int main(int argc, char const *argv[]) {
     ft::BST<ft::pair<int, std::string>> a;
 
     pointer head = NULL;
-    head = a.insert(head, p);
-    head = a.insert(head, ft::make_pair(2, "b"));
-    head = a.insert(head, ft::make_pair(3, "c"));
+    head = a.insert(p);
+    head = a.insert(ft::make_pair(2, "b"));
+    head = a.insert(ft::make_pair(3, "c"));
     a.inorder(head);
     ft_iterator ft_begin = a.begin();
+    ft_iterator ft_end = a.end();
 
-    std::cout << "iterator value: " << ft_begin->second << std::endl;
+    std::cout << "iterator value: " << ft_begin->first << " "
+              << ft_begin->second << std::endl;
+
+    std::cout << "iterator value: " << ft_end->first << " " << ft_end->second
+              << std::endl;
 
     std::map<int, std::string> m;
 
@@ -26,6 +31,9 @@ int main(int argc, char const *argv[]) {
     m.insert(std::make_pair(2, "b"));
     m.insert(std::make_pair(3, "c"));
     iterator begin = m.begin();
+    iterator end = m.end();
+    --end;
     std::cout << begin->first << " " << begin->second << std::endl;
+    std::cout << end->first << " " << end->second << std::endl;
     return 0;
 }

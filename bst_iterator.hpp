@@ -28,7 +28,9 @@ class map_iterator : public ft::Iterator<ft::bidirectional_iterator_tag, T> {
 
    public:
     pointer operator->() { return &(operator*()); }
-    reference operator*() const { return *_current; }
+    reference operator*() const { return *(_current); }
+
+    map_iterator &operator++() { return *this; }
 };
 
 }  // namespace ft

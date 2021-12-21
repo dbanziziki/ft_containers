@@ -22,22 +22,29 @@ class BST {
     typedef typename ft::map_iterator<value_type> iterator;
 
     BST(const node_allocator_type& node_alloc = node_allocator_type())
-        : _head(NULL) {}
+        : _head(NULL), _tail(NULL) {}
     ~BST() {}
 
-   public:
-    pointer insert(pointer node, const value_type& value) {
+   private:
+    pointer _insertKey(pointer node, const value_type& value) {
         if (node == NULL) {
             _head = _node_alloc.allocate(1);
             _node_alloc.construct(_head,
                                   ft::make_pair(value.first, value.second));
+            _tail = _head;
             return _head;
         }
         if (value < node->item)
-            node->left = insert(node->left, value);
+            node->left = _insertKey(node->left, value);
         else
-            node->right = insert(node->right, value);
+            node->right = _insertKey(node->right, value);
         return node;
+    }
+
+   public:
+    pointer insert(const value_type& value) {
+        _head = _insertKey(_head, value);
+        return _head;
     }
 
     void inorder(pointer node) {
@@ -52,6 +59,8 @@ class BST {
 
     iterator begin() { return &(_head->item); }
 
+    iterator end() { return &(_tail->item); }
+
    public:
     reference operator*() const { return *_head; }
 
@@ -59,6 +68,7 @@ class BST {
 
    private:
     pointer _head;
+    pointer _tail;
     node_allocator_type _node_alloc;
 };
 
