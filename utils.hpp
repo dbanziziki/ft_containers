@@ -7,6 +7,19 @@
 
 namespace ft {
 
+template <class T>
+struct node {
+    T item;
+    struct node<T>* right;
+    struct node<T>* left;
+
+    node(T item) {
+        this->item = item;
+        right = NULL;
+        left = NULL;
+    }
+};
+
 template <class Arg1, class Arg2, class Result>
 struct binary_function {
     typedef Arg1 first_argument_type;
