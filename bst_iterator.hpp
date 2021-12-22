@@ -10,6 +10,9 @@ class map_iterator : public ft::Iterator<ft::bidirectional_iterator_tag, T> {
     typedef ft::Iterator<ft::bidirectional_iterator_tag, T> iterator_type;
     typedef typename ft::Iterator<ft::bidirectional_iterator_tag, T>::value_type
         value_type;
+    typedef typename value_type::value_type pair_type;
+    typedef pair_type* pair_pointer;
+    typedef pair_type& pair_reference;
     typedef typename ft::Iterator<ft::bidirectional_iterator_tag,
                                   T>::iterator_category iterator_category;
     typedef typename ft::Iterator<ft::bidirectional_iterator_tag,
@@ -27,10 +30,10 @@ class map_iterator : public ft::Iterator<ft::bidirectional_iterator_tag, T> {
     pointer _current;
 
    public:
-    pointer operator->() { return &(operator*()); }
-    reference operator*() const { return *(_current); }
+    pair_pointer operator->() { return &(operator*()); }
+    pair_reference operator*() const { return _current->item; }
 
-    map_iterator &operator++() { return *this; }
+    map_iterator& operator++() { return *this; }
 };
 
 }  // namespace ft

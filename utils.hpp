@@ -11,6 +11,8 @@ template <class T>
 struct node {
     typedef T value_type;
     value_type item;
+    typedef T& reference;
+    typedef T* pointer;
     struct node<T>* right;
     struct node<T>* left;
 
@@ -19,6 +21,9 @@ struct node {
         right = NULL;
         left = NULL;
     }
+
+    pointer operator->() { return &(operator*()); }
+    reference operator*() const { return &item; }
 };
 
 template <class Arg1, class Arg2, class Result>

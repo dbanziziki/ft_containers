@@ -19,7 +19,7 @@ class BST {
     typedef typename node_allocator_type::const_pointer const_pointer;
     typedef typename node_allocator_type::reference reference;
     typedef typename node_allocator_type::const_reference const_reference;
-    typedef typename ft::map_iterator<value_type> iterator;
+    typedef typename ft::map_iterator<node_type> iterator;
 
     BST(const node_allocator_type& node_alloc = node_allocator_type())
         : _head(NULL), _tail(NULL) {}
@@ -32,20 +32,31 @@ class BST {
             _node_alloc.construct(_head,
                                   ft::make_pair(value.first, value.second));
             _tail = _head;
+            std::cout << "constructed!" << std::endl;
             return _head;
         }
+        if (value == node->item) return node;
         if (value < node->item)
             node->left = _insertKey(node->left, value);
         else
             node->right = _insertKey(node->right, value);
+        std::cout << "returning head node: " << node->item.first << " "
+                  << node->item.second << std::endl;
         return node;
     }
 
    public:
-    pointer insert(const value_type& value) {
+    // pointer insert(const value_type& value) {
+    //     _head = _insertKey(_head, value);
+    //     return _head;
+    // }
+
+    ft::pair<iterator, bool> insert(const value_type& value) {
         _head = _insertKey(_head, value);
-        return _head;
+        return ft::make_pair(iterator(_tail), true);
     }
+
+    pointer getHead() const { return _tail; }
 
     void inorder(pointer node) {
         if (node != NULL) {
@@ -57,9 +68,9 @@ class BST {
         }
     }
 
-    iterator begin() { return &(_head->item); }
+    iterator begin() { return _head; }
 
-    iterator end() { return &(_tail->item); }
+    iterator end() { return _tail; }
 
    public:
     reference operator*() const { return *_head; }
