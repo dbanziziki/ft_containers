@@ -2,9 +2,8 @@
 #define __VECTOR_H__
 
 #include <cstddef>
-#include <memory>
-#include <cstddef>
 #include <iostream>
+#include <memory>
 
 #include "algorithm.hpp"
 #include "iterator.hpp"
@@ -163,17 +162,17 @@ class vector {
      * parameters, T and Alloc).
      * @return vector&
      */
-     vector &operator=(const vector &x) {
-         this->~vector();
-		 size_type n = x.size();
-         _ptr = _alloc.allocate(n);
-		 _end = _ptr;
-         _capacity = x.capacity();
-		 _end_capacty = _ptr + n;
-         _size = x.size();
-		 while (n--) _alloc.construct(_end++, x._ptr[n]);
-         return *this;
-     }
+    vector &operator=(const vector &x) {
+        this->~vector();
+        size_type n = x.size();
+        _ptr = _alloc.allocate(n);
+        _end = _ptr;
+        _capacity = x.capacity();
+        _end_capacty = _ptr + n;
+        _size = x.size();
+        while (n--) _alloc.construct(_end++, x._ptr[n]);
+        return *this;
+    }
 
     /**
      * @brief Returns a reference to the element at position n in the vector.
@@ -346,7 +345,7 @@ class vector {
         typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * =
             NULL) {
         this->~vector();
-        typedef typename iterator_traits<InputIterator>::difference_type
+        typedef typename ft::iterator_traits<InputIterator>::difference_type
             difference_type;
         difference_type n = ft::difference(first, last);
         _ptr = _alloc.allocate(n);
@@ -490,8 +489,10 @@ class vector {
      * same order).
      */
     template <class InputIterator>
-    void insert(iterator position, InputIterator first, InputIterator last,
-                typename ft::enable_if<!ft::is_integral<InputIterator>::value >::type* = NULL) {
+    void insert(
+        iterator position, InputIterator first, InputIterator last,
+        typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * =
+            NULL) {
         size_type n = ft::difference(first, last);
         size_type pos = &(*position) - _ptr;
         if (_capacity >= _size + n) {
@@ -545,7 +546,7 @@ class vector {
             first++;
         }
         --_size;
-		--_end;
+        --_end;
         return _ptr + pos;
     }
 
@@ -562,10 +563,10 @@ class vector {
      */
     iterator erase(iterator first, iterator last) {
         size_type n = &(*first) - _ptr;
-		size_type rem = ft::difference(last, end());
+        size_type rem = ft::difference(last, end());
         iterator start = begin() + n;
-		size_type diff = ft::difference(first, last);
-		if (_size < diff) return _ptr;
+        size_type diff = ft::difference(first, last);
+        if (_size < diff) return _ptr;
         for (; first != last; first++) {
             _alloc.destroy(&(*first));
         }

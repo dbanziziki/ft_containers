@@ -6,7 +6,7 @@ TEST_SRCS = vector_test.cpp
 
 CC = clang++
 
-FSAN = -fsanitize=address
+FSAN = #-fsanitize=address
 
 FLAGS = -g -Wextra -Werror -Wall $(FSAN)  -std=c++98
 
@@ -17,5 +17,8 @@ test: fclean vector_test.cpp vector.hpp
 	$(CC) $(FLAGS) vector_test.cpp -o test
 	./test
 
+bst: bst.hpp bst.cpp
+	$(CC) $(FLAGS) bst.cpp -o bst
+
 fclean:
-	rm -f $(NAME) test
+	rm -f $(NAME) test bst
