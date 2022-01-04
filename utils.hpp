@@ -15,11 +15,13 @@ struct node {
     typedef T* pointer;
     struct node<T>* right;
     struct node<T>* left;
+    struct node<T>* parent;
 
     node(T item) {
         this->item = item;
         right = NULL;
         left = NULL;
+        parent = NULL;
     }
 
     pointer operator->() { return &(operator*()); }
