@@ -19,7 +19,10 @@ int main() {
     res = a.insert(ft::make_pair(21, "Brandon"));
 
 	a.inorder(a.getHead());
+	pointer found = a.findKey(a.getHead(), 42);
+	std::cout << "Found value is: " << found->item.first << " " << found->item.second << std::endl;
 	ft_iterator last = a.end();
-	std::cout << last->first << " " << last->second << std::endl;
+	std::cout << "Last: " << last->first << " " << last->second << std::endl;
+	a.inorder(a.getHead());
     return 0;
 }

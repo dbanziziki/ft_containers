@@ -21,6 +21,7 @@ class map {
     typedef typename allocator_type::pointer pointer;
     typedef typename allocator_type::const_pointer const_pointer;
     typedef typename ft::BST<value_type, key_compare>::iterator iterator;
+    typedef typename ft::BST<value_type, key_compare>::pointer tree_pointer;
 
     class value_compare : public binary_function<value_type, value_type, bool> {
        protected:
@@ -47,6 +48,13 @@ class map {
     ft::pair<iterator, bool> insert(const value_type& val) {
         return _tree.insert(val);
     }
+
+    mapped_type& operator[](const key_type k) {
+        tree_pointer res = _tree.findKey(_tree.getHead(), k);
+        return res->item.second;
+    }
+
+    size_t size() const { return _tree.size(); }
 };
 
 }  // namespace ft
