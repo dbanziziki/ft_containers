@@ -23,7 +23,7 @@ class BST {
     typedef typename ft::map_iterator<node_type> iterator;
 
     BST(const node_allocator_type& node_alloc = node_allocator_type())
-        : _root(NULL), _tail(NULL), _size(0), _node_alloc(node_alloc) {}
+        : _root(NULL), _tail(NULL), _max(NULL), _size(0), _node_alloc(node_alloc) {}
     ~BST() {
         _node_alloc.destroy(_root);
         _node_alloc.deallocate(_root, 1);
@@ -38,8 +38,9 @@ class BST {
         if (_root == NULL) {
             _root = newNode;
             _tail = newNode;
+            _max = newNode;
             _size++;
-            return ft::make_pair(iterator(_root), true);
+            return ft::make_pair(iterator(_root, _tail), true);
         }
         pointer x = _root;
         pointer y = NULL;
@@ -49,25 +50,27 @@ class BST {
             if (value.first < x->item.first) {
                 x = x->left;
             } else if (value.first == x->item.first) {
-                return ft::make_pair(iterator(x), false);
+                return ft::make_pair(iterator(x, _tail), false);
             } else {
                 x = x->right;
             }
         }
 
         if (value.first < y->item.first) {
+            if (value.first > _max->item.first) _max = newNode;
+            if (value.first < _tail->item.first) _tail = newNode;
             y->left = newNode;
             newNode->parent = y;
-            _tail = y->left;
             _size++;
-            return ft::make_pair(iterator(y->left), true);
+            return ft::make_pair(iterator(newNode, _tail), true);
         } else {
+            if (value.first > _max->item.first) _max = newNode;
             y->right = newNode;
             newNode->parent = y;
             _size++;
-            return ft::make_pair(iterator(y->right), true);
+            return ft::make_pair(iterator(newNode, _tail), true);
         }
-        return ft::make_pair(iterator(y), true);
+        return ft::make_pair(iterator(newNode, _tail), true);
     }
 
     pointer deleteNode(pointer node, const value_type& value) {
@@ -90,7 +93,7 @@ class BST {
                 _node_alloc.deallocate(node, 1);
                 return temp;
             }
-            pointer temp = _minValueNode(node->right);
+            pointer temp = minValueNode(node->right);
             node->item = temp->item;
             node->right = deleteNode(node->right, temp->item);
         }
@@ -109,16 +112,15 @@ class BST {
         return findKey(node->left, k);
     }
 
-   private:
-    pointer _minValueNode(pointer node) {
+   public:
+    pointer minValueNode(pointer node) {
         pointer current = node;
         while (current && current->left != NULL) current = current->left;
         return current;
     }
-
-   public:
     pointer getHead() const { return _root; }
     pointer getTail() const { return _tail; }
+    pointer getMax() const { return _max; }
 
     void inorder(pointer node) {
         if (node != NULL) {
@@ -130,9 +132,9 @@ class BST {
         }
     }
 
-    iterator begin() { return _root; }
+    iterator begin() { return iterator(_tail, _root); }
 
-    iterator end() { return _tail; }
+    iterator end() { return iterator(_max, _root); }
 
    public:
     reference operator*() const { return *_root; }
@@ -142,6 +144,7 @@ class BST {
    private:
     pointer _root;
     pointer _tail;
+    pointer _max;
     size_t _size;
     compare_type _comp;
     node_allocator_type _node_alloc;

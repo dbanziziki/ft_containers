@@ -26,6 +26,7 @@ struct node {
 
     pointer operator->() { return &(operator*()); }
     reference operator*() const { return &item; }
+
 };
 
 template <class Arg1, class Arg2, class Result>

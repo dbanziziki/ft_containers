@@ -22,19 +22,24 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
     typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::reference
         reference;
 
-    map_iterator() : _current(NULL) {}
+    map_iterator() : _current(NULL), _last(NULL) {}
 
-    map_iterator(pointer p) : _current(p) {}
+    map_iterator(pointer p, pointer last) : _current(p), _last(last) {}
 
    private:
     pointer _current;
+    pointer _last;
 
    public:
     pair_pointer operator->() { return &(operator*()); }
     pair_reference operator*() const { return _current->item; }
+    pointer operator++() {
+      if (_current->right == NULL && _current->left == NULL) return this;
+        
+      
+  }
 
-	pointer getPointer() const { return _current; }
-
+    pointer getPointer() const { return _current; }
 };
 
 }  // namespace ft
