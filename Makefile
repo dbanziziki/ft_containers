@@ -17,8 +17,9 @@ test: fclean vector_test.cpp vector.hpp
 	$(CC) $(FLAGS) vector_test.cpp -o test
 	./test
 
-bst: bst.hpp bst.cpp
+bst: fclean bst.hpp bst.cpp
 	$(CC) $(FLAGS) bst.cpp -o bst
+	./bst
 
 map: map.hpp map_test.cpp
 	$(CC) $(FLAGS) map_test.cpp -o map

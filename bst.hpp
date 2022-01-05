@@ -23,7 +23,11 @@ class BST {
     typedef typename ft::map_iterator<node_type> iterator;
 
     BST(const node_allocator_type& node_alloc = node_allocator_type())
-        : _root(NULL), _tail(NULL), _max(NULL), _size(0), _node_alloc(node_alloc) {}
+        : _root(NULL),
+          _tail(NULL),
+          _max(NULL),
+          _size(0),
+          _node_alloc(node_alloc) {}
     ~BST() {
         _node_alloc.destroy(_root);
         _node_alloc.deallocate(_root, 1);
@@ -134,7 +138,7 @@ class BST {
 
     iterator begin() { return iterator(_tail, _root); }
 
-    iterator end() { return iterator(_max, _root); }
+    iterator end() { return iterator(_max->right, _root); }
 
    public:
     reference operator*() const { return *_root; }

@@ -1,8 +1,6 @@
 #if !defined(__UTILS_H__)
 #define __UTILS_H__
 
-#include <uchar.h>
-
 #include "iterator.hpp"
 
 namespace ft {
@@ -26,8 +24,21 @@ struct node {
 
     pointer operator->() { return &(operator*()); }
     reference operator*() const { return &item; }
-
 };
+
+template <typename T>
+node<T>* minValueNode(node<T>* current) {
+    node<T>* root = current;
+    while (root && root->left != NULL) root = root->left;
+    return root;
+}
+
+template <typename T>
+node<T>* maxValueNode(node<T>* current) {
+    node<T>* root = current;
+    while (root && root->right != NULL) root = root->right;
+    return root;
+}
 
 template <class Arg1, class Arg2, class Result>
 struct binary_function {
