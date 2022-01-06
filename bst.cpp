@@ -3,35 +3,29 @@
 #include <iostream>
 #include <map>
 
-typedef ft::BST<ft::pair<int, std::string> >::pointer pointer;
-typedef std::map<int, std::string>::iterator iterator;
-typedef ft::BST<ft::pair<int, std::string> >::iterator ft_iterator;
-typedef ft::BST<ft::pair<int, std::string> >::pointer pointer;
+typedef ft::BST<ft::pair<std::string, int> >::pointer pointer;
+typedef std::map<std::string, int>::iterator iterator;
+typedef ft::BST<ft::pair<std::string, int> >::iterator ft_iterator;
+typedef ft::BST<ft::pair<std::string, int> >::pointer pointer;
 
 int main() {
-    ft::pair<int, std::string> p = ft::make_pair(78, "a");
-    ft::BST<ft::pair<int, std::string> > a;
+    ft::pair<std::string, int> p = ft::make_pair("a", 78);
+    ft::BST<ft::pair<std::string, int> > a;
+    std::map<std::string, int> map;
+
+    map.insert(std::make_pair(p.first, p.second));
+    map["Bono"] = 2;
 
     ft::pair<ft_iterator, bool> res = a.insert(p);
-    res = a.insert(ft::make_pair(2, "Bono"));
-    res = a.insert(ft::make_pair(1, "Oregon lowest"));
-    res = a.insert(ft::make_pair(4, "Jason"));
-    res = a.insert(ft::make_pair(140, "Brandon"));
-    res = a.insert(ft::make_pair(21, "Brandon"));
-    res = a.insert(ft::make_pair(98, "Brandon"));
+    res = a.insert(ft::make_pair("Bono", 2));
 
-    ft_iterator first = a.begin();
-    ft_iterator last = a.end();
-    for (; first != last; ++first) {
-        std::cout << first->first << "-" << first->second << std::endl;
-    }
-    first = a.begin();
-    --last;
-    std::cout << "-------\n";
-    for (; last != first; --last) {
-        std::cout << last->first << " " << last->second << std::endl;
-    }
-    std::cout << a.begin()->second << std::endl;
-
+    // a.inorder(a.getHead());
+    a.deleteNode(a.getHead(), "Bono");
+    map.erase("Bono");
+    // std::cout << "---------" << std::endl;
+    ft_iterator it = a.begin();
+    iterator begin = map.begin();
+    std::cout << it->first << " - " << it->second << std::endl;
+    std::cout << begin->first << " - " << begin->second << std::endl;
     return 0;
 }

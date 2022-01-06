@@ -24,7 +24,7 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
 
     map_iterator() : _current(NULL), _root(NULL) {}
 
-    map_iterator(pointer p, pointer last) : _current(p), _root(last) {}
+    map_iterator(pointer p, pointer root) : _current(p), _root(root) {}
 
    private:
     pointer _current;
@@ -32,7 +32,15 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
 
    public:
     pair_pointer operator->() { return &(operator*()); }
+
     pair_reference operator*() const { return _current->item; }
+
+    map_iterator &operator=(const map_iterator& other) {
+        _current = other._current;
+        _root = other._root;
+        return *this;
+    }
+
     map_iterator& operator++() {
         pointer n = _current;
 
@@ -77,7 +85,7 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
         return _current != other._current;
     }
 
-    pointer getPointer() const { return _current; }
+    pointer base() const { return _current; }
 
    private:
     pointer _findPredecessor(pointer node, pointer prec) {

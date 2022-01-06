@@ -1,7 +1,11 @@
 *.o
+test
+map
+bst
 main
 main.dSYM/
 test.dSYM/
 bst.dSYM/
+map.dSYM/
 .vscode/
 .notes

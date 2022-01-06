@@ -1,4 +1,3 @@
-#include <cstddef>
 #if !defined(__BST_H__)
 #define __BST_H__
 
@@ -21,6 +20,7 @@ class BST {
     typedef typename node_allocator_type::reference reference;
     typedef typename node_allocator_type::const_reference const_reference;
     typedef typename ft::map_iterator<node_type> iterator;
+    typedef typename ft::map_iterator<const node_type> const_iterator;
 
     BST(const node_allocator_type& node_alloc = node_allocator_type())
         : _root(NULL),
@@ -29,11 +29,10 @@ class BST {
           _size(0),
           _node_alloc(node_alloc) {}
     ~BST() {
-        _node_alloc.destroy(_root);
-        _node_alloc.deallocate(_root, 1);
+        // _node_alloc.destroy(_root);
+        // _node_alloc.deallocate(_root, 1);
     }
 
-   private:
    public:
     size_t size() const { return _size; }
     ft::pair<iterator, bool> insert(const value_type& value) {
@@ -77,11 +76,11 @@ class BST {
         return ft::make_pair(iterator(newNode, _tail), true);
     }
 
-    pointer deleteNode(pointer node, const value_type& value) {
+    pointer deleteNode(pointer node, const key_type& value) {
         if (node == NULL) return node;
-        if (value.first < node->item.first)
+        if (value < node->item.first)
             node->left = deleteNode(node->left, value);
-        else if (value.first > node->item.first)
+        else if (value > node->item.first)
             node->right = deleteNode(node->right, value);
         else {
             if (node->left == NULL && node->right == NULL)
@@ -99,8 +98,9 @@ class BST {
             }
             pointer temp = minValueNode(node->right);
             node->item = temp->item;
-            node->right = deleteNode(node->right, temp->item);
+            node->right = deleteNode(node->right, temp->item.first);
         }
+        _tail = minValueNode(_root);  // TODO: this is dodo
         return node;
     }
 
@@ -108,7 +108,7 @@ class BST {
         if (node == NULL) {
             ft::pair<iterator, bool> inserted =
                 insert(ft::make_pair(k, mapped_type()));
-            return inserted.first.getPointer();
+            return inserted.first.base();
         }
         if (node->item.first == k) return node;
 
@@ -138,12 +138,25 @@ class BST {
 
     iterator begin() { return iterator(_tail, _root); }
 
-    iterator end() { return iterator(_max->right, _root); }
+    iterator end() { return iterator(_max->left, _root); }
+
+    bool empty() const { return _root == NULL; }
 
    public:
     reference operator*() const { return *_root; }
 
     pointer operator->() { return &(operator*()); }
+
+    BST& operator=(const BST& other) {
+        this->~BST();
+        _root = other._root;
+        _tail = other._tail;
+        _max = other._max;
+        _size = other._size;
+        _comp = other._comp;
+        _node_alloc = other._node_alloc;
+        return *this;
+    }
 
    private:
     pointer _root;
