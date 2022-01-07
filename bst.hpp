@@ -89,18 +89,25 @@ class BST {
                 pointer temp = node->right;
                 _node_alloc.destroy(node);
                 _node_alloc.deallocate(node, 1);
+                if (node == _root && node == _tail) {
+                    _root = temp;
+                    _tail = temp;
+                }
                 return temp;
             } else if (node->right == NULL) {
                 pointer temp = node->left;
+                /*TODO: root node might be invalid*/
+                if (node == _root) _root = temp;
                 _node_alloc.destroy(node);
                 _node_alloc.deallocate(node, 1);
                 return temp;
             }
+            // deleting a head node whith 2 children
             pointer temp = minValueNode(node->right);
             node->item = temp->item;
             node->right = deleteNode(node->right, temp->item.first);
         }
-        _tail = minValueNode(_root);  // TODO: this is dodo
+        // _tail = minValueNode(_root);  // TODO: this is dodo
         return node;
     }
 
