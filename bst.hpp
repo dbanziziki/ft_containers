@@ -83,9 +83,14 @@ class BST {
         else if (value > node->item.first)
             node->right = deleteNode(node->right, value);
         else {
-            if (node->left == NULL && node->right == NULL)
+            if (node->left == NULL && node->right == NULL) {
+                if (node == _tail) {
+                    _tail = _findSuccessor(_tail);
+                }
+                _node_alloc.destroy(node);
+                _node_alloc.deallocate(node, 1);
                 return NULL;
-            else if (node->left == NULL) {
+            } else if (node->left == NULL) {
                 pointer temp = node->right;
                 _node_alloc.destroy(node);
                 _node_alloc.deallocate(node, 1);
@@ -96,18 +101,15 @@ class BST {
                 return temp;
             } else if (node->right == NULL) {
                 pointer temp = node->left;
-                /*TODO: root node might be invalid*/
                 if (node == _root) _root = temp;
                 _node_alloc.destroy(node);
                 _node_alloc.deallocate(node, 1);
                 return temp;
             }
-            // deleting a head node whith 2 children
             pointer temp = minValueNode(node->right);
             node->item = temp->item;
             node->right = deleteNode(node->right, temp->item.first);
         }
-        // _tail = minValueNode(_root);  // TODO: this is dodo
         return node;
     }
 
@@ -145,7 +147,7 @@ class BST {
 
     iterator begin() { return iterator(_tail, _root); }
 
-    iterator end() { return iterator(_max->left, _root); }
+    iterator end() { return iterator(NULL, _root); }
 
     bool empty() const { return _root == NULL; }
 
@@ -163,6 +165,20 @@ class BST {
         _comp = other._comp;
         _node_alloc = other._node_alloc;
         return *this;
+    }
+
+   private:
+    pointer _findSuccessor(pointer node) {
+        pointer n = node;
+        if (n->right != NULL) {
+            return ft::minValueNode(n->right);
+        }
+        pointer p = n->parent;
+        while (p != NULL && n == p->right) {
+            n = p;
+            p = p->parent;
+        }
+        return p;
     }
 
    private:

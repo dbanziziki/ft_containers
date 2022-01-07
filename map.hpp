@@ -82,7 +82,20 @@ class map {
 
     void erase(iterator position) { this->erase((*position).first); }
 
-    void erase(const key_type& k) { _tree.deleteNode(_tree.getHead(), k); }
+    size_type erase(const key_type& k) {
+        // if the node does not exist return 0
+        _tree.deleteNode(_tree.getHead(), k);
+        return 1;
+    }
+
+    void erase(iterator first, iterator last) {
+        size_type n = ft::difference(first, last);
+        std::cout << "n: " << n << std::endl;
+        while (first != last) {
+            this->erase(first++);
+            std::cout << "Erasing" << std::endl;
+        };
+    }
     /* Element access */
 
     mapped_type& operator[](const key_type k) {
