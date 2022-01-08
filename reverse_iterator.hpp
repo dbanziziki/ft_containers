@@ -33,11 +33,6 @@ class reverse_iterator {
         return reverse_iterator(_current[n]);
     }
 
-    reference operator*() const {
-        iterator_type temp = _current;
-        return *(--temp);
-    }
-
     reverse_iterator& operator++() {
         _current--;
         return *this;
@@ -71,6 +66,11 @@ class reverse_iterator {
 
     reverse_iterator operator+=(difference_type n) const {
         return reverse_iterator(_current -= n);
+    }
+
+    reference operator*() const {
+        iterator_type temp = _current;
+        return *(--temp);
     }
 
     pointer operator->() const { return &(operator*()); }

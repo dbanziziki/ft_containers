@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "bst.hpp"
+#include "reverse_iterator.hpp"
 
 namespace ft {
 
@@ -24,6 +25,10 @@ class map {
     typedef typename ft::BST<const value_type, key_compare>::const_iterator
         const_iterator;
     typedef typename ft::BST<value_type, key_compare>::pointer tree_pointer;
+    typedef typename ft::reverse_iterator<iterator> reverse_iterator;
+    typedef typename ft::reverse_iterator<const_iterator>
+        const_reverse_iterator;
+    typedef ft::BST<value_type, key_compare> tree_type;
     typedef size_t size_type;
 
     class value_compare : public binary_function<value_type, value_type, bool> {
@@ -61,7 +66,7 @@ class map {
         _alloc = x._alloc;
         _comp = x._comp;
     }
-    ~map() {}
+    ~map() { this->clear(); }
 
     /* Modifiers */
 
@@ -83,23 +88,40 @@ class map {
     void erase(iterator position) { this->erase((*position).first); }
 
     size_type erase(const key_type& k) {
-        // if the node does not exist return 0
-        _tree.deleteNode(_tree.getHead(), k);
+        if (!_tree.findKey(_tree.getRoot(), k)) return 0;
+        _tree.deleteNode(_tree.getRoot(), k);
         return 1;
     }
 
     void erase(iterator first, iterator last) {
-        size_type n = ft::difference(first, last);
-        std::cout << "n: " << n << std::endl;
         while (first != last) {
             this->erase(first++);
-            std::cout << "Erasing" << std::endl;
-        };
+        }
     }
+
+    void swap(map& x) {
+        Compare prev_comp = _comp;
+        tree_type prev_tree = _tree;
+        allocator_type prev_alloc = _alloc;
+
+        _tree = x._tree;
+        _comp = x._comp;
+        _alloc = x._alloc;
+
+        x._alloc = prev_alloc;
+        x._tree = prev_tree;
+        x._comp = prev_comp;
+    }
+
+    void clear() { this->erase(begin(), end()); }
+
     /* Element access */
 
     mapped_type& operator[](const key_type k) {
-        tree_pointer res = _tree.findKey(_tree.getHead(), k);
+        tree_pointer res = _tree.findKey(_tree.getRoot(), k);
+        if (res == u_nullptr) {
+            return _tree.insert(ft::make_pair(k, mapped_type())).first->second;
+        }
         return res->item.second;
     }
 
@@ -107,6 +129,14 @@ class map {
 
     iterator begin() { return _tree.begin(); }
     iterator end() { return _tree.end(); }
+
+    reverse_iterator rbegin() {
+        return reverse_iterator(this->end());
+    }
+
+    reverse_iterator rend() {
+        return reverse_iterator(this->begin());
+    }
 
     /* Capacity */
 

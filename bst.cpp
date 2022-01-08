@@ -24,10 +24,10 @@ int main() {
     res = a.insert(ft::make_pair("a", 2));
     res = a.insert(ft::make_pair("c", 19));
     // a.inorder(a.getHead());
-    a.deleteNode(a.getHead(), "b");
+    a.deleteNode(a.getRoot(), "b");
     ft_iterator begin = a.begin();
     std::cout << "Tail node: " << begin->first << " " << begin->second << std::endl;
-    pointer root = a.getHead();
+    pointer root = a.getRoot();
     std::cout << "Head node: " << root->item.first << " " << root->item.second << std::endl;
     return 0;
 }

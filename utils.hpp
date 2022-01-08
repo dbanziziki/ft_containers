@@ -3,6 +3,23 @@
 
 #include "iterator.hpp"
 
+struct nullptr_t
+{
+public:
+    template<class T>
+    inline operator T*() const
+        { return 0; }
+
+    template<class C, class T>
+    inline operator T C::*() const
+        { return 0; }
+ 
+private:
+    void operator&() const;
+}; 
+
+static nullptr_t u_nullptr = {};
+
 namespace ft {
 
 template <class T>
@@ -17,9 +34,9 @@ struct node {
 
     node(T item) {
         this->item = item;
-        right = NULL;
-        left = NULL;
-        parent = NULL;
+        right = u_nullptr;
+        left = u_nullptr;
+        parent = u_nullptr;
     }
 
     pointer operator->() { return &(operator*()); }
@@ -29,14 +46,14 @@ struct node {
 template <typename T>
 node<T>* minValueNode(node<T>* current) {
     node<T>* root = current;
-    while (root && root->left != NULL) root = root->left;
+    while (root && root->left != u_nullptr) root = root->left;
     return root;
 }
 
 template <typename T>
 node<T>* maxValueNode(node<T>* current) {
     node<T>* root = current;
-    while (root && root->right != NULL) root = root->right;
+    while (root && root->right != u_nullptr) root = root->right;
     return root;
 }
 

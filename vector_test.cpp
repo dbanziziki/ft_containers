@@ -284,7 +284,7 @@ void test_assign_operator() {
 }
 
 int main() {
-    srand(time(NULL));
+    srand(time(u_nullptr));
     test_copy_constructor();
 
     test_fill_constructor();

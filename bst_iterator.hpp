@@ -22,7 +22,7 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
     typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::reference
         reference;
 
-    map_iterator() : _current(NULL), _root(NULL) {}
+    map_iterator() : _current(u_nullptr), _root(u_nullptr) {}
 
     map_iterator(pointer p, pointer root) : _current(p), _root(root) {}
 
@@ -44,12 +44,16 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
     map_iterator& operator++() {
         pointer n = _current;
 
-        if (n->right != NULL) {
+        if (n->right == u_nullptr && n->left == u_nullptr) {
+            _current = n->left;
+            return *this;
+        }
+        if (n->right != u_nullptr) {
             _current = ft::minValueNode(n->right);
             return *this;
         }
         pointer p = n->parent;
-        while (p != NULL && n == p->right) {
+        while (p != u_nullptr && n == p->right) {
             n = p;
             p = p->parent;
         }
@@ -65,13 +69,13 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
 
     map_iterator& operator--() {
         pointer node = _current;
-        if (node == NULL) {
+        if (node == u_nullptr) {
             _current = _root;
-            if (_current == NULL) return *this;  // TODO: when the tree os empty
+            if (_current == u_nullptr) return *this;  // TODO: when the tree os empty
             _current = ft::maxValueNode(_root);
             return *this;
         }
-        _current = _findPredecessor(_root, NULL);
+        _current = _findPredecessor(_root, u_nullptr);
         return *this;
     }
 
@@ -89,11 +93,11 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
 
    private:
     pointer _findPredecessor(pointer node, pointer prec) {
-        if (node == NULL) {
+        if (node == u_nullptr) {
             return prec;
         }
         if (node->item.first == _current->item.first) {
-            if (node->left != NULL) return ft::maxValueNode(node->left);
+            if (node->left != u_nullptr) return ft::maxValueNode(node->left);
         } else if (_current->item.first < node->item.first) {
             return _findPredecessor(node->left, prec);
         } else {
@@ -102,6 +106,11 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
         }
         return prec;
     }
+};
+
+template <class T>
+class reverse_map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
+
 };
 
 }  // namespace ft

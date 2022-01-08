@@ -25,7 +25,7 @@ class random_access_iterator
     pointer _ptr;
 
    public:
-    random_access_iterator() : _ptr(NULL) {}
+    random_access_iterator() : _ptr(u_nullptr) {}
     random_access_iterator(pointer p) : _ptr(p) {}
     // random_accses_iterator(iterator_type it) {}
     random_access_iterator(const random_access_iterator<T>& ra_it)

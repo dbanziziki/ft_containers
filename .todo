@@ -1,4 +1,7 @@
 (#task-id) Map:
-    - [ ] 🎉 Iterator operator++ broken
+    - [x] 🎉 Iterator operator++ broken
     - [x] 🎉 Fix _max pointer || i actualy dont need that pointer can just give NULL
+    - [ ] 🎉 map size not updating when erasing
+    - [ ] 🎉 clear fun && deallocating in general
+    - [ ] 🎉 reverse iterator
 ----

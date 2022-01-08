@@ -23,7 +23,6 @@ class vector {
     typedef typename allocator_type::pointer pointer;
     typedef typename allocator_type::const_pointer const_pointer;
     typedef size_t size_type;
-
     typedef typename ft::random_access_iterator<value_type> iterator;
     typedef typename ft::random_access_iterator<const_value_type>
         const_iterator;
@@ -47,9 +46,9 @@ class vector {
      * @param alloc Allocator object.
      */
     explicit vector(const allocator_type &alloc = allocator_type())
-        : _ptr(NULL),
-          _end(NULL),
-          _end_capacty(NULL),
+        : _ptr(u_nullptr),
+          _end(u_nullptr),
+          _end_capacty(u_nullptr),
           _size(0),
           _capacity(0),
           _alloc(alloc) {}
@@ -90,7 +89,7 @@ class vector {
     vector(InputIterator first, InputIterator last,
            const allocator_type &alloc = allocator_type(),
            typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type
-               * = NULL)
+               * = u_nullptr)
         : _alloc(alloc) {
         size_type n = ft::difference(first, last);
         this->_ptr = this->_alloc.allocate(n);
@@ -343,7 +342,7 @@ class vector {
     void assign(
         InputIterator first, InputIterator last,
         typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * =
-            NULL) {
+            u_nullptr) {
         this->~vector();
         typedef typename ft::iterator_traits<InputIterator>::difference_type
             difference_type;
@@ -492,7 +491,7 @@ class vector {
     void insert(
         iterator position, InputIterator first, InputIterator last,
         typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * =
-            NULL) {
+            u_nullptr) {
         size_type n = ft::difference(first, last);
         size_type pos = &(*position) - _ptr;
         if (_capacity >= _size + n) {
