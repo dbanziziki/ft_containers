@@ -2,6 +2,7 @@
     - [x] 🎉 Iterator operator++ broken
     - [x] 🎉 Fix _max pointer || i actualy dont need that pointer can just give NULL
     - [ ] 🎉 map size not updating when erasing
-    - [x] 🎉 clear fun && deallocating in general
+    - [x] 🎉 clear fun && deallocating in general again
     - [x] 🎉 reverse iterator
+    - [x] 🎉 operator++ bst iterator
 ----

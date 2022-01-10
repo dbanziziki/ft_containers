@@ -3,73 +3,57 @@
 #include <iostream>
 #include <map>
 
+typedef ft::map<int, std::string>::reverse_iterator reverse_iterator;
+typedef ft::map<int, std::string>::iterator iterator;
+
+template <class T>
+ft::node<T> *findSuccessor(ft::node<T> *node) {
+    /*if (node->right == u_nullptr && node->left == u_nullptr) {
+        return u_nullptr;
+    }*/
+    ft::node<T> *n = node;
+    if (n->right != u_nullptr) {
+        return ft::minValueNode(n->right);
+    }
+    ft::node<T> *p = n->parent;
+    while (p != u_nullptr && n == p->right) {
+        n = p;
+        p = p->parent;
+    }
+    return p;
+}
+
+template <typename T, typename U>
+ft::node<T> *findKey(ft::node<T> *node, const U &k) {
+    if (node == u_nullptr) return u_nullptr;
+    if (node->item.first == k) return node;
+
+    if (node->item.first < k) return findKey(node->right, k);
+    return findKey(node->left, k);
+}
+
 int main() {
-    ft::map<int, std::string> m;
-    std::map<int, std::string> map;
-    typedef ft::map<int, std::string>::iterator iterator;
-    typedef ft::map<int, std::string>::reverse_iterator reverse_iterator;
-
-    // for (int i = 0; i < 4; i++) {
-    //     m.insert(ft::make_pair(i, "hello " + std::to_string(i)));
-    // }
-    // iterator begin = m.begin();
-    // iterator end = m.end();
-    // for (; begin != end; ++begin) {
-    //     std::cout << begin->first << " " << begin->second << std::endl;
-    // }
-    // begin = m.begin();
-    // end--;
-    // end--;
-    // m.erase(begin, end);
-    // std::cout << "---------\n";
-    // m[5] = "There";
-    // std::cout << "Should be null: " << m[78] << std::endl;
-    // begin = m.begin();
-    // end = m.end();
-    // for (; begin != end; ++begin) {
-    //     std::cout << begin->first << " " << begin->second << std::endl;
-    // }
-
-    int n = m.erase(78);
-    std::cout << "Erased: " << n << std::endl;
-
     ft::map<int, std::string> other;
 
     other[19] = "School";
-    other[42] = "Network";
     other[12] = "Network";
-    other[47] = "Network";
-    other[0] = "Network";
+    other[34] = "Network";
+    other[41] = "Network";
+    other[42] = "Network";
 
-    std::cout << "Size: " << other.size() << std::endl;
-    other.erase(47);
-    std::cout << "Size: " << other.size() << std::endl;
-    // m.swap(other);
-    iterator begin = m.begin();
-    iterator end = m.end();
-    for (; begin != end; ++begin) {
-        std::cout << begin->first << " " << begin->second << std::endl;
+    iterator first = other.begin();
+    iterator last = other.end();
+
+    std::cout << "Normal iterator" << std::endl;
+    for (; first != last; ++first) {
+        std::cout << first->first << " => " << first->second << "\n";
     }
+    std::cout << "Reverse iterator" << std::endl;
     reverse_iterator rfirst = other.rbegin();
     reverse_iterator rlast = other.rend();
-
-    for (; rfirst != rlast; ++rfirst) {
+    while (rfirst != rlast) {
         std::cout << rfirst->first << " => " << rfirst->second << std::endl;
+        ++rfirst;
     }
-    // typedef std::map<int, std::string>::iterator iterator;
-    // std::map<int, std::string> map;
-    // for (int i = 0; i < 4; ++i) {
-    //     map.insert(std::make_pair(i, "There " + std::to_string(i)));
-    // }
-    // iterator last = map.end();
-    // iterator first = map.begin();
-    // last--;
-    // last--;
-    // map.erase(first, last);
-    // first = map.begin();
-    // last = map.end();
-    // for (; first != last; ++first) {
-    //     std::cout << first->first << " " << first->second << std::endl;
-    // }
     return 0;
 }

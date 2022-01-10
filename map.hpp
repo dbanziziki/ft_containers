@@ -85,20 +85,16 @@ class map {
         while (n--) this->insert(*(first++));
     }
 
-    void erase(iterator position) {
-        this->erase((*position).first);
-    }
+    void erase(iterator position) { this->erase((*position).first); }
 
     size_type erase(const key_type& k) {
-        if (!_tree.findKey(_tree.getRoot(), k)) return 0;
+        // if (!_tree.findKey(_tree.getRoot(), k)) return 0;
         _tree.deleteNode(_tree.getRoot(), k);
         _tree.setSize(_tree.size() - 1);
         return 1;
     }
 
     void erase(iterator first, iterator last) {
-        // check if empty
-        // size_type n = ft::difference(first, last);
         while (first != last) {
             this->erase(first++);
         }
@@ -144,6 +140,8 @@ class map {
     size_t size() const { return _tree.size(); }
 
     bool empty() const { return _tree.empty(); }
+
+    tree_pointer base() const { return _tree.getRoot(); }
 };
 
 }  // namespace ft

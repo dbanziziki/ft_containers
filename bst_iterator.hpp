@@ -40,11 +40,6 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
 
     map_iterator& operator++() {
         node_ptr n = _current;
-
-        if (n->right == u_nullptr && n->left == u_nullptr) {
-            _current = n->left;
-            return *this;
-        }
         if (n->right != u_nullptr) {
             _current = ft::minValueNode(n->right);
             return *this;
@@ -103,11 +98,6 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
         }
         return prec;
     }
-};
-
-template <class T>
-class reverse_map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
-
 };
 
 }  // namespace ft
