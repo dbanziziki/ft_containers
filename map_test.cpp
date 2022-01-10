@@ -9,35 +9,39 @@ int main() {
     typedef ft::map<int, std::string>::iterator iterator;
     typedef ft::map<int, std::string>::reverse_iterator reverse_iterator;
 
-    for (int i = 0; i < 4; i++) {
-        m.insert(ft::make_pair(i, "hello " + std::to_string(i)));
-    }
-    
-    /*for (; begin != end; ++begin) {
-        std::cout << begin->first << " " << begin->second << std::endl;
-    }
-    begin = m.begin();
-    end--;
-    end--;
-    m.erase(begin, end);
-    std::cout << "---------\n";
-    m[5] = "There";
-    std::cout << "Should be null: " << m[78] << std::endl;
-    begin = m.begin();
-    end = m.end();
-    for (; begin != end; ++begin) {
-        std::cout << begin->first << " " << begin->second << std::endl;
-    }
+    // for (int i = 0; i < 4; i++) {
+    //     m.insert(ft::make_pair(i, "hello " + std::to_string(i)));
+    // }
+    // iterator begin = m.begin();
+    // iterator end = m.end();
+    // for (; begin != end; ++begin) {
+    //     std::cout << begin->first << " " << begin->second << std::endl;
+    // }
+    // begin = m.begin();
+    // end--;
+    // end--;
+    // m.erase(begin, end);
+    // std::cout << "---------\n";
+    // m[5] = "There";
+    // std::cout << "Should be null: " << m[78] << std::endl;
+    // begin = m.begin();
+    // end = m.end();
+    // for (; begin != end; ++begin) {
+    //     std::cout << begin->first << " " << begin->second << std::endl;
+    // }
 
     int n = m.erase(78);
     std::cout << "Erased: " << n << std::endl;
-*/
+
     ft::map<int, std::string> other;
 
     other[19] = "School";
     other[42] = "Network";
+    other[12] = "Network";
+    other[47] = "Network";
+    other[0] = "Network";
 
-    m.swap(other);
+    // m.swap(other);
     iterator begin = m.begin();
     iterator end = m.end();
     for (; begin != end; ++begin) {
@@ -47,7 +51,7 @@ int main() {
     reverse_iterator rlast = other.rend();
 
     for (; rfirst != rlast; ++rfirst) {
-        std::cout << rfirst->item.first << "=> " << rfirst->item.second << std::endl;
+        std::cout << rfirst->first << " => " << rfirst->second << std::endl;
     }
     // typedef std::map<int, std::string>::iterator iterator;
     // std::map<int, std::string> map;

@@ -7,33 +7,30 @@ namespace ft {
 template <class T>
 class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
    public:
+    typedef T* node_ptr;
     typedef ft::iterator<ft::bidirectional_iterator_tag, T> iterator_type;
-    typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::value_type
-        value_type;
-    typedef typename value_type::value_type pair_type;
-    typedef pair_type* pair_pointer;
-    typedef pair_type& pair_reference;
+    typedef typename T::value_type value_type;
     typedef typename ft::iterator<ft::bidirectional_iterator_tag,
                                   T>::iterator_category iterator_category;
     typedef typename ft::iterator<ft::bidirectional_iterator_tag,
                                   T>::difference_type difference_type;
-    typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::pointer
+    typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::pointer
         pointer;
-    typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::reference
+    typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::reference
         reference;
-
+        
     map_iterator() : _current(u_nullptr), _root(u_nullptr) {}
 
-    map_iterator(pointer p, pointer root) : _current(p), _root(root) {}
+    map_iterator(node_ptr p, node_ptr root) : _current(p), _root(root) {}
 
    private:
-    pointer _current;
-    pointer _root;
+    node_ptr _current;
+    node_ptr _root;
 
    public:
-    pair_pointer operator->() { return &(operator*()); }
+    pointer operator->() const { return &(operator*()); }
 
-    pair_reference operator*() const { return _current->item; }
+    reference operator*() const { return _current->item; }
 
     map_iterator &operator=(const map_iterator& other) {
         _current = other._current;
@@ -42,7 +39,7 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
     }
 
     map_iterator& operator++() {
-        pointer n = _current;
+        node_ptr n = _current;
 
         if (n->right == u_nullptr && n->left == u_nullptr) {
             _current = n->left;
@@ -52,7 +49,7 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
             _current = ft::minValueNode(n->right);
             return *this;
         }
-        pointer p = n->parent;
+        node_ptr p = n->parent;
         while (p != u_nullptr && n == p->right) {
             n = p;
             p = p->parent;
@@ -68,7 +65,7 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
     }
 
     map_iterator& operator--() {
-        pointer node = _current;
+        node_ptr node = _current;
         if (node == u_nullptr) {
             _current = _root;
             if (_current == u_nullptr) return *this;  // TODO: when the tree os empty
@@ -89,10 +86,10 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
         return _current != other._current;
     }
 
-    pointer base() const { return _current; }
+    node_ptr base() const { return _current; }
 
    private:
-    pointer _findPredecessor(pointer node, pointer prec) {
+    node_ptr _findPredecessor(node_ptr node, node_ptr prec) {
         if (node == u_nullptr) {
             return prec;
         }
