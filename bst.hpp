@@ -21,6 +21,7 @@ class BST {
     typedef typename node_allocator_type::const_reference const_reference;
     typedef typename ft::map_iterator<node_type> iterator;
     typedef typename ft::map_iterator<const node_type> const_iterator;
+    typedef size_t size_type;
 
     BST(const node_allocator_type& node_alloc = node_allocator_type())
         : _root(u_nullptr),
@@ -117,6 +118,10 @@ class BST {
     }
 
    public:
+
+    void setSize(size_type n) {
+        _size = n;
+    }
     pointer minValueNode(pointer node) {
         pointer current = node;
         while (current && current->left != u_nullptr) current = current->left;

@@ -41,6 +41,9 @@ int main() {
     other[47] = "Network";
     other[0] = "Network";
 
+    std::cout << "Size: " << other.size() << std::endl;
+    other.erase(47);
+    std::cout << "Size: " << other.size() << std::endl;
     // m.swap(other);
     iterator begin = m.begin();
     iterator end = m.end();
