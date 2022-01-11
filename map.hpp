@@ -88,7 +88,7 @@ class map {
     void erase(iterator position) { this->erase((*position).first); }
 
     size_type erase(const key_type& k) {
-        // if (!_tree.findKey(_tree.getRoot(), k)) return 0;
+        if (!_tree.findKey(_tree.getRoot(), k)) return 0;
         _tree.deleteNode(_tree.getRoot(), k);
         _tree.setSize(_tree.size() - 1);
         return 1;

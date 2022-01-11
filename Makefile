@@ -23,7 +23,6 @@ bst: fclean bst.hpp bst.cpp
 
 map: fclean map.hpp map_test.cpp
 	$(CC) $(FLAGS) map_test.cpp -o map
-	./map
 
 fclean:
 	rm -f $(NAME) test bst map

@@ -38,22 +38,49 @@ int main() {
     other[19] = "School";
     other[12] = "Network";
     other[34] = "Network";
-    other[41] = "Network";
-    other[42] = "Network";
+    other[84] = "Network";
+    // other[64] = "Network";
+    // other[39] = "Network";
+    // other[14] = "Network";
 
-    iterator first = other.begin();
-    iterator last = other.end();
+    iterator begin = other.begin();
+    std::cout << begin->first << " " << begin->second << std::endl;
+    other.erase(begin);
+    begin = other.begin();
+    std::cout << begin->first << " " << begin->second << std::endl;
 
-    std::cout << "Normal iterator" << std::endl;
-    for (; first != last; ++first) {
-        std::cout << first->first << " => " << first->second << "\n";
-    }
-    std::cout << "Reverse iterator" << std::endl;
-    reverse_iterator rfirst = other.rbegin();
-    reverse_iterator rlast = other.rend();
-    while (rfirst != rlast) {
-        std::cout << rfirst->first << " => " << rfirst->second << std::endl;
-        ++rfirst;
-    }
+    // begin = other.begin();
+    // std::cout << begin->first << " " << begin->second << std::endl;
+    /*
+                    [19]
+                  -     -
+                 -        -
+              [12]         [34]
+                 -             -
+                   -             -
+                  [14]           [84]
+                            [64]
+                           -
+                          -
+                        [39]  
+    */ 
+
+    /*other[41] = "Network";
+    other[42] = "Network";*/
+
+    // iterator first = other.begin();
+    // iterator last = other.end();
+
+    // std::cout << "Normal iterator" << std::endl;
+    // for (; first != last; ++first) {
+    //     std::cout << first->first << " => " << first->second << "\n";
+    // }
+    // std::cout << "Reverse iterator" << std::endl;
+    // reverse_iterator rfirst = other.rbegin();
+    // reverse_iterator rlast = other.rend();
+    // while (rfirst != rlast) {
+    //     std::cout << rfirst->first << " => " << rfirst->second << std::endl;
+    //     ++rfirst;
+    // }
     return 0;
 }

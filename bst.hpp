@@ -78,18 +78,20 @@ class BST {
             node->right = deleteNode(node->right, value);
         else {
             if (node->left == u_nullptr && node->right == u_nullptr) {
-                if (node == _tail) {
-                    _tail = _findSuccessor(_tail);
-                }
+                if (node == _tail) _tail = _findSuccessor(_tail);
                 _node_alloc.destroy(node);
                 _node_alloc.deallocate(node, 1);
+                node = u_nullptr;
                 return u_nullptr;
             } else if (node->left == u_nullptr) {
                 pointer temp = node->right;
                 if (node == _root && node == _tail) {
                     _root = temp;
                     _tail = temp;
+                } else if (node == _tail) {
+                    _tail = _findSuccessor(_tail);
                 }
+                temp->parent = node->parent;
                 _node_alloc.destroy(node);
                 _node_alloc.deallocate(node, 1);
                 return temp;
@@ -118,10 +120,7 @@ class BST {
     }
 
    public:
-
-    void setSize(size_type n) {
-        _size = n;
-    }
+    void setSize(size_type n) { _size = n; }
     pointer minValueNode(pointer node) {
         pointer current = node;
         while (current && current->left != u_nullptr) current = current->left;
@@ -175,9 +174,9 @@ class BST {
 
    private:
     pointer _findSuccessor(pointer node) {
-        if (node->right == u_nullptr && node->left == u_nullptr) {
+        /*if (node->right == u_nullptr && node->left == u_nullptr) {
             return u_nullptr;
-        }
+        }*/
         pointer n = node;
         if (n->right != u_nullptr) {
             return ft::minValueNode(n->right);
