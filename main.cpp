@@ -1,24 +1,14 @@
 #include <iostream>
 #include <vector>
 
-#include "random_access_iterator.hpp"
-#include "vector.hpp"
+#include "map.hpp"
 
-template <typename T>
-void print_vector(ft::vector<T> &v) {
-    for (int i = 0; i < v.size(); i++) {
-        std::cout << v[i] << std::endl;
-    }
-}
+int main() {
+    ft::map<int, std::string> m;
+    m[14] = "Hello";
+    m[12] = "Momo";
 
-template <typename T>
-void print_vector(std::vector<T> &v) {
-    for (int i = 0; i < v.size(); i++) {
-        std::cout << v[i] << std::endl;
-    }
-}
+    ft::map<int, std::string> other(m);
 
-int main (int argc, char *argv[])
-{
-  return 0;
+    return 0;
 }

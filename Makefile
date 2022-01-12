@@ -6,6 +6,9 @@ TEST_SRCS = vector_test.cpp
 
 CC = clang++
 
+CRITERION = -l criterion -I ~/.brew/include -L ~/.brew/lib -std=c++11
+
+
 FSAN = -fsanitize=address
 
 FLAGS = -g -Wextra -Werror -Wall $(FSAN)  -std=c++98
@@ -21,8 +24,12 @@ bst: fclean bst.hpp bst.cpp
 	$(CC) $(FLAGS) bst.cpp -o bst
 	./bst
 
-map: fclean map.hpp map_test.cpp
-	$(CC) $(FLAGS) map_test.cpp -o map
+map_test: fclean map.hpp tests/map_test.cpp
+	$(CC) -g tests/map_test.cpp -I. -o $@ $(CRITERION)
+	./$@
+
+map: fclean map.hpp main.cpp
+	$(CC) -g $(FSAN) $(FLAGS) main.cpp -o $@
 
 fclean:
 	rm -f $(NAME) test bst map

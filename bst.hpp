@@ -14,7 +14,7 @@ class BST {
     typedef typename value_type::second_type mapped_type;
     typedef Node node_type;
     typedef Node_alloc node_allocator_type;
-    typedef Compare compare_type;  // to compare the pairs
+    typedef Compare compare_type;
     typedef typename node_allocator_type::pointer pointer;
     typedef typename node_allocator_type::const_pointer const_pointer;
     typedef typename node_allocator_type::reference reference;
@@ -28,6 +28,7 @@ class BST {
           _tail(u_nullptr),
           _size(0),
           _node_alloc(node_alloc) {}
+
     ~BST() {}
 
    public:
@@ -81,7 +82,6 @@ class BST {
                 if (node == _tail) _tail = _findSuccessor(_tail);
                 _node_alloc.destroy(node);
                 _node_alloc.deallocate(node, 1);
-                node = u_nullptr;
                 return u_nullptr;
             } else if (node->left == u_nullptr) {
                 pointer temp = node->right;
@@ -100,6 +100,7 @@ class BST {
                 if (node == _root) {
                     _root = temp;
                 }
+                temp->parent = node->parent;
                 _node_alloc.destroy(node);
                 _node_alloc.deallocate(node, 1);
                 return temp;
@@ -111,7 +112,7 @@ class BST {
         return node;
     }
 
-    pointer findKey(pointer node, const key_type& k) {
+    pointer findKey(pointer node, const key_type& k) const {
         if (node == u_nullptr) return u_nullptr;
         if (node->item.first == k) return node;
 
@@ -141,7 +142,11 @@ class BST {
 
     iterator begin() { return iterator(_tail, _root); }
 
+    const_iterator begin() const { return const_iterator(_tail, _root); }
+
     iterator end() { return iterator(u_nullptr, _root); }
+
+    const_iterator end() const { return const_iterator(u_nullptr, _root); }
 
     bool empty() const { return _root == u_nullptr; }
 
@@ -174,9 +179,6 @@ class BST {
 
    private:
     pointer _findSuccessor(pointer node) {
-        /*if (node->right == u_nullptr && node->left == u_nullptr) {
-            return u_nullptr;
-        }*/
         pointer n = node;
         if (n->right != u_nullptr) {
             return ft::minValueNode(n->right);

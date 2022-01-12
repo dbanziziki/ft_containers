@@ -8,20 +8,26 @@ template <class T>
 class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
    public:
     typedef T* node_ptr;
+    typedef const T* const_node_ptr;
     typedef ft::iterator<ft::bidirectional_iterator_tag, T> iterator_type;
     typedef typename T::value_type value_type;
     typedef typename ft::iterator<ft::bidirectional_iterator_tag,
                                   T>::iterator_category iterator_category;
     typedef typename ft::iterator<ft::bidirectional_iterator_tag,
                                   T>::difference_type difference_type;
-    typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::pointer
-        pointer;
-    typedef typename ft::iterator<ft::bidirectional_iterator_tag, value_type>::reference
-        reference;
-        
+    typedef typename ft::iterator<ft::bidirectional_iterator_tag,
+                                  value_type>::pointer pointer;
+    typedef typename ft::iterator<ft::bidirectional_iterator_tag,
+                                  value_type>::reference reference;
+
     map_iterator() : _current(u_nullptr), _root(u_nullptr) {}
 
     map_iterator(node_ptr p, node_ptr root) : _current(p), _root(root) {}
+
+    map_iterator(const map_iterator& x) {
+        _current = x._current;
+        _root = x._root;
+    }
 
    private:
     node_ptr _current;
@@ -32,7 +38,7 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
 
     reference operator*() const { return _current->item; }
 
-    map_iterator &operator=(const map_iterator& other) {
+    map_iterator& operator=(const map_iterator& other) {
         _current = other._current;
         _root = other._root;
         return *this;
@@ -63,7 +69,8 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
         node_ptr node = _current;
         if (node == u_nullptr) {
             _current = _root;
-            if (_current == u_nullptr) return *this;  // TODO: when the tree os empty
+            if (_current == u_nullptr)
+                return *this;  // TODO: when the tree os empty
             _current = ft::maxValueNode(_root);
             return *this;
         }
