@@ -82,6 +82,7 @@ class BST {
                 if (node == _tail) _tail = _findSuccessor(_tail);
                 _node_alloc.destroy(node);
                 _node_alloc.deallocate(node, 1);
+                if (node == _root) _root = u_nullptr;
                 return u_nullptr;
             } else if (node->left == u_nullptr) {
                 pointer temp = node->right;

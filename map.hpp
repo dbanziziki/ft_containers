@@ -111,9 +111,11 @@ class map {
      * @return *this.
      */
     map& operator=(const map& x) {
+        if (&x == this) return *this;
+        this->clear();
         _alloc = x._alloc;
-        _tree = x._tree;
         _comp = x._comp;
+        this->insert(x.begin(), x.end());
         return *this;
     }
 

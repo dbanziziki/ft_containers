@@ -5,4 +5,5 @@
     - [x] 🎉 clear fun && deallocating in general again
     - [x] 🎉 reverse iterator
     - [x] 🎉 operator++ bst iterator
+    - [ ] 🎉 const iterator
 ----

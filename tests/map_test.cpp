@@ -44,3 +44,12 @@ Test(constructor, copy_constructor, .init = setup_dummy) {
 
     cr_assert(m.size() == dummy.size());
 }
+
+Test(Operators, assign_operator, .init = setup_dummy) {
+    ft_map m;
+
+    m[4] = "Hello";
+    m = dummy;
+
+    cr_assert(m.size() == dummy.size());
+}

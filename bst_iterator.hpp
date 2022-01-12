@@ -8,7 +8,7 @@ template <class T>
 class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
    public:
     typedef T* node_ptr;
-    typedef const T* const_node_ptr;
+    typedef T* const const_node_ptr;
     typedef ft::iterator<ft::bidirectional_iterator_tag, T> iterator_type;
     typedef typename T::value_type value_type;
     typedef typename ft::iterator<ft::bidirectional_iterator_tag,
