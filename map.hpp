@@ -15,6 +15,7 @@ class map {
     typedef Key key_type;
     typedef T mapped_type;
     typedef ft::pair<key_type, mapped_type> value_type;
+    typedef const value_type const_value_type;
     typedef Compare key_compare;
     typedef Alloc allocator_type;
     typedef typename allocator_type::reference reference;
@@ -22,7 +23,7 @@ class map {
     typedef typename allocator_type::pointer pointer;
     typedef typename allocator_type::const_pointer const_pointer;
     typedef typename ft::BST<value_type, key_compare>::iterator iterator;
-    typedef typename ft::BST<const value_type, key_compare>::const_iterator
+    typedef typename ft::BST<const_value_type, key_compare>::const_iterator
         const_iterator;
     typedef typename ft::BST<value_type, key_compare>::pointer tree_pointer;
     typedef typename ft::reverse_iterator<iterator> reverse_iterator;
@@ -261,7 +262,7 @@ class map {
      */
     iterator begin() { return iterator(_tree.getTail(), _tree.getRoot()); }
 
-    iterator begin() const {
+    const_iterator begin() const {
         return iterator(_tree.getTail(), _tree.getRoot());
     }
 
@@ -272,7 +273,7 @@ class map {
      */
     iterator end() { return iterator(u_nullptr, _tree.getRoot()); }
 
-    iterator end() const { return iterator(u_nullptr, _tree.getRoot()); }
+    const_iterator end() const { return iterator(u_nullptr, _tree.getRoot()); }
 
     /**
      * @brief Returns a reverse iterator pointing to the last element in the

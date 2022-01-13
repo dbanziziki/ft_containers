@@ -7,3 +7,8 @@
     - [x] 🎉 operator++ bst iterator
     - [ ] 🎉 const iterator
 ----
+
+(#task-id) Today:
+- [ ] 🎉 Fix const iterator
+- [ ] 🎉 Kepp writing tests
+----

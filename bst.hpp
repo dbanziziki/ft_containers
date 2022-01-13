@@ -19,8 +19,8 @@ class BST {
     typedef typename node_allocator_type::const_pointer const_pointer;
     typedef typename node_allocator_type::reference reference;
     typedef typename node_allocator_type::const_reference const_reference;
-    typedef typename ft::map_iterator<node_type> iterator;
-    typedef typename ft::map_iterator<const node_type> const_iterator;
+    typedef typename ft::map_iterator<value_type> iterator;
+    typedef typename ft::map_iterator<const value_type> const_iterator;
     typedef size_t size_type;
 
     BST(const node_allocator_type& node_alloc = node_allocator_type())
