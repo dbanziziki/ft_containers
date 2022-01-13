@@ -15,6 +15,8 @@ int main() {
     tree.insert(ft::make_pair(21, "Savege"));
     tree.insert(ft::make_pair(12, "Manga"));
     iterator it = tree.begin();
-    std::cout << it->first << " " << it->second << std::endl;
+    for (; it != tree.end(); ++it) {
+        std::cout << it->first << " " << it->second << std::endl;
+    }
     return 0;
 }

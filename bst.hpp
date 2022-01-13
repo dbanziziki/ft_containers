@@ -25,7 +25,7 @@ class BST {
 
     BST(const node_allocator_type& node_alloc = node_allocator_type())
         : _root(u_nullptr),
-          _tail(u_nullptr),
+          _first(u_nullptr),
           _size(0),
           _node_alloc(node_alloc) {}
 
@@ -38,9 +38,9 @@ class BST {
         _node_alloc.construct(newNode, Node(value));
         if (_root == u_nullptr) {
             _root = newNode;
-            _tail = newNode;
+            _first = newNode;
             _size++;
-            return ft::make_pair(iterator(_root, _tail), true);
+            return ft::make_pair(iterator(_root), true);
         }
         pointer x = _root;
         pointer y = u_nullptr;
@@ -50,25 +50,25 @@ class BST {
             if (value.first < x->item.first) {
                 x = x->left;
             } else if (value.first == x->item.first) {
-                return ft::make_pair(iterator(x, _tail), false);
+                return ft::make_pair(iterator(x), false);
             } else {
                 x = x->right;
             }
         }
 
         if (value.first < y->item.first) {
-            if (value.first < _tail->item.first) _tail = newNode;
+            if (value.first < _first->item.first) _first = newNode;
             y->left = newNode;
             newNode->parent = y;
             _size++;
-            return ft::make_pair(iterator(newNode, _tail), true);
+            return ft::make_pair(iterator(newNode), true);
         } else {
             y->right = newNode;
             newNode->parent = y;
             _size++;
-            return ft::make_pair(iterator(newNode, _tail), true);
+            return ft::make_pair(iterator(newNode), true);
         }
-        return ft::make_pair(iterator(newNode, _tail), true);
+        return ft::make_pair(iterator(newNode), true);
     }
 
     pointer deleteNode(pointer node, const key_type& value) {
@@ -79,18 +79,18 @@ class BST {
             node->right = deleteNode(node->right, value);
         else {
             if (node->left == u_nullptr && node->right == u_nullptr) {
-                if (node == _tail) _tail = _findSuccessor(_tail);
+                if (node == _first) _first = _findSuccessor(_first);
                 _node_alloc.destroy(node);
                 _node_alloc.deallocate(node, 1);
                 if (node == _root) _root = u_nullptr;
                 return u_nullptr;
             } else if (node->left == u_nullptr) {
                 pointer temp = node->right;
-                if (node == _root && node == _tail) {
+                if (node == _root && node == _first) {
                     _root = temp;
-                    _tail = temp;
-                } else if (node == _tail) {
-                    _tail = _findSuccessor(_tail);
+                    _first = temp;
+                } else if (node == _first) {
+                    _first = _findSuccessor(_first);
                 }
                 temp->parent = node->parent;
                 _node_alloc.destroy(node);
@@ -129,7 +129,7 @@ class BST {
         return current;
     }
     pointer getRoot() const { return _root; }
-    pointer getTail() const { return _tail; }
+    pointer getTail() const { return _first; }
 
     void inorder(pointer node) {
         if (node != u_nullptr) {
@@ -141,13 +141,13 @@ class BST {
         }
     }
 
-    iterator begin() { return iterator(_tail, _root); }
+    iterator begin() { return iterator(_first); }
 
-    const_iterator begin() const { return const_iterator(_tail, _root); }
+    // const_iterator begin() const { return const_iterator(_tail, _root); }
 
-    iterator end() { return iterator(u_nullptr, _root); }
+    iterator end() { return iterator(u_nullptr); }
 
-    const_iterator end() const { return const_iterator(u_nullptr, _root); }
+    // const_iterator end() const { return const_iterator(u_nullptr, _root); }
 
     bool empty() const { return _root == u_nullptr; }
 
@@ -158,7 +158,7 @@ class BST {
     BST& operator=(const BST& other) {
         this->~BST();
         _root = other._root;
-        _tail = other._tail;
+        _first = other._first;
         _size = other._size;
         _comp = other._comp;
         _node_alloc = other._node_alloc;
@@ -194,7 +194,8 @@ class BST {
 
    private:
     pointer _root;
-    pointer _tail;
+    pointer _first;
+    pointer _last;
     size_t _size;
     compare_type _comp;
     node_allocator_type _node_alloc;

@@ -26,44 +26,44 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
     typedef typename ft::iterator<ft::bidirectional_iterator_tag,
                                   const T>::reference const_reference;
 
-    map_iterator() : _current(u_nullptr), _root(u_nullptr) {}
+    map_iterator() : _current(u_nullptr) {}
 
-    map_iterator(Node* p, Node* root) : _current(p), _root(root) {}
+    map_iterator(Node* p) : _current(p) {}
 
-    map_iterator(const map_iterator& x)
-        : _current(x._current), _root(x._root) {}
+    map_iterator(const map_iterator& x) : _current(x._current) {}
 
    private:
     Node* _current;
-    Node* _root;
 
    public:
-    pointer operator->() const { return &this->_current->item; }
+    pointer operator->() const { return &(operator*()); }
 
     reference operator*() const { return _current->item; }
 
     map_iterator& operator=(const map_iterator& other) {
         _current = other._current;
-        _root = other._root;
         return *this;
     }
 
     operator map_iterator<const T>() const {
-        return map_iterator<const T>(_current, _root);
+        return map_iterator<const T>(_current);
     }
 
     map_iterator& operator++() {
-        Node* n = _current;
-        if (n->right != u_nullptr) {
-            _current = ft::minValueNode(n->right);
+        Node* node = _current;
+
+        if (node->right) {
+            _current = ft::minValueNode(node->right);
             return *this;
         }
-        Node* p = n->parent;
-        while (p != u_nullptr && n == p->right) {
-            n = p;
-            p = p->parent;
+        while (node->parent) {
+            if (node->parent->left == node) {
+                _current = node->parent;
+                return *this;
+            }
+            node = node->parent;
         }
-        _current = p;
+        _current = node;
         return *this;
     }
 
@@ -75,14 +75,19 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
 
     map_iterator& operator--() {
         Node* node = _current;
-        if (node == u_nullptr) {
-            _current = _root;
-            if (_current == u_nullptr)
-                return *this;  // TODO: when the tree os empty
-            _current = ft::maxValueNode(_root);
+
+        if (node->left) {
+            _current = ft::maxValueNode(node->left);
             return *this;
         }
-        _current = _findPredecessor(_root, u_nullptr);
+        while (node->parent) {
+            if (node->parent->right == node) {
+                _current = node->parent;
+                return *this;
+            }
+            node = node->parent;
+        }
+        _current = node;
         return *this;
     }
 

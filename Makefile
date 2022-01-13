@@ -9,7 +9,7 @@ CC = clang++
 CRITERION = -l criterion -I ~/.brew/include -L ~/.brew/lib -std=c++11
 
 
-FSAN = -fsanitize=address
+FSAN = #-fsanitize=address
 
 FLAGS = -g -Wextra -Werror -Wall $(FSAN)  -std=c++98
 
