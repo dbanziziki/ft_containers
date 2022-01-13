@@ -1,9 +1,11 @@
 #include "vector.hpp"
 
 #include <criterion/criterion.h>
+#include <iostream>
 
 #include <string>
 #include <vector>
+
 typedef std::vector<int>::iterator std_it;
 typedef ft::vector<int>::iterator it;
 
@@ -64,7 +66,7 @@ Test(constructor, coy_constructor, .init = setup_ft_random) {
     }
 }
 
-Test(opertors, index_operator, .init = setup_ft_seed) {
+Test(Element_access, index_operator, .init = setup_ft_seed) {
     cr_assert(dummy[0] == 0);
     cr_assert(dummy[1] == 1);
     cr_assert(dummy[2] == 2);
@@ -72,7 +74,7 @@ Test(opertors, index_operator, .init = setup_ft_seed) {
     cr_assert(dummy[4] == 4);
 }
 
-Test(operators, assign_operator, .init = setup_ft_random) {
+Test(Element_access, assign_operator, .init = setup_ft_random) {
     ft::vector<int> v;
 
     v = dummy;
@@ -81,4 +83,10 @@ Test(operators, assign_operator, .init = setup_ft_random) {
     for (int i = 0; i < dummy.size(); i++) {
         cr_assert(v[i] == dummy[i]);
     }
+}
+
+Test(Element_access, at, .init=setup_ft_seed) {
+
+    cr_assert(dummy.at(2) == dummy[2]);
+    cr_expect(dummy.at(4) == 4, "Should be 4");
 }
