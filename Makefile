@@ -26,7 +26,12 @@ bst: fclean bst.hpp bst.cpp
 
 map_test: fclean map.hpp tests/map_test.cpp
 	$(CC) -g tests/map_test.cpp -I. -o $@ $(CRITERION)
-	./$@
+	./$@ --verbose
+
+
+vec_test: fclean vector.hpp tests/vector_test.cpp
+	$(CC) -g tests/vector_test.cpp -I. -o $@ $(CRITERION)
+	./$@ --verbose
 
 map: fclean map.hpp main.cpp
 	$(CC) -g $(FSAN) $(FLAGS) main.cpp -o $@

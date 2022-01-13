@@ -3,20 +3,21 @@
 
 #include "iterator.hpp"
 
-struct nullptr_t
-{
-public:
-    template<class T>
-    inline operator T*() const
-        { return 0; }
+struct nullptr_t {
+   public:
+    template <class T>
+    inline operator T*() const {
+        return 0;
+    }
 
-    template<class C, class T>
-    inline operator T C::*() const
-        { return 0; }
- 
-private:
+    template <class C, class T>
+    inline operator T C::*() const {
+        return 0;
+    }
+
+   private:
     void operator&() const;
-}; 
+};
 
 static nullptr_t u_nullptr = {};
 
@@ -38,6 +39,8 @@ struct node {
         left = u_nullptr;
         parent = u_nullptr;
     }
+
+    // operator node<const T>() const { return node<const T>(item); }
 
     pointer operator->() { return &(operator*()); }
     reference operator*() const { return &item; }
@@ -196,8 +199,8 @@ struct is_integral<long long int> : public true_type {};
 template <>
 struct is_integral<unsigned char> : public true_type {};
 
-// template <>
-// struct is_integral<unsigned short int> : public true_type {};
+template <>
+struct is_integral<unsigned short int> : public true_type {};
 
 template <>
 struct is_integral<unsigned long int> : public true_type {};

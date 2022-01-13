@@ -9,14 +9,22 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
    public:
     typedef ft::node<T> Node;
     typedef ft::iterator<ft::bidirectional_iterator_tag, T> iterator_type;
+    typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::value_type
+        value_type;
     typedef typename ft::iterator<ft::bidirectional_iterator_tag,
                                   T>::iterator_category iterator_category;
     typedef typename ft::iterator<ft::bidirectional_iterator_tag,
                                   T>::difference_type difference_type;
     typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::pointer
         pointer;
+
+    typedef
+        typename ft::iterator<ft::bidirectional_iterator_tag, const T>::pointer
+            const_pointer;
     typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::reference
         reference;
+    typedef typename ft::iterator<ft::bidirectional_iterator_tag,
+                                  const T>::reference const_reference;
 
     map_iterator() : _current(u_nullptr), _root(u_nullptr) {}
 
@@ -30,7 +38,7 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
     Node* _root;
 
    public:
-    pointer operator->() const { return &(operator*()); }
+    pointer operator->() const { return &this->_current->item; }
 
     reference operator*() const { return _current->item; }
 
@@ -40,10 +48,9 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
         return *this;
     }
 
-    /*operator map_iterator<const T>() const {
-        return (map_iterator<const T>(
-            reinterpret_cast<ft::node<const T> const*>(_current)));
-    }*/
+    operator map_iterator<const T>() const {
+        return map_iterator<const T>(_current, _root);
+    }
 
     map_iterator& operator++() {
         Node* n = _current;

@@ -36,7 +36,7 @@ class random_access_iterator
 
     iterator_type base() const {}
 
-    // operator random_access_iterator<const T>() const { return _ptr; }
+    operator random_access_iterator<const T>() const { return _ptr; }
 
     random_access_iterator& operator=(const random_access_iterator& it) {
         _ptr = it._ptr;

@@ -1,7 +1,9 @@
-#include "bst.hpp"
-
+// #include "bst.hpp"
 #include <iostream>
 #include <map>
+
+// #include "vector.hpp"
+#include "map.hpp"
 
 typedef ft::BST<ft::pair<int, std::string> >::pointer pointer;
 typedef ft::BST<ft::pair<int, std::string> >::iterator iterator;
