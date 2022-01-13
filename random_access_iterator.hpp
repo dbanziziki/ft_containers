@@ -2,6 +2,7 @@
 #define __RANDOM_ACCESS_ITERATOR_H__
 
 #include "iterator.hpp"
+#include "utils.hpp"
 
 namespace ft {
 
@@ -34,6 +35,8 @@ class random_access_iterator
     ~random_access_iterator() {}
 
     iterator_type base() const {}
+
+    // operator random_access_iterator<const T>() const { return _ptr; }
 
     random_access_iterator& operator=(const random_access_iterator& it) {
         _ptr = it._ptr;
