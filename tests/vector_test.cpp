@@ -72,15 +72,13 @@ Test(opertors, index_operator, .init = setup_ft_seed) {
     cr_assert(dummy[4] == 4);
 }
 
-Test(operators, assign_operator, .init = setup_ft_seed) {
+Test(operators, assign_operator, .init = setup_ft_random) {
     ft::vector<int> v;
 
     v = dummy;
 
     cr_assert(v.size() == dummy.size());
     for (int i = 0; i < dummy.size(); i++) {
-        std::cout << "assigned: " << v[i] << "\n";
-        std::cout << "base: " << dummy[i] << "\n";
-        // cr_assert(v[i] == dummy[i]);
+        cr_assert(v[i] == dummy[i]);
     }
 }
