@@ -169,7 +169,8 @@ class vector {
         _capacity = x.capacity();
         _end_capacty = _ptr + n;
         _size = x.size();
-        while (n--) _alloc.construct(_end++, x._ptr[n]);
+        size_type i = -1;
+        while (++i < n) _alloc.construct(_end++, x._ptr[i]);
         return *this;
     }
 
