@@ -1,14 +1,19 @@
 (#task-id) Map:
     - [x] 🎉 Iterator operator++ broken
     - [x] 🎉 Fix _max pointer || i actualy dont need that pointer can just give NULL
-    - [ ] 🎉 map size not updating when erasing
+    - [x] 🎉 map size not updating when erasing
     - [x] 🎉 clear fun && deallocating in general again
     - [x] 🎉 reverse iterator
     - [x] 🎉 operator++ bst iterator
-    - [ ] 🎉 const iterator
+    - [x] 🎉 const iterator
 ----
 
 (#task-id) Today:
-- [ ] 🎉 Fix const iterator
-- [ ] 🎉 Kepp writing tests
+    - [x] 🎉 Fix const iterator
+    - [ ] 🎉 Kepp writing tests
+
+----
+
+(#tests) Vector:
+    - [ ] 🎉 Fix erase the last element (some how it doest work)
 ----
