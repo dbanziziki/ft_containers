@@ -28,12 +28,12 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
 
     map_iterator() : _current(u_nullptr) {}
 
-    map_iterator(Node* p) : _current(p) {}
+    map_iterator(Node const* p) : _current(p) {}
 
     map_iterator(const map_iterator& x) : _current(x._current) {}
 
    private:
-    Node* _current;
+    Node const* _current;
 
    public:
     pointer operator->() const { return &(operator*()); }
@@ -46,14 +46,19 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
     }
 
     operator map_iterator<const T>() const {
-        return map_iterator<const T>(_current);
+        return (map_iterator<const T>(
+            reinterpret_cast<ft::node<const T> const*>(_current)));
     }
 
     map_iterator& operator++() {
-        Node* node = _current;
+        Node const* node = _current;
 
         if (node->right) {
             _current = ft::minValueNode(node->right);
+            return *this;
+        }
+        if (node->parent == u_nullptr) {
+            _current = u_nullptr;
             return *this;
         }
         while (node->parent) {
@@ -74,7 +79,7 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
     }
 
     map_iterator& operator--() {
-        Node* node = _current;
+        Node const* node = _current;
 
         if (node->left) {
             _current = ft::maxValueNode(node->left);

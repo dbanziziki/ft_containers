@@ -1,13 +1,15 @@
 #include "vector.hpp"
 
 #include <criterion/criterion.h>
-#include <iostream>
 
+#include <iostream>
 #include <string>
 #include <vector>
 
+#define SIZE 5
+
 typedef std::vector<int>::iterator std_it;
-typedef ft::vector<int>::iterator it;
+typedef ft::vector<int>::iterator iterator;
 
 std::vector<int> vec;
 ft::vector<int> dummy;
@@ -27,7 +29,7 @@ void setup_ft_seed(void) {
 
 void setup_std(void) {
     std::srand(time(NULL));
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < SIZE; i++) {
         vec.push_back(std::rand() % 100);
     }
 }
@@ -85,8 +87,181 @@ Test(Element_access, assign_operator, .init = setup_ft_random) {
     }
 }
 
-Test(Element_access, at, .init=setup_ft_seed) {
-
+Test(Element_access, at, .init = setup_ft_seed) {
     cr_assert(dummy.at(2) == dummy[2]);
     cr_expect(dummy.at(4) == 4, "Should be 4");
+}
+
+Test(Element_access, front, .init = setup_ft_seed) {
+    cr_assert(dummy.front() == 0);
+}
+
+Test(Element_access, back, .init = setup_ft_seed) {
+    cr_assert(dummy.back() == 4);
+}
+
+Test(Capacity, size, .init = setup_ft_random) {
+    cr_assert(dummy.size() == SIZE);
+    dummy.push_back(SIZE);
+    cr_expect(dummy.size() == 6, "size should be 6");
+    dummy.push_back(5);
+    dummy.push_back(5);
+    cr_expect(dummy.size() == 8, "size should be 8");
+    dummy.pop_back();
+    cr_expect(dummy.size() == 7);
+}
+
+Test(Capacity, empty, .init = setup_ft_random) {
+    cr_expect(dummy.empty() == false, "should return false");
+    dummy.clear();
+    cr_expect(dummy.empty() == true, "should return true");
+}
+
+Test(Capacity, resize, .init = setup_ft_random) {
+    dummy.resize(3, 0);
+    cr_expect(dummy.size() == 3);
+    dummy.resize(10, 19);
+    cr_expect(dummy.size() == 10, "size should be 10");
+    for (int i = 3; i < 10; i++) {
+        cr_assert(dummy[i] == 19);
+    }
+}
+
+Test(Capacity, reserve, .init = setup_ft_seed) {
+    ft::vector<int> v;
+
+    v.reserve(5);
+    cr_expect(v.capacity() == 5, "Capacity should be 5");
+    cr_expect(v.empty() == true, "vec should be empty");
+    dummy.reserve(10);
+    cr_expect(dummy.capacity() == 10, "Capacity should 10");
+    for (int i = 0; i < 5; i++) {
+        cr_assert(dummy[i] == i);
+    }
+}
+
+Test(Modifiers, assign, .init = setup_ft_random) {
+    cr_assert(dummy.size() == 5);
+
+    dummy.assign(10, 42);
+    cr_expect(dummy.size() == 10, "Size should be 10");
+    for (int i = 0; i < 10; i++) {
+        cr_assert(dummy[i] == 42);
+    }
+    dummy.assign(2, 19);
+    cr_expect(dummy.size() == 2, "Size should be 2");
+    for (int i = 0; i < dummy.size(); i++) {
+        cr_assert(dummy[i] == 19);
+    }
+}
+
+Test(Modifiers, swap, .init = setup_ft_seed) {
+    ft::vector<int> sw(4, 123);
+
+    sw.swap(dummy);
+
+    cr_assert(dummy.size() == 4);
+    cr_assert(sw.size() == 5);
+    for (int i = 0; i < dummy.size(); i++) {
+        cr_assert(dummy[i] == 123);
+    }
+    for (int i = 0; i < sw.size(); ++i) {
+        cr_assert(sw[i] == i);
+    }
+}
+
+Test(Modifiers, push_back) {
+    cr_assert(dummy.size() == 0);
+    dummy.push_back(12);
+    cr_assert(dummy.size() == 1);
+    for (int i = 0; i < 45; i++) {
+        dummy.push_back(21);
+    }
+    cr_expect(dummy.size() == 46, "Size should be 46");
+}
+
+Test(Modifiers, pop_back, .init = setup_ft_random) {
+    cr_assert(dummy.size() == 5);
+    dummy.pop_back();
+    cr_assert(dummy.size() == 4);
+    for (int i = 0; i < 4; i++) {
+        dummy.pop_back();
+    }
+    cr_expect(dummy.size() == 0, "Should be empty");
+}
+
+Test(Modifiers, insert_one, .init = setup_ft_seed) {
+    /* iterator insert(iterator position, const value_type &val) */
+    cr_assert(dummy.size() == 5);
+    iterator it = dummy.insert(dummy.begin(), 42);
+    cr_expect(dummy.size() == 6, "size should be 6");
+    cr_expect(*it == 42, "should be 42");
+    cr_expect(dummy[0] == 42, "should be 42");
+    cr_assert(dummy[1] == 0);
+    it = dummy.insert(dummy.begin() + 4, 420);
+    cr_expect(dummy.size() == 7, "size should be 7");
+    // [42, 0, 1, 2, 3, 4, 5]
+    cr_expect(*it == 420, "should be 420");
+    cr_expect(dummy[4] == 420, "should be 420");
+}
+
+Test(Modifiers, insert_n_vals, .init = setup_ft_seed) {
+    /* void insert(iterator position, size_type n, const value_type &val) */
+
+    cr_assert(dummy.size() == 5);
+    dummy.insert(dummy.begin(), 5, 42);
+    cr_expect(dummy.size() == 10);
+    for (int i = 0; i < 5; i++) {
+        cr_assert(dummy[i] == 42);
+    }
+
+    dummy.insert(dummy.begin() + 2, 2, 79);
+    cr_expect(dummy.size() == 12, "size should be 12");
+    for (int i = 2; i < 4; i++) {
+        cr_assert(dummy[i] == 79);
+    }
+}
+
+Test(Modifiers, insert_range_at_pos, .init = setup_ft_seed) {
+    ft::vector<int> v(4, 49);
+
+    dummy.insert(dummy.begin(), v.begin(), v.end());
+    cr_expect(dummy.size() == 9, "size should be 9");
+    for (int i = 0; i < 4; i++) {
+        cr_assert(dummy[i] == 49);
+    }
+    v.assign(4, 12);
+    dummy.insert(dummy.begin() + 7, v.begin(), v.end());
+    cr_expect(dummy.size() == 13);
+    for (int i = 7; i < 11; i++) {
+        cr_assert(dummy[i] == 12);
+    }
+}
+
+Test(Modifiers, erase_one, .init = setup_ft_seed) {
+    cr_assert(dummy.size() == 5);
+
+    dummy.erase(dummy.begin());
+    cr_assert(dummy.size() == 4);
+    iterator it = dummy.begin();
+    cr_assert(*it == 1);
+    //[1, 2, 3, 4]
+    dummy.erase(dummy.begin() + 2);
+    cr_assert(dummy.size() == 3);
+    cr_assert(dummy[0] == 1);
+    cr_assert(dummy[1] == 2);
+    cr_assert(dummy[2] == 4);
+}
+
+Test(Modifiers, erase_range, .init = setup_ft_seed) {
+    cr_assert(dummy.size() == 5);
+    iterator it = dummy.erase(dummy.begin(), dummy.begin() + 3);
+    cr_expect(*it == 3, "should be 3");
+    cr_assert(dummy.size() == 2);
+    it = dummy.begin() + 1;
+    std::cout << *it << std::endl;
+    it = dummy.erase(dummy.begin() + 1, dummy.end());  // TODO: broken
+    std::cout << *it << std::endl;
+    // cr_expect(dummy.size() == 1, "Size should be 1");
+    // cr_expect(it == dummy.end());
 }

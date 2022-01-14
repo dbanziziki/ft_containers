@@ -143,11 +143,11 @@ class BST {
 
     iterator begin() { return iterator(_first); }
 
-    // const_iterator begin() const { return const_iterator(_tail, _root); }
+    const_iterator begin() const { return const_iterator(_first); }
 
     iterator end() { return iterator(u_nullptr); }
 
-    // const_iterator end() const { return const_iterator(u_nullptr, _root); }
+    const_iterator end() const { return const_iterator(u_nullptr); }
 
     bool empty() const { return _root == u_nullptr; }
 
@@ -163,19 +163,6 @@ class BST {
         _comp = other._comp;
         _node_alloc = other._node_alloc;
         return *this;
-    }
-
-    void deleteTree(pointer node) {
-        if (node == u_nullptr) return;
-
-        deleteTree(node->left);
-        deleteTree(node->right);
-
-        std::cout << "Deleting: " << node->item.first << " "
-                  << node->item.second << std::endl;
-        _node_alloc.destroy(node);
-        _node_alloc.deallocate(node, 1);
-        _size = 0;
     }
 
    private:

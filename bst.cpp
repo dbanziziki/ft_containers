@@ -12,11 +12,17 @@ typedef ft::BST<ft::pair<int, std::string> >::const_iterator const_iterator;
 int main() {
     ft::BST<ft::pair<int, std::string> > tree;
 
-    tree.insert(ft::make_pair(21, "Savege"));
+    tree.insert(ft::make_pair(21, "Savage"));
     tree.insert(ft::make_pair(12, "Manga"));
-    iterator it = tree.begin();
-    for (; it != tree.end(); ++it) {
-        std::cout << it->first << " " << it->second << std::endl;
-    }
+    tree.insert(ft::make_pair(42, "school"));
+
+    /*
+                [21]
+            [12] .  [42]
+    */
+    const_iterator cit = tree.begin();
+    std::cout << cit->first << " " << cit->second << std::endl;
+    cit++;
+    std::cout << cit->first << " " << cit->second << std::endl;
     return 0;
 }
