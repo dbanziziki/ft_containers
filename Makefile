@@ -37,3 +37,6 @@ map: fclean map.hpp main.cpp
 
 fclean:
 	rm -f $(NAME) test bst map
+
+pair: pair_test.cpp utils.hpp
+	$(CC) -g pair_test.cpp -o $@

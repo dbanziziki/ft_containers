@@ -618,6 +618,7 @@ class vector {
      * @return An iterator to the element past the end of the sequence.
      */
     iterator end() { return _end; }
+
     const_iterator end() const { return _end; }
 
     /**

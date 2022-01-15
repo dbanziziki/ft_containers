@@ -260,20 +260,18 @@ class map {
      *
      * @return An iterator to the first element in the container.
      */
-    iterator begin() { return iterator(_tree.getTail(), _tree.getRoot()); }
+    iterator begin() { return _tree.begin(); }
 
-    const_iterator begin() const {
-        return iterator(_tree.getTail(), _tree.getRoot());
-    }
+    const_iterator begin() const { return _tree.begin(); }
 
     /**
      * @brief An iterator to the first element in the container.
      *
      * @return An iterator to the past-the-end element in the container.
      */
-    iterator end() { return iterator(u_nullptr, _tree.getRoot()); }
+    iterator end() { return _tree.end(); }
 
-    const_iterator end() const { return iterator(u_nullptr, _tree.getRoot()); }
+    const_iterator end() const { return _tree.end(); }
 
     /**
      * @brief Returns a reverse iterator pointing to the last element in the

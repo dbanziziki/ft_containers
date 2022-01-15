@@ -96,6 +96,10 @@ class pair {
    public:
     first_type first;
     second_type second;
+
+    // operator pair<const T1, const T2>() const {
+    //     return pair<const T1, const T2>(first, second);
+    // }
 };
 
 template <class T1, class T2>

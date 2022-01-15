@@ -40,7 +40,7 @@ class BST {
             _root = newNode;
             _first = newNode;
             _size++;
-            return ft::make_pair(iterator(_root), true);
+            return ft::make_pair(iterator(_first, _root), true);
         }
         pointer x = _root;
         pointer y = u_nullptr;
@@ -50,7 +50,7 @@ class BST {
             if (value.first < x->item.first) {
                 x = x->left;
             } else if (value.first == x->item.first) {
-                return ft::make_pair(iterator(x), false);
+                return ft::make_pair(iterator(x, _root), false);
             } else {
                 x = x->right;
             }
@@ -61,14 +61,14 @@ class BST {
             y->left = newNode;
             newNode->parent = y;
             _size++;
-            return ft::make_pair(iterator(newNode), true);
+            return ft::make_pair(iterator(newNode, _root), true);
         } else {
             y->right = newNode;
             newNode->parent = y;
             _size++;
-            return ft::make_pair(iterator(newNode), true);
+            return ft::make_pair(iterator(newNode, _root), true);
         }
-        return ft::make_pair(iterator(newNode), true);
+        return ft::make_pair(iterator(newNode, _root), true);
     }
 
     pointer deleteNode(pointer node, const key_type& value) {
@@ -141,13 +141,13 @@ class BST {
         }
     }
 
-    iterator begin() { return iterator(_first); }
+    iterator begin() { return iterator(_first, _root); }
 
-    const_iterator begin() const { return const_iterator(_first); }
+    const_iterator begin() const { return iterator(_first, _root); }
 
-    iterator end() { return iterator(u_nullptr); }
+    iterator end() { return iterator(u_nullptr, _root); }
 
-    const_iterator end() const { return const_iterator(u_nullptr); }
+    const_iterator end() const { return iterator(u_nullptr, _root); }
 
     bool empty() const { return _root == u_nullptr; }
 
@@ -182,7 +182,6 @@ class BST {
    private:
     pointer _root;
     pointer _first;
-    pointer _last;
     size_t _size;
     compare_type _comp;
     node_allocator_type _node_alloc;
