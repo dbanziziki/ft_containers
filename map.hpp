@@ -391,10 +391,67 @@ class map {
      * is not considered to go before k, or map::end if all keys are considered
      * to go before k.
      */
-    // iterator lower_bound(const key_type& k) {}
+    iterator lower_bound(const key_type& k) {
+        iterator it = begin();
 
-    // const_iterator lower_bound(const key_type& k) const {}
-};
+        for (; it != end(); ++it) {
+            if (!_comp(it->first, k)) return it;
+        }
+        return end();
+    }
+
+    const_iterator lower_bound(const key_type& k) const {
+        const_iterator it = begin();
+        for (; it != end(); ++it) {
+            if (!_comp(it->first, k)) return it;
+        }
+        return end();
+    }
+
+    /**
+     * @brief Returns an iterator pointing to the first element in the container
+     whose key is considered to go after k.
+     *
+     * @param k Key to search for.
+     * @return An iterator to the the first element in the container whose key
+     * is considered to go after k, or map::end if no keys are considered to go
+     * after k.
+     */
+    iterator upper_bound(const key_type& k) {
+        iterator it = begin();
+
+        for (; it != end(); ++it) {
+            if (_comp(k, it->first)) return it;
+        }
+        return end();
+    }
+
+    const_iterator upper_bound(const key_type& k) const {
+        const_iterator it = begin();
+
+        for (; it != end(); ++it) {
+            if (_comp(k, it->first)) return it;
+        }
+        return end();
+    }
+
+    /**
+     * @brief Returns the bounds of a range that includes all the elements in
+     * the container which have a key equivalent to k.
+     *
+     * @param k Key to search for.
+     * @return The function returns a pair, whose member pair::first is the
+     * lower bound of the range (the same as lower_bound), and pair::second is
+     * the upper bound (the same as upper_bound).
+     */
+    pair<const_iterator, const_iterator> equal_range(const key_type& k) const {
+        return ft::make_pair(lower_bound(k), upper_bound(k));
+    }
+
+    pair<iterator, iterator> equal_range(const key_type& k) {
+        return ft::make_pair(lower_bound(k), upper_bound(k));
+    }
+};  // namespace ft
 
 }  // namespace ft
 
