@@ -21,7 +21,7 @@ class stack {
     value_type &top() { return _ctn.back(); }
 
     const value_type &top() const { return _ctn.back(); }
-    
+
     void pop() { _ctn.pop_back(); }
 
     size_type size() { return _ctn.size(); }
