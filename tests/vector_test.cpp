@@ -254,14 +254,35 @@ Test(Modifiers, erase_one, .init = setup_ft_seed) {
 }
 
 Test(Modifiers, erase_range, .init = setup_ft_seed) {
-    cr_assert(dummy.size() == 5);
-    iterator it = dummy.erase(dummy.begin(), dummy.begin() + 3);
-    cr_expect(*it == 3, "should be 3");
-    cr_assert(dummy.size() == 2);
-    it = dummy.begin() + 1;
-    std::cout << *it << std::endl;
-    it = dummy.erase(dummy.begin() + 1, dummy.end());  // TODO: broken
-    std::cout << *it << std::endl;
+    iterator it = dummy.begin();
+    for (; it != dummy.end(); ++it) {
+        std::cout << *it << std::endl;
+    }
+    it = dummy.erase(dummy.begin() + 2, dummy.end() - 1);
+    std::cout << "after erase last elem: " << *it << std::endl;
+    it = dummy.begin();
+    std::cout << "After erase" << std::endl;
+    for (; it != dummy.end(); ++it) {
+        std::cout << *it << std::endl;
+    }
+
+    std::vector<int> nums;
+    for (int i = 0; i < 5; ++i) {
+        nums.push_back(i);
+    }
+
+    std::vector<int>::iterator nit;
+
+    nit = nums.erase(nums.begin() + 2, nums.end() - 1);
+    std::cout << "std after erase last: " << *nit << std::endl;
+    // cr_assert(dummy.size() == 5);
+    // iterator it = dummy.erase(dummy.begin(), dummy.begin() + 3);
+    // cr_expect(*it == 3, "should be 3");
+    // cr_assert(dummy.size() == 2);
+    // it = dummy.begin() + 1;
+    // std::cout << *it << std::endl;
+    // it = dummy.erase(dummy.begin() + 1, dummy.end());  // TODO: broken
+    // std::cout << *it << std::endl;
     // cr_expect(dummy.size() == 1, "Size should be 1");
     // cr_expect(it == dummy.end());
 }

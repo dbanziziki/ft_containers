@@ -574,8 +574,10 @@ class vector {
             _alloc.construct(&(*(start + i)), *(start + (diff + i)));
             _alloc.destroy(&(*(start + diff + i)));
         }
+        std::cout << "diff: " << diff << std::endl;
         _size -= diff;
-        return _ptr + diff;
+        _end = _ptr + _size;
+        return _ptr + diff - 1;
     }
     /**
      * @brief Removes all elements from the vector (which are destroyed),

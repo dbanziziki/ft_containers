@@ -1,39 +1,27 @@
 #include <iostream>
 #include <map>
+#include <string>
 #include <vector>
 
 #include "map.hpp"
 #include "vector.hpp"
 
-typedef ft::map<std::string, int>::const_iterator const_iterator;
-typedef ft::map<std::string, int>::iterator iterator;
+typedef ft::map<int, std::string>::iterator iterator;
+typedef ft::map<int, std::string>::const_iterator const_iterator;
+
 int main() {
-    ft::map<std::string, int> m;
+    ft::map<int, std::string> m;
 
-    m["hello"] = 21;
-    m["hllo"] = 24;
-    m["ello"] = 29;
-
-    iterator it = m.begin();
-    const_iterator cit = it;
-
-    it->second = 67;
-    for (; cit != m.end(); ++cit) {
-        std::cout << cit->first << " " << cit->second << std::endl;
+    for (int i = 0; i < 10; i++) {
+        m.insert(ft::make_pair(i, "Plop"));
     }
-    --cit;
 
-    std::cout << cit->first << " " << cit->second << std::endl;
-    /*    ft::map<int, std::string> other;
-        ft::map<int, std::string>::iterator it;
-
-        other[4] = "Hello";
-        it = other.begin();
-        std::cout << it->first << " " << it->second << std::endl;
-
-        other = m;
-
-        it = other.begin();
-        std::cout << it->first << " " << it->second << std::endl;*/
+    ft::map<int, std::string>::iterator it = m.lower_bound(9);
+    std::cout << it->first << " " << it->second << std::endl;
+    it = m.upper_bound(4);
+    std::cout << it->first << " " << it->second << std::endl;
+    ft::pair<const_iterator, const_iterator> p = m.equal_range(2);
+    std::cout << "Lower bound: " << p.first->first << std::endl;
+    std::cout << "upper bound: " << p.second->first << std::endl;
     return 0;
 }
