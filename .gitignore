@@ -8,9 +8,11 @@ main.dSYM/
 test.dSYM/
 map_test.dSYM/
 vec_test.dSYM/
-vec_test
-bst.dSYM/
 map.dSYM/
+bst.dSYM/
+play.dSYM/
 .vscode/
+vec_test
 .notes
 playground.cpp
+play

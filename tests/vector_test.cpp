@@ -6,10 +6,11 @@
 #include <string>
 #include <vector>
 
-#define SIZE 5
-
 typedef std::vector<int>::iterator std_it;
 typedef ft::vector<int>::iterator iterator;
+typedef ft::vector<int>::const_iterator const_iterator;
+typedef ft::vector<int>::reverse_iterator reverse_iterator;
+typedef ft::vector<int>::const_reverse_iterator const_reverse_iterator;
 
 std::vector<int> vec;
 ft::vector<int> dummy;
@@ -27,9 +28,16 @@ void setup_ft_seed(void) {
     }
 }
 
+void setup_both(void) {
+    for (int i = 0; i < 10; i++) {
+        dummy.push_back(i);
+        vec.push_back(i);
+    }
+}
+
 void setup_std(void) {
     std::srand(time(NULL));
-    for (int i = 0; i < SIZE; i++) {
+    for (int i = 0; i < 5; i++) {
         vec.push_back(std::rand() % 100);
     }
 }
@@ -101,8 +109,8 @@ Test(Element_access, back, .init = setup_ft_seed) {
 }
 
 Test(Capacity, size, .init = setup_ft_random) {
-    cr_assert(dummy.size() == SIZE);
-    dummy.push_back(SIZE);
+    cr_assert(dummy.size() == 5);
+    dummy.push_back(5);
     cr_expect(dummy.size() == 6, "size should be 6");
     dummy.push_back(5);
     dummy.push_back(5);
@@ -253,36 +261,69 @@ Test(Modifiers, erase_one, .init = setup_ft_seed) {
     cr_assert(dummy[2] == 4);
 }
 
-Test(Modifiers, erase_range, .init = setup_ft_seed) {
+Test(Modifiers, erase_range, .init = setup_both) {
+    assert(dummy.size() == vec.size());
+    iterator it = dummy.erase(dummy.begin() + 2, dummy.end() - 3);
+    std_it sit = vec.erase(vec.begin() + 2, vec.end() - 3);
+    cr_assert(*it == *sit);
+    cr_assert(dummy.size() == vec.size());
+    for (int i = 0; i < dummy.size(); ++i) {
+        cr_assert(dummy[i] == vec[i]);
+    }
+    it = dummy.erase(dummy.begin() + 2, dummy.end());
+    sit = vec.erase(vec.begin() + 2, vec.end());
+    cr_assert(*it == *sit);
+}
+
+Test(Modifiers, clear, .init = setup_ft_random) {
+    cr_assert(dummy.size() == 5);
+    dummy.clear();
+    cr_expect(dummy.size() == 0, "Size should be 0");
+}
+
+Test(Iterators, begin_end, .init = setup_ft_seed) {
     iterator it = dummy.begin();
+
+    cr_assert(*it == 0);
+    int i = 0;
+
     for (; it != dummy.end(); ++it) {
-        std::cout << *it << std::endl;
+        cr_assert(*it == i);
+        i++;
     }
-    it = dummy.erase(dummy.begin() + 2, dummy.end() - 1);
-    std::cout << "after erase last elem: " << *it << std::endl;
-    it = dummy.begin();
-    std::cout << "After erase" << std::endl;
+}
+
+Test(Iterators, const_begin_end, .init = setup_ft_seed) {
+    const_iterator it = dummy.begin();
+
+    cr_assert(*it == 0);
+    int i = 0;
+
     for (; it != dummy.end(); ++it) {
-        std::cout << *it << std::endl;
+        cr_assert(*it == i);
+        i++;
     }
+}
 
-    std::vector<int> nums;
-    for (int i = 0; i < 5; ++i) {
-        nums.push_back(i);
+Test(Reverse_iterators, rbegin_rend, .init = setup_ft_seed) {
+    reverse_iterator rit = dummy.rbegin();
+
+    cr_assert(*rit == 4);
+    int i = 4;
+    for (; rit != dummy.rend(); ++rit) {
+        cr_assert(*rit == i);
+        i--;
     }
+}
 
-    std::vector<int>::iterator nit;
-
-    nit = nums.erase(nums.begin() + 2, nums.end() - 1);
-    std::cout << "std after erase last: " << *nit << std::endl;
-    // cr_assert(dummy.size() == 5);
-    // iterator it = dummy.erase(dummy.begin(), dummy.begin() + 3);
-    // cr_expect(*it == 3, "should be 3");
-    // cr_assert(dummy.size() == 2);
-    // it = dummy.begin() + 1;
-    // std::cout << *it << std::endl;
-    // it = dummy.erase(dummy.begin() + 1, dummy.end());  // TODO: broken
-    // std::cout << *it << std::endl;
-    // cr_expect(dummy.size() == 1, "Size should be 1");
-    // cr_expect(it == dummy.end());
+Test(Reverse_iterators, const_rbegin_rend, .init = setup_ft_seed) {
+    const_reverse_iterator crit = dummy.rbegin();
+    const_reverse_iterator crend = dummy.rend();
+    cr_assert(*crit == 4);
+    int i = 4;
+    for (; crit != crend; ++crit) {  // Error when directly using dummy.rend()
+                                     // not taking the right overload?
+        cr_assert(*crit == i);
+        i--;
+    }
 }

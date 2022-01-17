@@ -84,11 +84,6 @@ reverse_iterator<Iterator> operator+(
     return rev_it + n;
 }
 
-/*template <class Iterator>
-typename reverse_iterator<Iterator>::difference_type operator-(
-    const reverse_iterator<Iterator>& lhs,
-    const reverse_iterator<Iterator>& rhs) {}
-*/
 /*relational operators*/
 
 template <class Iterator>

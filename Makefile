@@ -30,13 +30,13 @@ map_test: fclean map.hpp tests/map_test.cpp
 
 vec_test: fclean vector.hpp tests/vector_test.cpp
 	$(CC) -g tests/vector_test.cpp -I. -o $@ $(CRITERION)
-	./$@ --verbose
+	./$@
 
-map: fclean map.hpp main.cpp
+play: fclean map.hpp main.cpp
 	$(CC) -g $(FSAN) $(FLAGS) main.cpp -o $@
 
 fclean:
-	rm -f $(NAME) test bst map
+	rm -f $(NAME) test bst map map_test play vec_test
 
 pair: pair_test.cpp utils.hpp
 	$(CC) -g pair_test.cpp -o $@
