@@ -292,20 +292,21 @@ class vector {
      * @param new_cap Minimum capacity for the vector.
      */
     void reserve(size_type new_cap) {
+        if (new_cap >= max_size()) throw std::out_of_range("ft::vector");
+
         if (new_cap <= capacity()) return;
-        pointer new_ptr = this->_alloc.allocate(new_cap);
+
         pointer prev_ptr = _ptr;
-        _end = new_ptr;
-        size_type i = size();
-        size_type prev_size = size();
-        while (i--) {
-            this->_alloc.construct(_end++, *prev_ptr);
-            prev_ptr++;
+        pointer prev_end = _end;
+        _ptr = _alloc.allocate(new_cap);
+        _end = _ptr;
+        for (pointer p = prev_ptr; p != prev_end; ++p) {
+            _alloc.construct(_end++, *p);
         }
-        clear();
-        _alloc.deallocate(_ptr, capacity());
-        _size = prev_size;
-        _ptr = new_ptr;
+        for (pointer p = prev_ptr; p != prev_end; ++p) {
+            _alloc.destroy(p);
+        }
+        _alloc.deallocate(prev_ptr, _capacity);
         _capacity = new_cap;
         _end_capacty = _ptr + new_cap;
     }
@@ -394,8 +395,7 @@ class vector {
      */
     void push_back(const value_type &val) {
         if (_size >= _capacity) {
-            size_type new_cap =
-                _capacity == 0 ? 2 : (_capacity + (_capacity / 2));
+            size_type new_cap = _capacity == 0 ? 2 : _capacity * 2;
             reserve(new_cap);
         }
         _alloc.construct(_end++, val);
@@ -534,6 +534,15 @@ class vector {
         _alloc.deallocate(prev_ptr, prev_capacity);
     }
 
+    /**
+     * @brief Removes from the vector a single element
+     *
+     * @param position Iterator pointing to a single element to be removed from
+     * the vector.
+     * @return An iterator pointing to the new location of the element that
+     * followed the last element erased by the function call. This is the
+     * container end if the operation erased the last element in the sequence.
+     */
     iterator erase(iterator position) {
         if (_size < 1) return _ptr;
         size_type pos = &(*position) - _ptr;
@@ -563,9 +572,9 @@ class vector {
      */
     iterator erase(iterator first, iterator last) {
         size_type n = &(*first) - _ptr;
+        size_type diff = ft::difference(first, last);
         size_type rem = ft::difference(last, end());
         iterator start = begin() + n;
-        size_type diff = ft::difference(first, last);
         if (_size < diff) return _ptr;
         for (; first != last; first++) {
             _alloc.destroy(&(*first));
@@ -574,26 +583,16 @@ class vector {
             _alloc.construct(&(*(start + i)), *(start + (diff + i)));
             _alloc.destroy(&(*(start + diff + i)));
         }
-        std::cout << "diff: " << diff << std::endl;
         _size -= diff;
         _end = _ptr + _size;
-        return _ptr + diff - 1;
+        return start;
     }
     /**
      * @brief Removes all elements from the vector (which are destroyed),
      * leaving the container with a size of 0.
      *
      */
-    void clear() {
-        pointer temp = _ptr;
-        size_type i = 0;
-        while (i < _size) {
-            _alloc.destroy(temp);
-            temp++;
-            i++;
-        }
-        _size = 0;
-    }
+    void clear() { this->erase(begin(), end()); }
 
     /* Allocator */
 
@@ -631,6 +630,10 @@ class vector {
      */
     reverse_iterator rbegin() { return reverse_iterator(_end); }
 
+    const_reverse_iterator rbegin() const {
+        return const_reverse_iterator(_end);
+    }
+
     /**
      * @brief Returns a reverse iterator pointing to the theoretical element
      * preceding the first element in the vector (which is considered its
@@ -638,6 +641,8 @@ class vector {
      * @return A reverse iterator to the reverse end of the sequence container.
      */
     reverse_iterator rend() { return reverse_iterator(_ptr); }
+
+    const_reverse_iterator rend() const { return const_reverse_iterator(_ptr); }
 
    private:
 };
