@@ -262,7 +262,7 @@ Test(Modifiers, erase_one, .init = setup_ft_seed) {
 }
 
 Test(Modifiers, erase_range, .init = setup_both) {
-    assert(dummy.size() == vec.size());
+    cr_assert(dummy.size() == vec.size());
     iterator it = dummy.erase(dummy.begin() + 2, dummy.end() - 3);
     std_it sit = vec.erase(vec.begin() + 2, vec.end() - 3);
     cr_assert(*it == *sit);

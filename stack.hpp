@@ -4,7 +4,7 @@
 #include "vector.hpp"
 
 namespace ft {
-template <class T, class Container = vector<T> >
+template <class T, class Container = ft::vector<T> >
 class stack {
    public:
     typedef T value_type;
@@ -12,52 +12,52 @@ class stack {
     typedef size_t size_type;
 
    public:
-    explicit stack(const container_type ctnr = container_type()) : _ctn() {}
+    explicit stack(const container_type ctnr = container_type()) : c(ctnr) {}
 
-    void push(const value_type &val) { _ctn.push_back(val); }
+    void push(const value_type &val) { c.push_back(val); }
 
-    bool empty() const { return _ctn.empty(); }
+    bool empty() const { return c.empty(); }
 
-    value_type &top() { return _ctn.back(); }
+    value_type &top() { return c.back(); }
 
-    const value_type &top() const { return _ctn.back(); }
+    const value_type &top() const { return c.back(); }
 
-    void pop() { _ctn.pop_back(); }
+    void pop() { c.pop_back(); }
 
-    size_type size() const { return _ctn.size(); }
+    size_type size() const { return c.size(); }
 
-   private:
-    container_type _ctn;
+   protected:
+    container_type c;
 
    public:
     friend bool operator==(const stack<T, Container> &lhs,
                            const stack<T, Container> &rhs) {
-        return lhs._ctn == rhs._ctn;
+        return lhs.c == rhs.c;
     }
 
     friend bool operator!=(const stack<T, Container> &lhs,
                            stack<T, const Container> &rhs) {
-        return lhs._ctn != rhs._ctn;
+        return lhs.c != rhs.c;
     }
 
     friend bool operator<=(const stack<T, Container> &lhs,
                            const stack<T, Container> &rhs) {
-        return lhs._ctn <= rhs._ctn;
+        return lhs.c <= rhs.c;
     }
 
     friend bool operator>=(const stack<T, Container> &lhs,
                            const stack<T, const Container> &rhs) {
-        return lhs._ctn >= rhs._ctn;
+        return lhs.c >= rhs.c;
     }
 
     friend bool operator>(const stack<T, Container> &lhs,
                           const stack<T, Container> &rhs) {
-        return lhs._ctn > rhs._ctn;
+        return lhs.c > rhs.c;
     }
 
     friend bool operator<(const stack<T, Container> &lhs,
                           const stack<T, Container> &rhs) {
-        return lhs._ctn < rhs._ctn;
+        return lhs.c < rhs.c;
     }
 };
 
