@@ -1,6 +1,7 @@
 #if !defined(__MAP_H__)
 #define __MAP_H__
 
+#include <cstdio>
 #include <iostream>
 
 #include "bst.hpp"
@@ -165,8 +166,13 @@ class map {
     void insert(InputIterator first, InputIterator last,
                 typename ft::enable_if<!ft::is_integral<InputIterator>::value,
                                        InputIterator>::type* = u_nullptr) {
-        size_type n = ft::difference(first, last);
-        while (n--) this->insert(*(first++));
+        // int i = 0;
+        std::cout << "start" << std::endl;
+        for (; first != last; ++first) {
+            // std::cout << "[" << i++ << "]\n";
+            insert(*(first));
+        }
+        std::cout << "end" << std::endl;
     }
 
     /**
