@@ -33,8 +33,27 @@ class BST {
 
    public:
     size_t size() const { return _size; }
+
+    pointer insert(pointer root, const value_type& value) {
+        if (root == u_nullptr) return _new_node(value);
+        if (value.first < root->item.first)
+            return root->left = insert(root->left, value);
+        else if (value.first == root->item.first)
+            return root;
+        else
+            return root->right = insert(root->right, value);
+        return root;
+    }
+
+    //TODO: when the key already exist
     ft::pair<iterator, bool> insert(const value_type& value) {
-        pointer newNode = _node_alloc.allocate(1);
+        if (_root == u_nullptr) {
+            _root = _new_node(value);
+            return ft::make_pair(iterator(_root, u_nullptr), true);
+        }
+        pointer inserted = insert(_root, value);
+        return ft::make_pair(iterator(inserted, u_nullptr), true);
+        /*pointer newNode = _node_alloc.allocate(1);
         _node_alloc.construct(newNode, Node(value));
         if (_root == u_nullptr) {
             _root = newNode;
@@ -68,7 +87,7 @@ class BST {
             _size++;
             return ft::make_pair(iterator(newNode, _root), true);
         }
-        return ft::make_pair(iterator(newNode, _root), true);
+        return ft::make_pair(iterator(newNode, _root), true);*/
     }
 
     pointer deleteNode(pointer node, const key_type& value) {
@@ -166,6 +185,11 @@ class BST {
     }
 
    private:
+    pointer _new_node(value_type const& value) {
+        pointer new_node = _node_alloc.allocate(1);
+        _node_alloc.construct(new_node, Node(value));
+        return new_node;
+    }
     pointer _findSuccessor(pointer node) {
         pointer n = node;
         if (n->right != u_nullptr) {
