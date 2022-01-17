@@ -46,6 +46,7 @@ class map {
     };
 
    private:
+    /* Actual data structure storing the map elements */
     ft::BST<value_type, key_compare> _tree;
     allocator_type _alloc;
     Compare _comp;
