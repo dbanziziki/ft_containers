@@ -28,7 +28,6 @@ class random_access_iterator
    public:
     random_access_iterator() : _ptr(u_nullptr) {}
     random_access_iterator(pointer p) : _ptr(p) {}
-    // random_accses_iterator(iterator_type it) {}
     random_access_iterator(const random_access_iterator<T>& ra_it)
         : _ptr(ra_it._ptr) {}
 
@@ -71,14 +70,6 @@ class random_access_iterator
 
     reference operator*() const { return *_ptr; }
 
-    bool operator==(const random_access_iterator& other) {
-        return _ptr == other._ptr;
-    }
-
-    bool operator!=(const random_access_iterator& other) {
-        return !(*this == other);
-    }
-
     random_access_iterator operator+(difference_type n) const {
         return random_access_iterator(_ptr + n);
     }
@@ -97,17 +88,33 @@ class random_access_iterator
         return *this;
     }
 
-    /*bool operator>(const random_accses_iterator& rhs) {
-        return _ptr > rhs._ptr;
+    friend bool operator!=(const random_access_iterator& lhs,
+                           const random_access_iterator& rhs) {
+        return (lhs._ptr != rhs._ptr);
     }
 
-    bool operator<(const random_accses_iterator& rhs) {
-        return _ptr < rhs._ptr;
+    friend bool operator==(const random_access_iterator& lhs,
+                           const random_access_iterator& rhs) {
+        return (lhs._ptr == rhs._ptr);
+    }
+    friend bool operator>(const random_access_iterator& lhs,
+                          const random_access_iterator& rhs) {
+        return (lhs._ptr > rhs._ptr);
     }
 
-    bool operator<=(const random_accses_iterator& rhs) {
-        return
-    }*/
+    friend bool operator<(const random_access_iterator& lhs,
+                          const random_access_iterator& rhs) {
+        return (lhs._ptr < rhs._ptr);
+    }
+
+    friend bool operator>=(const random_access_iterator& lhs,
+                           const random_access_iterator& rhs) {
+        return (lhs._ptr >= rhs._ptr);
+    }
+    friend bool operator<=(const random_access_iterator& lhs,
+                           const random_access_iterator& rhs) {
+        return (lhs._ptr <= rhs._ptr);
+    }
 };
 }  // namespace ft
 
