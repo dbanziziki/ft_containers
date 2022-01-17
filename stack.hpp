@@ -24,11 +24,12 @@ class stack {
 
     void pop() { _ctn.pop_back(); }
 
-    size_type size() { return _ctn.size(); }
+    size_type size() const { return _ctn.size(); }
 
    private:
     container_type _ctn;
 
+   public:
     friend bool operator==(const stack<T, Container> &lhs,
                            const stack<T, Container> &rhs) {
         return lhs._ctn == rhs._ctn;
