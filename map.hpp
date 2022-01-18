@@ -96,7 +96,9 @@ class map {
      * copied or acquired.
      */
     map(const map& x) : _tree(), _alloc(x._alloc), _comp(x._comp) {
-        this->insert(x.begin(), x.end());
+        tree_pointer dest = u_nullptr;
+        dest = _tree._copy(x.getRoot(), dest);
+        _tree.setRoot(dest);
     }
 
     /**
@@ -453,6 +455,10 @@ class map {
 
     pair<iterator, iterator> equal_range(const key_type& k) {
         return ft::make_pair(lower_bound(k), upper_bound(k));
+    }
+
+    tree_pointer getRoot() const {
+        return _tree.getRoot();
     }
 };  // namespace ft
 

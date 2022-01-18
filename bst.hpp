@@ -38,16 +38,17 @@ class BST {
         if (root == u_nullptr) {
             pointer new_node = _new_node(value);
             if (new_node->item.first < _first->item.first) _first = new_node;
+            _last = new_node;
             return new_node;
         }
         if (value.first < root->item.first)
-            return root->left = insert(root->left, value);
-        else if (value.first > root->item.first)
-            return root->right = insert(root->right, value);
+            root->left = insert(root->left, value);
+        else
+            root->right = insert(root->right, value);
         return root;
     }
 
-    //TODO: when the key already exist
+    // TODO: when the key already exist
     ft::pair<iterator, bool> insert(const value_type& value) {
         if (_root == u_nullptr) {
             _root = _new_node(value);
@@ -55,9 +56,9 @@ class BST {
             _size += 1;
             return ft::make_pair(iterator(_root, u_nullptr), true);
         }
-        pointer inserted = insert(_root, value);
+        insert(_root, value);
         _size += 1;
-        return ft::make_pair(iterator(inserted, u_nullptr), true);
+        return ft::make_pair(iterator(_last, u_nullptr), true);
     }
 
     pointer deleteNode(pointer node, const key_type& value) {
@@ -119,6 +120,9 @@ class BST {
     }
     pointer getRoot() const { return _root; }
     pointer getTail() const { return _first; }
+    void setRoot(pointer new_root) {
+        _root = new_root;
+    }
 
     void inorder(pointer node) {
         if (node != u_nullptr) {
@@ -154,6 +158,15 @@ class BST {
         return *this;
     }
 
+    pointer _copy(pointer root, pointer dest) {
+        if (root == u_nullptr) return u_nullptr;
+        dest = _new_node(root->item);
+
+        dest->left = _copy(root->left, dest->left);
+        dest->right = _copy(root->right, dest->right);
+        return dest;
+    }
+
    private:
     pointer _new_node(value_type const& value) {
         pointer new_node = _node_alloc.allocate(1);
@@ -176,6 +189,7 @@ class BST {
    private:
     pointer _root;
     pointer _first;
+    pointer _last;
     size_t _size;
     compare_type _comp;
     node_allocator_type _node_alloc;
