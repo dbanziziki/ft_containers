@@ -35,12 +35,14 @@ class BST {
     size_t size() const { return _size; }
 
     pointer insert(pointer root, const value_type& value) {
-        if (root == u_nullptr) return _new_node(value);
+        if (root == u_nullptr) {
+            pointer new_node = _new_node(value);
+            if (new_node->item.first < _first->item.first) _first = new_node;
+            return new_node;
+        }
         if (value.first < root->item.first)
             return root->left = insert(root->left, value);
-        else if (value.first == root->item.first)
-            return root;
-        else
+        else if (value.first > root->item.first)
             return root->right = insert(root->right, value);
         return root;
     }
@@ -49,45 +51,13 @@ class BST {
     ft::pair<iterator, bool> insert(const value_type& value) {
         if (_root == u_nullptr) {
             _root = _new_node(value);
+            _first = _root;
+            _size += 1;
             return ft::make_pair(iterator(_root, u_nullptr), true);
         }
         pointer inserted = insert(_root, value);
+        _size += 1;
         return ft::make_pair(iterator(inserted, u_nullptr), true);
-        /*pointer newNode = _node_alloc.allocate(1);
-        _node_alloc.construct(newNode, Node(value));
-        if (_root == u_nullptr) {
-            _root = newNode;
-            _first = newNode;
-            _size++;
-            return ft::make_pair(iterator(_first, _root), true);
-        }
-        pointer x = _root;
-        pointer y = u_nullptr;
-
-        while (x != u_nullptr) {
-            y = x;
-            if (value.first < x->item.first) {
-                x = x->left;
-            } else if (value.first == x->item.first) {
-                return ft::make_pair(iterator(x, _root), false);
-            } else {
-                x = x->right;
-            }
-        }
-
-        if (value.first < y->item.first) {
-            if (value.first < _first->item.first) _first = newNode;
-            y->left = newNode;
-            newNode->parent = y;
-            _size++;
-            return ft::make_pair(iterator(newNode, _root), true);
-        } else {
-            y->right = newNode;
-            newNode->parent = y;
-            _size++;
-            return ft::make_pair(iterator(newNode, _root), true);
-        }
-        return ft::make_pair(iterator(newNode, _root), true);*/
     }
 
     pointer deleteNode(pointer node, const key_type& value) {

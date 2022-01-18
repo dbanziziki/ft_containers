@@ -166,13 +166,9 @@ class map {
     void insert(InputIterator first, InputIterator last,
                 typename ft::enable_if<!ft::is_integral<InputIterator>::value,
                                        InputIterator>::type* = u_nullptr) {
-        // int i = 0;
-        std::cout << "start" << std::endl;
         for (; first != last; ++first) {
-            // std::cout << "[" << i++ << "]\n";
             insert(*(first));
         }
-        std::cout << "end" << std::endl;
     }
 
     /**
