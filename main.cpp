@@ -22,13 +22,16 @@ typedef ft::BST<ft::pair<int, std::string> >::iterator iterator;
 int main() {
     ft::BST<ft::pair<int, std::string> > tree;
 
-    ft::pair<iterator, bool> inserted = tree.insert(ft::make_pair(5, "Hello"));
+    ft::pair<iterator, bool> inserted = tree.insert(ft::make_pair(67, "Hello"));
     inserted = tree.insert(ft::make_pair(42, "school"));
     inserted = tree.insert(ft::make_pair(12, "school"));
     ft::BST<ft::pair<int, std::string> >::pointer p = tree.getRoot();
+    ft::BST<ft::pair<int, std::string> >::pointer t = tree.getTail();
     std::cout << "inserted: " << inserted.first->first << " "
               << inserted.first->second << std::endl;
     std::cout << "Root: " << p->item.first << " " << p->item.second
+              << std::endl;
+    std::cout << "first: " << t->item.first << " " << t->item.second
               << std::endl;
     return 0;
 }
