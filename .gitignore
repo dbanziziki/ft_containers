@@ -4,6 +4,8 @@ map
 bst
 main
 map_test
+bench
+bench.dSYM/
 main.dSYM/
 test.dSYM/
 map_test.dSYM/

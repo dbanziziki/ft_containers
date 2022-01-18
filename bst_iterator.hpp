@@ -97,6 +97,10 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
         return _current != other._current;
     }
 
+    bool operator==(const map_iterator& other) {
+        return _current == other._current;
+    }
+
     Node* base() const { return _current; }
 
    private:

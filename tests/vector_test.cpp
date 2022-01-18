@@ -321,8 +321,9 @@ Test(Reverse_iterators, const_rbegin_rend, .init = setup_ft_seed) {
     const_reverse_iterator crend = dummy.rend();
     cr_assert(*crit == 4);
     int i = 4;
-    for (; crit != crend; ++crit) {  // Error when directly using dummy.rend()
-                                     // not taking the right overload?
+    for (; crit != dummy.rend();
+         ++crit) {  // Error when directly using dummy.rend()
+                    // not taking the right overload?
         cr_assert(*crit == i);
         i--;
     }

@@ -14,7 +14,7 @@ typedef ft::map<int, std::string>::iterator iterator;
 typedef ft::map<int, std::string> ft_map;
 typedef std::map<int, std::string> std_map;
 
-std::vector<ft::pair<int, std::string>> v;
+std::vector<ft::pair<int, std::string> > v;
 ft_map dummy;
 
 void setup(void) {

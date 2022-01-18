@@ -97,7 +97,7 @@ class map {
      */
     map(const map& x) : _tree(), _alloc(x._alloc), _comp(x._comp) {
         tree_pointer dest = u_nullptr;
-        dest = _tree._copy(x.getRoot(), dest);
+        dest = _tree._copy(x._tree.getRoot(), dest);
         _tree.setRoot(dest);
     }
 
@@ -287,6 +287,10 @@ class map {
      */
     reverse_iterator rbegin() { return reverse_iterator(this->end()); }
 
+    const_reverse_iterator rbegin() const {
+        return const_reverse_iterator(this->end());
+    }
+
     /**
      * @brief Returns a reverse iterator pointing to the theoretical element
      * right before the first element in the map container (which is considered
@@ -295,6 +299,10 @@ class map {
      * @return A reverse iterator to the reverse end of the sequence container.
      */
     reverse_iterator rend() { return reverse_iterator(this->begin()); }
+
+    const_reverse_iterator rend() const {
+        return const_reverse_iterator(this->begin());
+    }
 
     /* Capacity */
 
@@ -455,10 +463,6 @@ class map {
 
     pair<iterator, iterator> equal_range(const key_type& k) {
         return ft::make_pair(lower_bound(k), upper_bound(k));
-    }
-
-    tree_pointer getRoot() const {
-        return _tree.getRoot();
     }
 };  // namespace ft
 

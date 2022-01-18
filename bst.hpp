@@ -50,15 +50,41 @@ class BST {
 
     // TODO: when the key already exist
     ft::pair<iterator, bool> insert(const value_type& value) {
+        pointer newNode = _node_alloc.allocate(1);
+        _node_alloc.construct(newNode, Node(value));
         if (_root == u_nullptr) {
-            _root = _new_node(value);
-            _first = _root;
-            _size += 1;
-            return ft::make_pair(iterator(_root, u_nullptr), true);
+            _root = newNode;
+            _first = newNode;
+            _size++;
+            return ft::make_pair(iterator(_first, _root), true);
         }
-        insert(_root, value);
-        _size += 1;
-        return ft::make_pair(iterator(_last, u_nullptr), true);
+        pointer x = _root;
+        pointer y = u_nullptr;
+
+        while (x != u_nullptr) {
+            y = x;
+            if (value.first < x->item.first) {
+                x = x->left;
+            } else if (value.first == x->item.first) {
+                return ft::make_pair(iterator(x, _root), false);
+            } else {
+                x = x->right;
+            }
+        }
+
+        if (value.first < y->item.first) {
+            if (value.first < _first->item.first) _first = newNode;
+            y->left = newNode;
+            newNode->parent = y;
+            _size++;
+            return ft::make_pair(iterator(newNode, _root), true);
+        } else {
+            y->right = newNode;
+            newNode->parent = y;
+            _size++;
+            return ft::make_pair(iterator(newNode, _root), true);
+        }
+        return ft::make_pair(iterator(newNode, _root), true);
     }
 
     pointer deleteNode(pointer node, const key_type& value) {
@@ -120,9 +146,7 @@ class BST {
     }
     pointer getRoot() const { return _root; }
     pointer getTail() const { return _first; }
-    void setRoot(pointer new_root) {
-        _root = new_root;
-    }
+    void setRoot(pointer new_root) { _root = new_root; }
 
     void inorder(pointer node) {
         if (node != u_nullptr) {

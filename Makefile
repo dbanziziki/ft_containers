@@ -35,6 +35,9 @@ vec_test: fclean vector.hpp tests/vector_test.cpp
 play: fclean map.hpp main.cpp
 	$(CC) -g $(FSAN) $(FLAGS) main.cpp -o $@
 
+bench: fclean map.hpp main_19.cpp
+	$(CC) -g $(FSAN) $(FLAGS) main_19.cpp -o $@
+
 fclean:
 	rm -f $(NAME) test bst map map_test play vec_test
 
