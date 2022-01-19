@@ -14,6 +14,9 @@ namespace ft = std;
 
 typedef ft::map<int, std::string>::iterator iterator;
 typedef ft::map<int, std::string>::const_iterator const_iterator;
+typedef ft::map<int, std::string>::reverse_iterator reverse_iterator;
+typedef ft::map<int, std::string>::const_reverse_iterator const_reverse_iterator;
+
 
 void inorder(ft::node<ft::pair<int, std::string> > *node) {
     if (node != u_nullptr) {
@@ -32,12 +35,11 @@ int main() {
     m.insert(ft::make_pair(2, "Manga"));
     m.insert(ft::make_pair(42, "school"));
 
-    ft::map<int, std::string> copy(m);
-    iterator it = copy.begin();
-    iterator end = copy.end();
-
-    for (; it != end; ++it) {
-        std::cout << it->first << std::endl;
+    reverse_iterator rit = m.rbegin(); 
+    reverse_iterator rit1;
+    rit1  = rit;
+    for (; rit != m.rend(); ++rit) {
+        std::cout << rit->first << " " << rit->second << std::endl;
     }
     return 0;
 }

@@ -107,8 +107,8 @@ class map {
      * @brief Destroy the map object
      *
      */
-    ~map() { /*this->clear();*/
-    }
+    ~map() { _tree.deleteTree(); }
+    
 
     /**
      * @brief Assigns new contents to the container, replacing its current
@@ -128,6 +128,7 @@ class map {
         dest = _tree.copy(x._tree.getRoot(), dest);
         _tree.setRoot(dest);
         _tree.setSize(x.size());
+        _tree.setFirst(ft::minValueNode(dest));
         return *this;
     }
 

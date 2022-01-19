@@ -186,6 +186,34 @@ class BST {
         return *this;
     }
 
+    void deleteTree(pointer root) {
+        if (root == u_nullptr) return;
+
+        deleteTree(root->left);
+        deleteTree(root->right);
+        _node_alloc.destroy(root);
+        _node_alloc.deallocate(root, 1);
+    }
+
+    void deleteTree() {
+        if (_root == u_nullptr) return;
+
+        deleteTree(_root->left);
+        deleteTree(_root->right);
+        _node_alloc.destroy(_root);
+        _node_alloc.deallocate(_root, 1);
+    }
+
+    // void deleteTree() {
+    //     if (_root == u_nullptr) return;
+    //
+    //     _node_alloc.destroy(_root);
+    //     _node_alloc.deallocate(_root, 1);
+    //
+    //     deleteTree(_root->right);
+    //     deleteTree(_root->left);
+    // }
+
     pointer copy(pointer root, pointer dest) {
         if (root == u_nullptr) return u_nullptr;
         dest = _new_node(root->item);
