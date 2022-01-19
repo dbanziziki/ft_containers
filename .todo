@@ -1,7 +1,3 @@
-(#1) const_reverse_iterator:
-    - [x] 🎉 "comparering crit != map.end()" 
-----
-
-(#2) map:
-    - [ ] 🎉 move bst logic in bst
+(#1) SEGFAULT reverse_iterator:
+    - [ ] 🎉 FIX IT
 ----

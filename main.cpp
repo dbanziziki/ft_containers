@@ -1,4 +1,4 @@
-#if 0
+#if 1
 #include <map>
 #include <vector>
 namespace ft = std;
@@ -23,7 +23,7 @@ int main() {
     std::srand(789);
 
     std::cout << "Inserting: " << COUNT << " values" << std::endl;
-    for (int i = 0; i < COUNT; ++i) {
+    for (int i = 0; i < 789; ++i) {
         m.insert(ft::make_pair(std::rand(), std::rand()));
     }
     return 0;

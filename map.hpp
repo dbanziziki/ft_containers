@@ -97,15 +97,18 @@ class map {
      */
     map(const map& x) : _tree(), _alloc(x._alloc), _comp(x._comp) {
         tree_pointer dest = u_nullptr;
-        dest = _tree._copy(x._tree.getRoot(), dest);
+        dest = _tree.copy(x._tree.getRoot(), dest);
         _tree.setRoot(dest);
+        _tree.setSize(x.size());
+        _tree.setFirst(_tree.minValueNode(dest));
     }
 
     /**
      * @brief Destroy the map object
      *
      */
-    ~map() { this->clear(); }
+    ~map() { /*this->clear();*/
+    }
 
     /**
      * @brief Assigns new contents to the container, replacing its current
@@ -115,12 +118,16 @@ class map {
      * parameters, key, T, Compare and Alloc).
      * @return *this.
      */
+    /*TODO: dont use insert*/
     map& operator=(const map& x) {
         if (&x == this) return *this;
         this->clear();
         _alloc = x._alloc;
         _comp = x._comp;
-        this->insert(x.begin(), x.end());
+        tree_pointer dest = u_nullptr;
+        dest = _tree.copy(x._tree.getRoot(), dest);
+        _tree.setRoot(dest);
+        _tree.setSize(x.size());
         return *this;
     }
 
@@ -404,21 +411,10 @@ class map {
      * is not considered to go before k, or map::end if all keys are considered
      * to go before k.
      */
-    iterator lower_bound(const key_type& k) {
-        iterator it = begin();
-
-        for (; it != end(); ++it) {
-            if (!_comp(it->first, k)) return it;
-        }
-        return end();
-    }
+    iterator lower_bound(const key_type& k) { return _tree.lower_bound(k); }
 
     const_iterator lower_bound(const key_type& k) const {
-        const_iterator it = begin();
-        for (; it != end(); ++it) {
-            if (!_comp(it->first, k)) return it;
-        }
-        return end();
+        return _tree.lower_bound(k);
     }
 
     /**
@@ -430,22 +426,10 @@ class map {
      * is considered to go after k, or map::end if no keys are considered to go
      * after k.
      */
-    iterator upper_bound(const key_type& k) {
-        iterator it = begin();
-
-        for (; it != end(); ++it) {
-            if (_comp(k, it->first)) return it;
-        }
-        return end();
-    }
+    iterator upper_bound(const key_type& k) { return _tree.upper_bound(k); }
 
     const_iterator upper_bound(const key_type& k) const {
-        const_iterator it = begin();
-
-        for (; it != end(); ++it) {
-            if (_comp(k, it->first)) return it;
-        }
-        return end();
+        return _tree.upper_bound(k);
     }
 
     /**
@@ -464,6 +448,8 @@ class map {
     pair<iterator, iterator> equal_range(const key_type& k) {
         return ft::make_pair(lower_bound(k), upper_bound(k));
     }
+
+    tree_pointer getRoot() const { return _tree.getRoot(); }
 };  // namespace ft
 
 }  // namespace ft

@@ -5,8 +5,8 @@
 #include "utils.hpp"
 
 namespace ft {
-template <class T, class Compare = ft::less<T>, class Node = ft::node<T>,
-          class Node_alloc = std::allocator<Node> >
+template <class T, class Compare = ft::less<typename T::first_type>,
+          class Node = ft::node<T>, class Node_alloc = std::allocator<Node> >
 class BST {
    public:
     typedef T value_type;
@@ -38,7 +38,6 @@ class BST {
         if (root == u_nullptr) {
             pointer new_node = _new_node(value);
             if (new_node->item.first < _first->item.first) _first = new_node;
-            _last = new_node;
             return new_node;
         }
         if (value.first < root->item.first)
@@ -138,15 +137,20 @@ class BST {
     }
 
    public:
-    void setSize(size_type n) { _size = n; }
     pointer minValueNode(pointer node) {
         pointer current = node;
         while (current && current->left != u_nullptr) current = current->left;
         return current;
     }
+
+    /* getters */
     pointer getRoot() const { return _root; }
     pointer getTail() const { return _first; }
+
+    /* setters */
+    void setSize(size_type n) { _size = n; }
     void setRoot(pointer new_root) { _root = new_root; }
+    void setFirst(pointer p) { _first = p; }
 
     void inorder(pointer node) {
         if (node != u_nullptr) {
@@ -172,7 +176,7 @@ class BST {
 
     pointer operator->() { return &(operator*()); }
 
-    BST& operator=(const BST& other) {
+    BST& operator=(const BST& other) {  // TODO: should make a copy
         this->~BST();
         _root = other._root;
         _first = other._first;
@@ -182,13 +186,23 @@ class BST {
         return *this;
     }
 
-    pointer _copy(pointer root, pointer dest) {
+    pointer copy(pointer root, pointer dest) {
         if (root == u_nullptr) return u_nullptr;
         dest = _new_node(root->item);
-
-        dest->left = _copy(root->left, dest->left);
-        dest->right = _copy(root->right, dest->right);
+        dest->parent = root->parent;
+        dest->left = copy(root->left, dest->left);
+        dest->right = copy(root->right, dest->right);
         return dest;
+    }
+
+    iterator lower_bound(const key_type& k) {
+        pointer lb = _lower_bound_helper(_root, k);
+        return iterator(lb, _root);
+    }
+
+    iterator upper_bound(const key_type& k) {
+        pointer ub = _upper_bound_helper(_root, k);
+        return iterator(ub, _root);
     }
 
    private:
@@ -197,6 +211,30 @@ class BST {
         _node_alloc.construct(new_node, Node(value));
         return new_node;
     }
+
+    pointer _lower_bound_helper(pointer node, const key_type& k) {
+        if (node == u_nullptr) return node;
+
+        if (_comp(k, node->item.first)) {
+            pointer res = _lower_bound_helper(node->left, k);
+            if (res) return res;
+        } else if (_comp(node->item.first, k)) {
+            return _lower_bound_helper(node->right, k);
+        }
+        return node;
+    }
+
+    pointer _upper_bound_helper(pointer node, const key_type& k) {
+        if (node == u_nullptr) return node;
+
+        if (!_comp(k, node->item.first)) {
+            return _upper_bound_helper(node->right, k);
+        }
+        pointer res = _upper_bound_helper(node->left, k);
+        if (res) return res;
+        return node;
+    }
+
     pointer _findSuccessor(pointer node) {
         pointer n = node;
         if (n->right != u_nullptr) {
@@ -213,7 +251,6 @@ class BST {
    private:
     pointer _root;
     pointer _first;
-    pointer _last;
     size_t _size;
     compare_type _comp;
     node_allocator_type _node_alloc;
