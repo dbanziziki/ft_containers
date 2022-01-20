@@ -17,8 +17,9 @@ class reverse_iterator {
     typedef typename ft::iterator_traits<Iterator>::reference reference;
 
    private:
-   public:
     iterator_type _current;
+
+   public:
     reverse_iterator() : _current() {}
 
     explicit reverse_iterator(iterator_type it) : _current(it) {}

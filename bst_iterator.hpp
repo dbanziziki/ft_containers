@@ -42,8 +42,9 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
 
     reference operator*() const { return _current->item; }
 
-    map_iterator& operator=(const map_iterator& other) {
-        _current = other._current;
+    map_iterator& operator=(const map_iterator& rhs) {
+        _current = rhs._current;
+        _root = rhs._root;
         return *this;
     }
 

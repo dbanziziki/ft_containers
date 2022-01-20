@@ -1,7 +1,10 @@
 #if !defined(__BST_H__)
 #define __BST_H__
 
+#include <cmath>
+
 #include "bst_iterator.hpp"
+#include "stack.hpp"
 #include "utils.hpp"
 
 namespace ft {
@@ -46,6 +49,7 @@ class BST {
             root->right = insert(root->right, value);
         return root;
     }
+    
 
     // TODO: when the key already exist
     ft::pair<iterator, bool> insert(const value_type& value) {
@@ -65,6 +69,9 @@ class BST {
             if (value.first < x->item.first) {
                 x = x->left;
             } else if (value.first == x->item.first) {
+                _node_alloc.destroy(newNode);
+                _node_alloc.deallocate(newNode, 1);
+
                 return ft::make_pair(iterator(x, _root), false);
             } else {
                 x = x->right;
@@ -204,15 +211,27 @@ class BST {
         _node_alloc.deallocate(_root, 1);
     }
 
-    // void deleteTree() {
-    //     if (_root == u_nullptr) return;
-    //
-    //     _node_alloc.destroy(_root);
-    //     _node_alloc.deallocate(_root, 1);
-    //
-    //     deleteTree(_root->right);
-    //     deleteTree(_root->left);
-    // }
+    void clear() {
+        pointer ptr;
+
+        ft::vector<pointer> v;
+        if (_size >= 2) {
+            v.reserve(floor(2 * log2(_size)));
+        }
+
+        ft::stack<pointer> s(v);
+        if (_root) s.push(_root);
+
+        while (!(s.empty())) {
+            ptr = s.top();
+            s.pop();
+            if (ptr->left) s.push(ptr->left);
+            if (ptr->right) s.push(ptr->right);
+            _clear_helper(ptr);
+        }
+        _root = u_nullptr;
+        _size = 0;
+    }
 
     pointer copy(pointer root, pointer dest) {
         if (root == u_nullptr) return u_nullptr;
@@ -234,6 +253,13 @@ class BST {
     }
 
    private:
+    void _clear_helper(pointer& ptr) {
+        // std::cout << "i: " << *i << " " << ptr->item.first << " " << ptr->item.first << std::endl;
+        _node_alloc.destroy(ptr);
+        _node_alloc.deallocate(ptr, 1);
+        ptr = u_nullptr;
+    }
+
     pointer _new_node(value_type const& value) {
         pointer new_node = _node_alloc.allocate(1);
         _node_alloc.construct(new_node, Node(value));

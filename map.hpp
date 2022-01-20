@@ -107,7 +107,7 @@ class map {
      * @brief Destroy the map object
      *
      */
-    ~map() { _tree.deleteTree(); }
+    ~map() { _tree.clear(); }
     
 
     /**
