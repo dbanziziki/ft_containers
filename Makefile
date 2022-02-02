@@ -9,7 +9,7 @@ CC = clang++
 CRITERION = -l criterion -I ~/.brew/include -L ~/.brew/lib -std=c++11
 
 
-FSAN = #-fsanitize=address
+FSAN = -fsanitize=address
 
 FLAGS = -g -Wextra -Werror -Wall $(FSAN)  -std=c++98
 
@@ -27,6 +27,8 @@ map_test: fclean map.hpp tests/map_test.cpp
 	$(CC) -g tests/map_test.cpp -I. -o $@ $(CRITERION)
 	./$@ --verbose
 
+vec: fclean vector.hpp vector_test.cpp
+	$(CC) $(FLAGS) vector_test.cpp -o $@
 
 vec_test: fclean vector.hpp tests/vector_test.cpp
 	$(CC) -g tests/vector_test.cpp -I. -o $@ $(CRITERION)

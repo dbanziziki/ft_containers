@@ -1,4 +1,5 @@
 *.o
+vec
 test
 map
 bst
@@ -20,3 +21,4 @@ playground.cpp
 play
 containers_test/
 out.txt
+vec.dSYM/

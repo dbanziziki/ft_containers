@@ -88,13 +88,13 @@ class random_access_iterator
         return *this;
     }
 
-    friend bool operator-(const random_access_iterator& lhs,
-                          const random_access_iterator& rhs) {
+    friend difference_type operator-(const random_access_iterator& lhs,
+                                     const random_access_iterator& rhs) {
         return (lhs._ptr - rhs._ptr);
     }
 
-    friend bool operator+(const random_access_iterator& lhs,
-                          const random_access_iterator& rhs) {
+    friend difference_type operator+(const random_access_iterator& lhs,
+                                     const random_access_iterator& rhs) {
         return (lhs._ptr + rhs._ptr);
     }
 
@@ -126,6 +126,20 @@ class random_access_iterator
         return (lhs._ptr <= rhs._ptr);
     }
 };
+
+template <class Iterator>
+random_access_iterator<Iterator> operator+(
+    typename random_access_iterator<Iterator>::difference_type n,
+    const random_access_iterator<Iterator>& it) {
+    return it + n;
+}
+
+template <class Iterator>
+random_access_iterator<Iterator> operator-(
+    typename random_access_iterator<Iterator>::difference_type n,
+    const random_access_iterator<Iterator>& it) {
+    return it - n;
+}
 }  // namespace ft
 
 #endif  // __RANDOM_ACCESS_ITERATOR_H__
