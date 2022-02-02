@@ -188,26 +188,16 @@ void test_map(void) {
 
         // reverse_iterator
         {
-            ft::map<int , int>::iterator it, it2;
-
-            it = map_int.begin();
-            it2 = it;
-            ++it;
-            while (it != map_int.end()){
-                if (it->first < it2->first) {
-                    std::cout << "should be sorted" << std::endl;
-                }
+            ft::map<int, int>::reverse_iterator rit, rit2;
+            rit = map_int.rbegin();
+            rit2 = rit;
+            ++rit;
+            while (rit != map_int.rend()) {
+                if (map_int.key_comp()(rit2->first, rit->first))
+                    std::cerr << "Error: MAP MUST BE SORTED!!" << std::endl;
+                ++rit;
+                ++rit2;
             }
-            // ft::map<int, int>::reverse_iterator rit, rit2;
-            // rit = map_int.rbegin();
-            // rit2 = rit;
-            // ++rit;
-            // while (rit != map_int.rend()) {
-            //     // if (map_int.key_comp()(rit2->first, rit->first))
-            //     //     std::cerr << "Error: MAP MUST BE SORTED!!" << std::endl;
-            //     ++rit;
-            //     ++rit2;
-            // }
         }
 
         // count

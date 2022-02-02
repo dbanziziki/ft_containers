@@ -49,9 +49,7 @@ class BST {
             root->right = insert(root->right, value);
         return root;
     }
-    
 
-    // TODO: when the key already exist
     ft::pair<iterator, bool> insert(const value_type& value) {
         pointer newNode = _node_alloc.allocate(1);
         _node_alloc.construct(newNode, Node(value));
@@ -254,7 +252,6 @@ class BST {
 
    private:
     void _clear_helper(pointer& ptr) {
-        // std::cout << "i: " << *i << " " << ptr->item.first << " " << ptr->item.first << std::endl;
         _node_alloc.destroy(ptr);
         _node_alloc.deallocate(ptr, 1);
         ptr = u_nullptr;

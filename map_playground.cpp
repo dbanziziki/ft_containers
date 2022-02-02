@@ -12,11 +12,10 @@
 namespace ft = std;
 #endif
 
-typedef ft::map<int, std::string>::iterator iterator;
-typedef ft::map<int, std::string>::const_iterator const_iterator;
-typedef ft::map<int, std::string>::reverse_iterator reverse_iterator;
-typedef ft::map<int, std::string>::const_reverse_iterator
-    const_reverse_iterator;
+typedef ft::map<int, int>::iterator iterator;
+typedef ft::map<int, int>::const_iterator const_iterator;
+typedef ft::map<int, int>::reverse_iterator reverse_iterator;
+typedef ft::map<int, int>::const_reverse_iterator const_reverse_iterator;
 
 void inorder(ft::node<ft::pair<int, int> > *node) {
     if (node != u_nullptr) {
@@ -39,24 +38,32 @@ int main() {
     srand(1234);
     ft::map<int, int> m;
 
-    ft::map<int, int>::iterator it = m.begin();
     for (int i = 0; i < COUNT; ++i) {
         m.insert(ft::make_pair(rand(), rand()));
     }
-    for (int i = 0; i < 1000; i++) {
-        ft::map<int, int>::iterator it = m.upper_bound(rand());
-        m.erase(it);
-    }
 
     ft::map<int, int> copy(m);
-    std::cout << "before: " << COUNT << " After: " << copy.size() << " "
-              << m.size() << std::endl;
-    ft::map<int, int>::const_iterator cit = copy.begin();
+
+    iterator it = m.begin();
+    iterator cit = copy.begin();
+    std::cout << "Testing is the same" << std::endl;
     while (it != m.end()) {
-        if (*it != *cit) {
-            std::cout << "MAPS ARE DIFFERENT" << std::endl;
+        if (it->first != cit->first) {
+            std::cout << "Not the same" << std::endl;
+            break;
         }
-        ++it;
-        cit++;
+        it++;
+        ++cit;
+    }
+    std::cout << "Testing reverse iterator" << std::endl;
+    reverse_iterator rit = m.rbegin();
+    reverse_iterator crit = copy.rbegin();
+    while (rit != m.rend()) {
+        if (rit->first != crit->first) {
+            std::cout << "Not the same" << std::endl;
+            break;
+        }
+        rit++;
+        crit++;
     }
 }
