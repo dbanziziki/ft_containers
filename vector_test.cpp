@@ -1,97 +1,56 @@
-#include "vector.hpp"
+#include <list>
 
-#include <vector>
-
-#define TESTED_NAMESPACE ft
-
-template <typename T>
-class foo {
-   public:
-    typedef T value_type;
-
-    foo(void) : value(), _verbose(false){};
-    foo(value_type src, const bool verbose = false)
-        : value(src), _verbose(verbose){};
-    foo(foo const &src, const bool verbose = false)
-        : value(src.value), _verbose(verbose){};
-    ~foo(void) {
-        if (this->_verbose) std::cout << "~foo::foo()" << std::endl;
-    };
-    void m(void) {
-        std::cout << "foo::m called [" << this->value << "]" << std::endl;
-    };
-    void m(void) const {
-        std::cout << "foo::m const called [" << this->value << "]" << std::endl;
-    };
-    foo &operator=(value_type src) {
-        this->value = src;
-        return *this;
-    };
-    foo &operator=(foo const &src) {
-        if (this->_verbose || src._verbose)
-            std::cout << "foo::operator=(foo) CALLED" << std::endl;
-        this->value = src.value;
-        return *this;
-    };
-    value_type getValue(void) const { return this->value; };
-    void switchVerbose(void) { this->_verbose = !(this->_verbose); };
-
-    operator value_type(void) const { return value_type(this->value); }
-
-   private:
-    value_type value;
-    bool _verbose;
-};
+#include "stack.hpp"
 
 #define TESTED_TYPE int
+#define TESTED_NAMESPACE ft
+typedef std::list<TESTED_TYPE> container_type;
+#define t_stack_ TESTED_NAMESPACE::stack<TESTED_TYPE, container_type>
 
-void print_vec(TESTED_NAMESPACE::vector<int> vec) {
-    TESTED_NAMESPACE::vector<int>::iterator it = vec.begin();
-    for (; it != vec.end(); ++it) {
-        std::cout << *it << "\n";
-    }
+template <class T_STACK>
+void cmp(const T_STACK &lhs, const T_STACK &rhs) {
+    static int i = 0;
+
+    std::cout << "############### [" << i++ << "] ###############" << std::endl;
+    std::cout << "eq: " << (lhs == rhs) << " | ne: " << (lhs != rhs)
+              << std::endl;
+    std::cout << "lt: " << (lhs < rhs) << " | le: " << (lhs <= rhs)
+              << std::endl;
+    std::cout << "gt: " << (lhs > rhs) << " | ge: " << (lhs >= rhs)
+              << std::endl;
 }
 
-int main() {
-    /* code */
-    const int size = 5;
-    TESTED_NAMESPACE::vector<TESTED_TYPE> vct(size);
-    TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it(vct.rbegin());
-    TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator ite(
-        vct.rend());
+int main(void) {
+    container_type ctnr;
 
-    for (int i = 1; it != ite; ++i) *it++ = (i * 7);
+    ctnr.push_back(21);
+    ctnr.push_back(42);
+    ctnr.push_back(1337);
+    ctnr.push_back(19);
+    ctnr.push_back(0);
+    ctnr.push_back(183792);
 
-    it = vct.rbegin();
-    ite = vct.rbegin();
+    t_stack_ stck(ctnr);
+    t_stack_ stck2(ctnr);
 
-    std::cout << *(++ite) << std::endl;
-    std::cout << *(ite++) << std::endl;
-    std::cout << *ite++ << std::endl;
-    std::cout << *++ite << std::endl;
-    std::cout << "-----------\n";
-    // it->m();
-    // ite->m();
+    cmp(stck, stck);   // 0
+    cmp(stck, stck2);  // 1
 
-    std::cout << *(++it) << std::endl;
-    std::cout << *(it++) << std::endl;
-    std::cout << *it++ << std::endl;
-    std::cout << *++it << std::endl;
+    stck2.push(60);
+    stck2.push(61);
+    stck2.push(62);
 
-    std::cout << "-----------\n";
+    cmp(stck, stck2);  // 2
+    cmp(stck2, stck);  // 3
 
-    std::cout << *(--ite) << std::endl;
-    std::cout << *(ite--) << std::endl;
-    std::cout << *--ite << std::endl;
-    std::cout << *ite-- << std::endl;
+    stck.push(42);
 
-    // (*it).m();
-    // (*ite).m();
-    std::cout << "-----------\n";
+    cmp(stck, stck2);  // 4
+    cmp(stck2, stck);  // 5
 
-    std::cout << *(--it) << std::endl;
-    std::cout << *(it--) << std::endl;
-    std::cout << *it-- << std::endl;
-    std::cout << *--it << std::endl;
-    return 0;
+    stck.push(100);
+
+    cmp(stck, stck2);  // 6
+    cmp(stck2, stck);  // 7
+    return (0);
 }

@@ -30,33 +30,27 @@ class stack {
     container_type c;
 
    public:
-    friend bool operator==(const stack<T, Container> &lhs,
-                           const stack<T, Container> &rhs) {
+    friend bool operator==(const stack &lhs, const stack &rhs) {
         return lhs.c == rhs.c;
     }
 
-    friend bool operator!=(const stack<T, Container> &lhs,
-                           stack<T, const Container> &rhs) {
+    friend bool operator!=(const stack &lhs, const stack &rhs) {
         return lhs.c != rhs.c;
     }
 
-    friend bool operator<=(const stack<T, Container> &lhs,
-                           const stack<T, Container> &rhs) {
+    friend bool operator<=(const stack &lhs, const stack &rhs) {
         return lhs.c <= rhs.c;
     }
 
-    friend bool operator>=(const stack<T, Container> &lhs,
-                           const stack<T, const Container> &rhs) {
+    friend bool operator>=(const stack &lhs, const stack &rhs) {
         return lhs.c >= rhs.c;
     }
 
-    friend bool operator>(const stack<T, Container> &lhs,
-                          const stack<T, Container> &rhs) {
+    friend bool operator>(const stack &lhs, const stack &rhs) {
         return lhs.c > rhs.c;
     }
 
-    friend bool operator<(const stack<T, Container> &lhs,
-                          const stack<T, Container> &rhs) {
+    friend bool operator<(const stack &lhs, const stack &rhs) {
         return lhs.c < rhs.c;
     }
 };
