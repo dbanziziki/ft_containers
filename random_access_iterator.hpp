@@ -88,6 +88,16 @@ class random_access_iterator
         return *this;
     }
 
+    friend bool operator-(const random_access_iterator& lhs,
+                          const random_access_iterator& rhs) {
+        return (lhs._ptr - rhs._ptr);
+    }
+
+    friend bool operator+(const random_access_iterator& lhs,
+                          const random_access_iterator& rhs) {
+        return (lhs._ptr + rhs._ptr);
+    }
+
     friend bool operator!=(const random_access_iterator& lhs,
                            const random_access_iterator& rhs) {
         return (lhs._ptr != rhs._ptr);

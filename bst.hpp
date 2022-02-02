@@ -181,13 +181,15 @@ class BST {
 
     pointer operator->() { return &(operator*()); }
 
-    BST& operator=(const BST& other) {  // TODO: should make a copy
-        this->~BST();
-        _root = other._root;
-        _first = other._first;
-        _size = other._size;
+    BST& operator=(const BST& other) {
+        this->clear();
+        pointer dest = u_nullptr;
         _comp = other._comp;
         _node_alloc = other._node_alloc;
+        dest = this->copy(other.getRoot(), dest);
+        this->setRoot(dest);
+        this->setSize(other.size());
+        this->setFirst(this->minValueNode(dest));
         return *this;
     }
 

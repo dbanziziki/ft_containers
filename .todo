@@ -1,3 +1,4 @@
-(#1) SEGFAULT reverse_iterator:
-    - [ ] 🎉 FIX IT
+
+(#1) map iterator end:
+    - [ ] 🎉 accessing end value should not cause a segfault
 ----

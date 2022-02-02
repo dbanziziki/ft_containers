@@ -118,7 +118,7 @@ class map {
      * parameters, key, T, Compare and Alloc).
      * @return *this.
      */
-    /*TODO: dont use insert*/
+
     map& operator=(const map& x) {
         if (&x == this) return *this;
         this->clear();
@@ -450,8 +450,7 @@ class map {
         return ft::make_pair(lower_bound(k), upper_bound(k));
     }
 
-    tree_pointer getRoot() const { return _tree.getRoot(); }
-};  // namespace ft
+};
 
 }  // namespace ft
 

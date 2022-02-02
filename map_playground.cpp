@@ -34,8 +34,7 @@ struct Buffer {
 
 #define COUNT (MAX_RAM / (int)sizeof(Buffer))
 
-int main() {
-    srand(1234);
+void map_test() {
     ft::map<int, int> m;
 
     for (int i = 0; i < COUNT; ++i) {
@@ -44,6 +43,12 @@ int main() {
 
     ft::map<int, int> copy(m);
 
+    if (copy.size() == m.size()) {
+        std::cout << "size is the same " << copy.size() << " " << m.size()
+                  << std::endl;
+    } else {
+        std::cout << "size not the same" << std::endl;
+    }
     iterator it = m.begin();
     iterator cit = copy.begin();
     std::cout << "Testing is the same" << std::endl;
@@ -66,4 +71,29 @@ int main() {
         rit++;
         crit++;
     }
+
+    ft::map<int, int> assign;
+    assign = copy;
+}
+
+int main() {
+    srand(1234);
+
+    ft::map<char, int> mymap;
+
+    mymap['a'] = 10;
+    mymap['b'] = 20;
+    mymap['c'] = 30;
+
+    ft::pair<ft::map<char, int>::iterator, ft::map<char, int>::iterator> ret;
+    ret = mymap.equal_range('b');
+
+    std::cout << "lower bound points to: ";
+    std::cout << ret.first->first << " => " << ret.first->second << '\n';
+
+    std::cout << "upper bound points to: ";
+    std::cout << ret.second->first << " => " << ret.second->second << '\n';
+
+    ft::map<char, int>::iterator it = mymap.find('b');
+    std::cout << it->first << " => " << it->second << std::endl;
 }

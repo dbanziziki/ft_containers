@@ -80,7 +80,7 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
         if (node == u_nullptr) {
             _current = _root;
             if (_current == u_nullptr)
-                return *this;  // TODO: when the tree os empty
+                return *this;  // TODO: when the tree is empty
             _current = ft::maxValueNode(_root);
             return *this;
         }
