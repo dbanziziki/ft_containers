@@ -1,30 +1,20 @@
-#if 1
-#include <map>
-#include <vector>
-namespace ft = std;
-#else
+#include <list>
+
 #include "map.hpp"
-#include "vector.hpp"
-#endif
+#include "test.hpp"
 
-#include <iostream>
+int main(int argc, char const *argv[]) {
+    ft::map<char, int> m;
 
-#define MAX_RAM 4294967296
-#define BUFFER_SIZE 4096
-struct Buffer {
-    int idx;
-    char buff[BUFFER_SIZE];
-};
-
-#define COUNT (MAX_RAM / (int)sizeof(Buffer))
-
-int main() {
-    ft::map<int, int> m;
-    std::srand(789);
-
-    std::cout << "Inserting: " << COUNT << " values" << std::endl;
-    for (int i = 0; i < 789; ++i) {
-        m.insert(ft::make_pair(std::rand(), std::rand()));
+    for (int i = 0; i <= 5; i++) {
+        m.insert(ft::make_pair('a' + i, i * 5));
     }
+    m.erase('c');
+    ft::map<char, int>::iterator it = m.begin();
+    for (; it != m.end(); ++it) {
+        std::cout << it->first << " " << it->second << "\n";
+    }
+    m.erase('a');
+    // m.erase(m.begin(), m.end());
     return 0;
 }
