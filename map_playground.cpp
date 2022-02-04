@@ -1,99 +1,137 @@
-// #include "bst.hpp"
-#include <iostream>
-#include <map>
+#include <list>
 
-// #include "vector.hpp"
-#if 1
-#define TAG "ft"
 #include "map.hpp"
-#else
-#include <map>
-#define TAG "std"
-namespace ft = std;
-#endif
 
-typedef ft::map<int, int>::iterator iterator;
-typedef ft::map<int, int>::const_iterator const_iterator;
-typedef ft::map<int, int>::reverse_iterator reverse_iterator;
-typedef ft::map<int, int>::const_reverse_iterator const_reverse_iterator;
-
-void inorder(ft::node<ft::pair<int, int> > *node) {
-    if (node != u_nullptr) {
-        std::cout << node->item.first << " " << node->item.second << std::endl;
-        inorder(node->left);
-        inorder(node->right);
-    }
+template <typename T>
+std::string printPair(const T &iterator, bool nl = true,
+                      std::ostream &o = std::cout) {
+    o << "key: " << iterator->first << " | value: " << iterator->second;
+    if (nl) o << std::endl;
+    return ("");
 }
 
-#define MAX_RAM 4294967296
-#define BUFFER_SIZE 4096
-struct Buffer {
-    int idx;
-    char buff[BUFFER_SIZE];
+// --- Class foo
+template <typename T>
+class foo {
+   public:
+    typedef T value_type;
+
+    foo(void) : value(), _verbose(false){};
+    foo(value_type src, const bool verbose = false)
+        : value(src), _verbose(verbose){};
+    foo(foo const &src, const bool verbose = false)
+        : value(src.value), _verbose(verbose){};
+    ~foo(void) {
+        if (this->_verbose) std::cout << "~foo::foo()" << std::endl;
+    };
+    void m(void) {
+        std::cout << "foo::m called [" << this->value << "]" << std::endl;
+    };
+    void m(void) const {
+        std::cout << "foo::m const called [" << this->value << "]" << std::endl;
+    };
+    foo &operator=(value_type src) {
+        this->value = src;
+        return *this;
+    };
+    foo &operator=(foo const &src) {
+        if (this->_verbose || src._verbose)
+            std::cout << "foo::operator=(foo) CALLED" << std::endl;
+        this->value = src.value;
+        return *this;
+    };
+    value_type getValue(void) const { return this->value; };
+    void switchVerbose(void) { this->_verbose = !(this->_verbose); };
+
+    operator value_type(void) const { return value_type(this->value); }
+
+   private:
+    value_type value;
+    bool _verbose;
 };
 
-#define COUNT (MAX_RAM / (int)sizeof(Buffer))
+template <typename T>
+std::ostream &operator<<(std::ostream &o, foo<T> const &bar) {
+    o << bar.getValue();
+    return o;
+}
+// --- End of class foo
 
-void map_test() {
-    ft::map<int, int> m;
+#define TESTED_NAMESPACE ft
 
-    for (int i = 0; i < COUNT; ++i) {
-        m.insert(ft::make_pair(rand(), rand()));
-    }
+#define _pair TESTED_NAMESPACE::pair
 
-    ft::map<int, int> copy(m);
+#define T1 int
+#define T2 foo<int>
+typedef TESTED_NAMESPACE::map<T1, T2>::value_type T3;
+typedef TESTED_NAMESPACE::map<T1, T2>::iterator ft_iterator;
+typedef TESTED_NAMESPACE::map<T1, T2>::const_iterator ft_const_iterator;
 
-    if (copy.size() == m.size()) {
-        std::cout << "size is the same " << copy.size() << " " << m.size()
-                  << std::endl;
-    } else {
-        std::cout << "size not the same" << std::endl;
-    }
-    iterator it = m.begin();
-    iterator cit = copy.begin();
-    std::cout << "Testing is the same" << std::endl;
-    while (it != m.end()) {
-        if (it->first != cit->first) {
-            std::cout << "Not the same" << std::endl;
-            break;
-        }
-        it++;
-        ++cit;
-    }
-    std::cout << "Testing reverse iterator" << std::endl;
-    reverse_iterator rit = m.rbegin();
-    reverse_iterator crit = copy.rbegin();
-    while (rit != m.rend()) {
-        if (rit->first != crit->first) {
-            std::cout << "Not the same" << std::endl;
-            break;
-        }
-        rit++;
-        crit++;
-    }
+static int iter = 0;
 
-    ft::map<int, int> assign;
-    assign = copy;
+template <typename MAP>
+void ft_bound(MAP &mp, const T1 &param) {
+    ft_iterator ite = mp.end(), it[2];
+    _pair<ft_iterator, ft_iterator> ft_range;
+
+    std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+    std::cout << "with key [" << param << "]:" << std::endl;
+    it[0] = mp.lower_bound(param);
+    it[1] = mp.upper_bound(param);
+    ft_range = mp.equal_range(param);
+    std::cout << "lower_bound: "
+              << (it[0] == ite ? "end()" : printPair(it[0], false))
+              << std::endl;
+    std::cout << "upper_bound: "
+              << (it[1] == ite ? "end()" : printPair(it[1], false))
+              << std::endl;
+    std::cout << "equal_range: "
+              << (ft_range.first == it[0] && ft_range.second == it[1])
+              << std::endl;
 }
 
-int main() {
-    srand(1234);
+template <typename MAP>
+void ft_const_bound(const MAP &mp, const T1 &param) {
+    ft_const_iterator ite = mp.end(), it[2];
+    _pair<ft_const_iterator, ft_const_iterator> ft_range;
 
-    ft::map<char, int> mymap;
+    std::cout << "\t-- [" << iter++ << "] (const) --" << std::endl;
+    std::cout << "with key [" << param << "]:" << std::endl;
+    it[0] = mp.lower_bound(param);
+    it[1] = mp.upper_bound(param);
+    ft_range = mp.equal_range(param);
+    std::cout << "lower_bound: "
+              << (it[0] == ite ? "end()" : printPair(it[0], false))
+              << std::endl;
+    std::cout << "upper_bound: "
+              << (it[1] == ite ? "end()" : printPair(it[1], false))
+              << std::endl;
+    std::cout << "equal_range: "
+              << (ft_range.first == it[0] && ft_range.second == it[1])
+              << std::endl;
+}
 
-    mymap['a'] = 10;
-    mymap['b'] = 20;
-    mymap['c'] = 30;
+int main(void) {
+    std::list<T3> lst;
+    unsigned int lst_size = 10;
+    for (unsigned int i = 0; i < lst_size; ++i)
+        lst.push_back(T3(i + 1, (i + 1) * 3));
+    TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
+    // printSize(mp);
 
-    ft::pair<ft::map<char, int>::iterator, ft::map<char, int>::iterator> ret;
-    ret = mymap.equal_range('b');
+    ft_const_bound(mp, -10);
+    ft_const_bound(mp, 1);
+    ft_const_bound(mp, 5);
+    ft_const_bound(mp, 10);
+    ft_const_bound(mp, 50);
 
-    std::cout << "lower bound points to: ";
-    std::cout << ret.first->first << " => " << ret.first->second << '\n';
+    // printSize(mp);
 
-    std::cout << "upper bound points to: ";
-    std::cout << ret.second->first << " => " << ret.second->second << '\n';
+    mp.lower_bound(3)->second = 404;
+    mp.upper_bound(7)->second = 842;
+    ft_bound(mp, 5);
+    ft_bound(mp, 7);
 
-    ft::map<char, int>::iterator it = mymap.find('b');
-    std::cout << it->first << " => " << it->second << std::endl;
+    // printSize(mp);
+    return (0);
 }

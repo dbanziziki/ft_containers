@@ -26,24 +26,22 @@ namespace ft {
 template <class T>
 struct node {
     typedef T value_type;
-    value_type item;
+    value_type *item;
     typedef T& reference;
     typedef T* pointer;
     struct node<T>* right;
     struct node<T>* left;
     struct node<T>* parent;
 
-    node(T item) {
+    node(value_type *item) {
         this->item = item;
         right = u_nullptr;
         left = u_nullptr;
         parent = u_nullptr;
     }
 
-    // operator node<const T>() const { return node<const T>(item); }
-
-    pointer operator->() { return &(operator*()); }
-    reference operator*() const { return &item; }
+    // pointer operator->() { return &(operator*()); }
+    // reference operator*() const { return &item; }
 };
 
 template <typename T>
@@ -175,11 +173,11 @@ struct is_integral<bool> : public true_type {};
 template <>
 struct is_integral<char> : public true_type {};
 
-// template <>
-// struct is_integral<char16_t> : public true_type {};
+template <>
+struct is_integral<char16_t> : public true_type {};
 
-// template <>
-// struct is_integral<char32_t> : public true_type {};
+template <>
+struct is_integral<char32_t> : public true_type {};
 
 template <>
 struct is_integral<wchar_t> : public true_type {};

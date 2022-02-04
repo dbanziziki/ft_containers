@@ -26,7 +26,7 @@ class map {
     typedef typename ft::BST<value_type, key_compare>::iterator iterator;
     typedef typename ft::BST<const_value_type, key_compare>::const_iterator
         const_iterator;
-    typedef typename ft::BST<value_type, key_compare>::pointer tree_pointer;
+    typedef typename ft::BST<value_type, key_compare>::node_ptr tree_pointer;
     typedef typename ft::reverse_iterator<iterator> reverse_iterator;
     typedef
         typename ft::iterator_traits<iterator>::difference_type difference_type;
@@ -36,7 +36,7 @@ class map {
     typedef size_t size_type;
 
     class value_compare : public binary_function<value_type, value_type, bool> {
-       protected:
+       public:
         Compare comp;
         value_compare(Compare c) : comp(c) {}
 
@@ -108,7 +108,6 @@ class map {
      *
      */
     ~map() { _tree.clear(); }
-    
 
     /**
      * @brief Assigns new contents to the container, replacing its current
@@ -225,17 +224,7 @@ class map {
      * swapped with that of this container.
      */
     void swap(map& x) {
-        Compare prev_comp = _comp;
-        tree_type prev_tree = _tree;
-        allocator_type prev_alloc = _alloc;
-
-        _tree = x._tree;
-        _comp = x._comp;
-        _alloc = x._alloc;
-
-        x._alloc = prev_alloc;
-        x._tree = prev_tree;
-        x._comp = prev_comp;
+        _tree.swap(x._tree);
     }
 
     /**
@@ -243,7 +232,7 @@ class map {
      * leaving the container with a size of 0.
      *
      */
-    void clear() { this->erase(begin(), end()); }
+    void clear() { _tree.clear(); }
 
     /* Element access */
     /**
@@ -262,7 +251,7 @@ class map {
         if (res == u_nullptr) {
             return _tree.insert(ft::make_pair(k, mapped_type())).first->second;
         }
-        return res->item.second;
+        return res->item->second;
     }
 
     /* Iterators */
@@ -328,6 +317,8 @@ class map {
      * @return true if the container size is 0, false otherwise.
      */
     bool empty() const { return _tree.empty(); }
+
+    size_type max_size() const { return _tree.max_size(); }
 
     /* Observers */
 
@@ -451,6 +442,48 @@ class map {
     }
 
 };
+
+template <class Key, class T, class Compare, class Alloc>
+  bool operator== ( const map<Key,T,Compare,Alloc>& lhs,
+                    const map<Key,T,Compare,Alloc>& rhs ) {
+    if (lhs.size() != rhs.size()) return false;
+    return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+
+template <class Key, class T, class Compare, class Alloc>
+  bool operator!= ( const map<Key,T,Compare,Alloc>& lhs,
+                    const map<Key,T,Compare,Alloc>& rhs ) {
+    return !(lhs == rhs);
+}
+
+template <class Key, class T, class Compare, class Alloc>
+  bool operator<( const map<Key,T,Compare,Alloc>& lhs,
+                    const map<Key,T,Compare,Alloc>& rhs ) {
+    return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+}
+
+template <class Key, class T, class Compare, class Alloc>
+  bool operator<= ( const map<Key,T,Compare,Alloc>& lhs,
+                    const map<Key,T,Compare,Alloc>& rhs ) {
+    return !(rhs < lhs);
+}
+
+template <class Key, class T, class Compare, class Alloc>
+  bool operator>  ( const map<Key,T,Compare,Alloc>& lhs,
+                    const map<Key,T,Compare,Alloc>& rhs ) {
+    return (rhs < lhs);
+}
+
+template <class Key, class T, class Compare, class Alloc>
+  bool operator>= ( const map<Key,T,Compare,Alloc>& lhs,
+                    const map<Key,T,Compare,Alloc>& rhs ) {
+    return !(lhs < rhs);
+}
+
+template <class Key, class T, class Compare, class Alloc>
+  void swap (map<Key,T,Compare,Alloc>& x, map<Key,T,Compare,Alloc>& y) {
+      x.swap(y);
+  }
 
 }  // namespace ft
 

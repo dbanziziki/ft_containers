@@ -40,7 +40,7 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
    public:
     pointer operator->() const { return &(operator*()); }
 
-    reference operator*() const { return _current->item; }
+    reference operator*() const { return *(_current->item); }
 
     map_iterator& operator=(const map_iterator& rhs) {
         _current = rhs._current;
@@ -109,9 +109,9 @@ class map_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
         if (node == u_nullptr) {
             return prec;
         }
-        if (node->item.first == _current->item.first) {
+        if (node->item->first == _current->item->first) {
             if (node->left != u_nullptr) return ft::maxValueNode(node->left);
-        } else if (_current->item.first < node->item.first) {
+        } else if (_current->item->first < node->item->first) {
             return _findPredecessor(node->left, prec);
         } else {
             prec = node;
