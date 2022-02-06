@@ -1,50 +1,41 @@
-#include "test.hpp"
 #include <list>
 
+#include "test.hpp"
 #define T1 int
-#define T2 std::string
+#define T2 int
 typedef _pair<const T1, T2> T3;
-
-static int iter = 0;
-
-template <typename MAP, typename U>
-void	ft_erase(MAP &mp, U param)
-{
-	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-	std::cout << "ret: " << mp.erase(param) << std::endl;
-	printSize(mp);
-}
 
 int		main(void)
 {
-    ft::map<int, char> m;
+	std::list<T3> lst;
+	unsigned int lst_size = 7;
+	for (unsigned int i = 0; i < lst_size; ++i)
+		lst.push_back(T3(lst_size - i, i));
 
-    m.insert(ft::make_pair(1, 'a'));
-    m.insert(ft::make_pair(2, 'b'));
-    printSize(m);
-    m[-1] = 'c';
-    ft_erase(m, 1);
-	// std::list<T3> lst;
-	// unsigned int lst_size = 6;
-	// for (unsigned int i = 0; i < lst_size; ++i)
-	// 	lst.push_back(T3(i, std::string((lst_size - i), i + 65)));
-	// TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
-	// printSize(mp);
-	//
-	// for (int i = 2; i < 4; ++i)
-	// 	ft_erase(mp, i);
-	//
-	// ft_erase(mp, mp.begin()->first);
-	// ft_erase(mp, (--mp.end())->first);
-	//
-	// mp[-1] = "Hello";
- //    printSize(mp);
-	// mp[10] = "Hi there";
-	// mp[10] = "Hi there";
-	// printSize(mp);
-	//
-	// ft_erase(mp, 0);
-	// ft_erase(mp, 1);
+	TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
+	TESTED_NAMESPACE::map<T1, T2>::iterator it = mp.begin(), ite = mp.end();
 
+	TESTED_NAMESPACE::map<T1, T2> mp_range(it, --(--ite));
+	for (int i = 0; it != ite; ++it)
+		it->second = ++i * 5;
+
+	it = mp.begin(); ite = --(--mp.end());
+	TESTED_NAMESPACE::map<T1, T2> mp_copy(mp);
+	for (int i = 0; it != ite; ++it)
+		it->second = ++i * 7;
+
+	std::cout << "\t-- PART ONE --" << std::endl;
+	printSize(mp);
+	printSize(mp_range);
+	printSize(mp_copy);
+
+	mp = mp_copy;
+	mp_copy = mp_range;
+	mp_range.clear();
+
+	std::cout << "\t-- PART TWO --" << std::endl;
+	printSize(mp);
+	printSize(mp_range);
+	printSize(mp_copy);
 	return (0);
 }

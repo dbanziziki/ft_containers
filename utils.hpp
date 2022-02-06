@@ -29,6 +29,7 @@ struct node {
     value_type* item;
     typedef T& reference;
     typedef T* pointer;
+    bool _i;
     struct node<T>* right;
     struct node<T>* left;
     struct node<T>* parent;
@@ -39,9 +40,6 @@ struct node {
         left = u_nullptr;
         parent = u_nullptr;
     }
-
-    // pointer operator->() { return &(operator*()); }
-    // reference operator*() const { return &item; }
 };
 
 template <typename T>
