@@ -2,14 +2,16 @@
 #define __BST_H__
 
 #include <cmath>
+#include <limits>
+#include <memory>
 
 #include "bst_iterator.hpp"
 #include "stack.hpp"
 #include "utils.hpp"
 
 namespace ft {
-template <class T, class Compare = ft::less<typename T::first_type>,
-          class Node = ft::node<T>, class Alloc = std::allocator<T> >
+template <class T, class Compare, class Alloc = std::allocator<T>,
+          class Node = ft::node<T> >
 class BST {
    public:
     typedef T value_type;
@@ -92,8 +94,8 @@ class BST {
         else {
             if (node->left == u_nullptr && node->right == u_nullptr) {
                 if (node == _first) _first = _findSuccessor(_first);
-                _free_node(node);
                 if (node == _root) _root = u_nullptr;
+                _free_node(node);
                 return u_nullptr;
             } else if (node->left == u_nullptr) {
                 node_ptr temp = node->right;
@@ -116,7 +118,10 @@ class BST {
                 return temp;
             }
             node_ptr temp = minValueNode(node->right);
-            node->item = temp->item;
+            _value_allocator.destroy(node->item);
+            _value_allocator.deallocate(node->item, 1);
+            node->item = _value_allocator.allocate(1);
+            _value_allocator.construct(node->item, *(temp->item));
             node->right = deleteNode(node->right, temp->item->first);
         }
         return node;

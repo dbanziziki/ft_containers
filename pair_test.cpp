@@ -2,6 +2,12 @@
 
 #include "utils.hpp"
 
+template<class T>
+struct ft_lst {
+  T *content;
+  struct ft_lst *next;
+};
+
 int main(int argc, char const *argv[]) {
     ft::pair<std::string, int> p;
 
