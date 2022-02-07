@@ -124,6 +124,26 @@ class vector {
         _alloc.deallocate(_ptr, capacity());
     }
 
+    /**
+     * @brief
+     *
+     * @param x A vector object of the same type (i.e., with the same template
+     * parameters, T and Alloc).
+     * @return vector&
+     */
+    vector &operator=(const vector &x) {
+        this->~vector();
+        size_type n = x.size();
+        _ptr = _alloc.allocate(n);
+        _end = _ptr;
+        _capacity = x.capacity();
+        _end_capacty = _ptr + n;
+        _size = x.size();
+        size_type i = -1;
+        while (++i < n) _alloc.construct(_end++, x._ptr[i]);
+        return *this;
+    }
+
     /* Element access */
 
     /**
@@ -147,31 +167,11 @@ class vector {
      * @param n Position of an element in the container.
      * @return reference The element at the specified position in the vector.
      */
-    reference operator[](size_type index) const {
+    const_reference operator[](size_type index) const {
         if (index >= _size) {
             throw std::out_of_range("ft::vector");
         }
         return _ptr[index];
-    }
-
-    /**
-     * @brief
-     *
-     * @param x A vector object of the same type (i.e., with the same template
-     * parameters, T and Alloc).
-     * @return vector&
-     */
-    vector &operator=(const vector &x) {
-        this->~vector();
-        size_type n = x.size();
-        _ptr = _alloc.allocate(n);
-        _end = _ptr;
-        _capacity = x.capacity();
-        _end_capacty = _ptr + n;
-        _size = x.size();
-        size_type i = -1;
-        while (++i < n) _alloc.construct(_end++, x._ptr[i]);
-        return *this;
     }
 
     /**
@@ -603,7 +603,8 @@ class vector {
      */
     allocator_type get_allocator() const { return _alloc; }
 
-   public:
+    /* Iterators */
+
     /**
      * @brief Returns an iterator pointing to the first element in the vector.
      *
@@ -643,8 +644,6 @@ class vector {
     reverse_iterator rend() { return reverse_iterator(_ptr); }
 
     const_reverse_iterator rend() const { return const_reverse_iterator(_ptr); }
-
-   private:
 };
 
 template <class T, class Alloc>

@@ -15,10 +15,9 @@ class map {
    public:
     typedef Key key_type;
     typedef T mapped_type;
-    typedef ft::pair<key_type, mapped_type> value_type;
+    typedef ft::pair<const key_type, mapped_type> value_type;
     typedef const value_type const_value_type;
     typedef Compare key_compare;
-
     typedef Alloc allocator_type;
     typedef typename allocator_type::reference reference;
     typedef typename allocator_type::const_reference const_reference;

@@ -71,7 +71,7 @@ class BST {
         }
 
         if (_comp(value.first, y->item->first)) {
-            if (value.first < _first->item->first) _first = newNode;
+            if (_comp(value.first, _first->item->first)) _first = newNode;
             y->left = newNode;
             newNode->parent = y;
             _size++;

@@ -7,7 +7,7 @@
 #define STL 0
 #endif
 
-#if 0  // CREATE A REAL STL EXAMPLE
+#if ft  // CREATE A REAL STL EXAMPLE
 #include <map>
 #include <stack>
 #include <vector>
@@ -84,8 +84,17 @@ void test_vector(void) {
         {
             for (int i = 0; i < 10000; i++) vector_int.push_back(rand());
             ft::vector<int>::iterator it = vector_int.begin();
+            ft::vector<int>::const_iterator cit;
+            cit = it;
             int sum = 0;
-            while (it != vector_int.end()) sum += *it++;
+            while (it != vector_int.end()) {
+                if (*cit != *it) {
+                    std::cout << "Should be the same\n";
+                    break;
+                }
+                sum += *it++;
+                cit++;
+            }
             std::cout << "should be constant with the same seed: " << sum
                       << std::endl;
         }
@@ -270,9 +279,9 @@ int main(int argc, char** argv) {
     const int seed = atoi(argv[1]);
     srand(seed);
 
-    // test_vector();
+    test_vector();
     test_map();
-    // test_stack();
+    test_stack();
 
     return (0);
 }

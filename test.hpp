@@ -3,7 +3,7 @@
 
 #include "map.hpp"
 
-#define TESTED_NAMESPACE ft
+#define TESTED_NAMESPACE std
 #define _pair TESTED_NAMESPACE::pair
 
 template <typename T>
